@@ -64,11 +64,14 @@
   <button class="capture-btn" onclick="capturePhoto()"></button>
 
   <div class="bottom-sheet" id="resultPanel">
-    <div class="ticket-row"><span>Importe</span><strong id="importeField">0.00</strong></div>
-    <div class="ticket-row"><span>Fecha</span><strong id="fechaField">-</strong></div>
-    <div style="display:flex; gap:10px; margin-top:20px;">
-      <button style="flex:1; padding:15px; background:#444; color:#fff; border:none; border-radius:10px;" onclick="resetScan()">REINTENTAR</button>
-      <button style="flex:1; padding:15px; background:#f5c400; color:#000; border:none; border-radius:10px;" onclick="guardarEnSheets()">ACEPTAR</button>
+    <div class="ticket-row"><span>Fecha</span><strong id="fechaField" contenteditable="true">-</strong></div>
+    <div class="ticket-row"><span>Importe</span><strong id="importeField" contenteditable="true">0.00</strong></div>
+    <div class="ticket-row"><span>Servicios</span><strong id="serviciosField" contenteditable="true">-</strong></div>
+    <div class="ticket-row"><span>Kilómetros</span><strong id="kmField" contenteditable="true">-</strong></div>
+    <div class="ticket-row"><span>Tiempo</span><strong id="tiempoField" contenteditable="true">-</strong></div>
+    <div class="actions">
+      <button class="btn btn-back" onclick="resetScan()">REINTENTAR</button>
+      <button class="btn btn-accept" onclick="guardarEnSheets()">ACEPTAR</button>
     </div>
   </div>
 
@@ -110,17 +113,20 @@
     video.style.display = "none";
     document.getElementById("loadingOverlay").style.display = "flex";
 
-    // Enviamos a Google
+    // Enviamos a Google para procesar el OCR
     fetch(SCRIPT_URL, {
       method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify({ action: "ocr", image: dataURL })
+      mode: "no-cors", // Google requiere esto desde dominios externos
+      body: JSON.stringify({ action: "ocr", image: dataURL, filename: "ticket.jpg" })
     }).then(() => {
-      // Simulación porque fuera de Google no podemos leer la respuesta directa fácilmente
+      // Como el modo 'no-cors' no deja leer la respuesta,
+      // damos 3 segundos para que el script de Google termine de escribir en el Excel
+      // y luego mostramos el panel para que tú verifiques.
       setTimeout(() => {
         document.getElementById("loadingOverlay").style.display = "none";
         document.getElementById("resultPanel").classList.add("show");
-      }, 2000);
+        alert("¡Procesado! Si el OCR ha funcionado, verás los datos en el Excel. Revisa y pulsa Aceptar.");
+      }, 3500);
     });
   }
 
