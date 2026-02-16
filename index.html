@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Taxi App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #000; font-family: system-ui, -apple-system, sans-serif; }
+    .top-bar { background: #f5c400; height: 80px; display: flex; align-items: center; justify-content: center; }
+    .top-bar img { height: 60px; object-fit: contain; }
+    .hero-image { position: relative; }
+    .hero-image img { width: 100%; display: block; }
+    .hero-greeting { position: absolute; left: 10%; top: 30%; transform: translateY(-50%); color: #fff; font-size: 21px; font-style: italic; text-shadow: 0 2px 6px rgba(0,0,0,0.6); }
+    .carbon-bg { min-height: 100vh; background-color: #0a0a0a; background-image: linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.04) 75%), linear-gradient(-45deg, rgba(255,255,255,0.04) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.04) 75%); background-size: 20px 20px; }
+    .scan-container { padding: 20px; }
+    .scan-btn { width: 100%; background: #f5c400; border: none; border-radius: 14px; padding: 16px; text-align: left; cursor: pointer; box-shadow: 0 8px 20px rgba(245,196,0,0.35); }
+    .scan-title { font-family: "Russo One", sans-serif; font-size: 18px; font-weight: 700; }
+    .scan-subtitle { font-size: 13px; font-style: italic; color: #222; }
+    #scannerScreen { position: fixed; inset: 0; background: #000; display: none; z-index: 9999; }
+    #camera, #photo { width: 100%; height: 100%; object-fit: cover; }
+    #photo { display: none; }
+    .scanner-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; padding-top: 10%; pointer-events: none; }
+    .scan-frame { width: 85%; max-width: 340px; height: 70%; border: 2px solid #f5c400; border-radius: 12px; }
+    .capture-btn { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; border-radius: 50%; border: 4px solid #f5c400; background: #000; z-index: 10; }
+    .bottom-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: #1a1a1a; border-radius: 20px 20px 0 0; padding: 20px; transition: bottom 0.35s ease; z-index: 10000; }
+    .bottom-sheet.show { bottom: 0; }
+    .ticket-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .ticket-row span { color: #aaa; }
+    .ticket-row strong[contenteditable="true"] { outline: 1px dashed #f5c400; padding: 0 5px; }
+    .actions { display: flex; gap: 10px; margin-top: 15px; }
+    .btn { flex: 1; padding: 12px; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; }
+    .btn-back { background: #333; color: #fff; }
+    .btn-edit { background: #fff; color: #000; }
+    .btn-accept { background: #f5c400; color: #000; }
+    .loading-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 10001; }
+    .spinner { width: 50px; height: 50px; border: 4px solid transparent; border-top: 4px solid #f5c400; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 10002; }
+    .modal-content { background: #111; padding: 30px; border-radius: 20px; text-align: center; color: #fff; }
+  </style>
+</head>
+<body>
+
+<div id="homeScreen">
+  <div class="top-bar">
+    <strong style="font-family: 'Russo One'; font-size: 24px;">TAXI APP</strong>
+  </div>
+  <div class="hero-image">
+    <img src="https://images.unsplash.com/photo-1556122071-e404be08f399?auto=format&fit=crop&w=800&q=80">
+    <div class="hero-greeting">👋 Hola, Dani!</div>
+  </div>
+  <div class="carbon-bg">
+    <div class="scan-container">
+      <button class="scan-btn" onclick="openScanner()">
+        <div class="scan-title">📸 Escanear Tickets</div>
+        <div class="scan-subtitle">Escanear tickets del taxímetro</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="scannerScreen">
+  <video id="camera" autoplay playsinline muted></video>
+  <img id="photo">
+  <div class="scanner-overlay"><div class="scan-frame"></div></div>
+  <button class="capture-btn" id="captureBtn" onclick="capturePhoto()"></button>
+
+  <div class="bottom-sheet" id="resultPanel">
+    <div class="ticket-row"><span>Fecha</span><strong id="fechaField">-</strong></div>
+    <div class="ticket-row"><span>Importe</span><strong id="importeField">-</strong></div>
+    <div class="ticket-row"><span>Servicios</span><strong id="serviciosField">-</strong></div>
+    <div class="ticket-row"><span>Kilómetros</span><strong id="kmField">-</strong></div>
+    <div class="ticket-row"><span>Tiempo</span><strong id="tiempoField">-</strong></div>
+    <div class="actions">
+      <button class="btn btn-back" onclick="resetScan()">VOLVER</button>
+      <button class="btn btn-edit" id="editBtn" onclick="toggleEdit()">EDITAR</button>
+      <button class="btn btn-accept" onclick="guardarEnSheets()">ACEPTAR</button>
+    </div>
+  </div>
+
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text" style="color:#fff; margin-top:10px;">Procesando ticket...</div>
+  </div>
+</div>
+
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <h3>✅ ¡Hecho!</h3>
+    <p>Ticket guardado en el Excel</p>
+    <button onclick="cerrarModal()" class="btn btn-accept">ENTENDIDO</button>
+  </div>
+</div>
+
+<script>
+  // Pega aquí la URL de tu implementación de Google Script
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnbZohq9RvBu5EAqKA5aq59EftWh7d04IBCJf9QKMPo5u7SRUdDoCgVkC3QOnK9y2_xw/exec";
+
+  let stream;
+  let editing = false;
+
+  async function openScanner() {
+    document.getElementById("homeScreen").style.display = "none";
+    document.getElementById("scannerScreen").style.display = "block";
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+      document.getElementById("camera").srcObject = stream;
+    } catch (err) {
+      alert("Error al abrir cámara: " + err.message);
+    }
+  }
+
+  function capturePhoto() {
+    const video = document.getElementById("camera");
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext("2d").drawImage(video, 0, 0);
+    
+    const dataURL = canvas.toDataURL("image/jpeg", 0.8);
+    document.getElementById("photo").src = dataURL;
+    document.getElementById("photo").style.display = "block";
+    video.style.display = "none";
+    document.getElementById("captureBtn").style.display = "none";
+    document.getElementById
