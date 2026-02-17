@@ -61,8 +61,65 @@
     
     .capture-btn { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; border-radius: 50%; border: 5px solid #f5c400; background: rgba(255,255,255,0.2); z-index: 10000; cursor: pointer; }
 
-    .bottom-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: #1a1a1a; border-radius: 25px 25px 0 0; padding: 25px; transition: 0.4s; z-index: 10001; color: white; }
-    .bottom-sheet.show { bottom: 0; }
+    /* El Panel con entrada suave */
+    .bottom-sheet { 
+      position: fixed; 
+      bottom: -100%; 
+      left: 0; 
+      width: 100%; 
+      background: #1c1c1e; /* Gris Apple muy elegante */
+      border-radius: 30px 30px 0 0; 
+      padding: 30px 25px; 
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); /* Movimiento ultra suave */
+      z-index: 10001; 
+      color: white;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    }
+
+    .bottom-sheet.show { 
+      transform: translateY(-100%); 
+      bottom: 0;
+    }
+
+    /* Contenedor para 3 botones */
+    .actions { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; /* Dos columnas */
+      gap: 12px; 
+      margin-top: 25px; 
+    }
+
+    .btn {
+      border: none;
+      border-radius: 15px;
+      padding: 18px; /* Un poco más altos para que sea fácil darles con el pulgar */
+      font-family: 'Russo One', sans-serif;
+      font-size: 13px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+    }
+
+    .btn:active { transform: scale(0.95); }
+
+    .btn-back { background: #3a3a3c; color: #ebebeb; }
+    
+    /* Botón EDITAR (Gris un poco más claro o azulado) */
+    .btn-edit { background: #48484a; color: #f5c400; }
+
+    /* Botón ACEPTAR (Amarillo Taxi - Ocupa las dos columnas abajo) */
+    .btn-accept { 
+      background: #f5c400; 
+      color: #000; 
+      grid-column: span 2; /* Este ocupa todo el ancho abajo */
+      font-size: 16px;
+      box-shadow: 0 4px 15px rgba(245, 196, 0, 0.4);
+    }
+    
     .ticket-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #333; }
     
     /* Pantalla de carga profesional */
@@ -140,8 +197,9 @@
     <div class="ticket-row"><span>Kilómetros</span><strong id="kmField" contenteditable="true">-</strong></div>
     <div class="ticket-row"><span>Tiempo</span><strong id="tiempoField" contenteditable="true">-</strong></div>
     <div class="actions">
-      <button onclick="resetScan()">REINTENTAR</button>
-      <button onclick="guardarEnSheets()">ACEPTAR</button>
+      <button class="btn btn-back" onclick="resetScan()">VOLVER</button>
+      <button class="btn btn-edit" onclick="habilitarEdicion()">EDITAR</button>
+      <button class="btn btn-accept" onclick="guardarEnSheets()" id="btnAceptar">ACEPTAR</button>
     </div>
   </div>
 
@@ -233,9 +291,22 @@
       resetScan();
     });
   }
+
+  function habilitarEdicion() {
+    // Hace que los campos brillen para avisar que se pueden tocar
+    const campos = ["fechaField", "importeField", "serviciosField", "kmField", "tiempoField"];
+    campos.forEach(id => {
+      const el = document.getElementById(id);
+      el.style.backgroundColor = "rgba(245, 196, 0, 0.1)";
+      el.style.borderRadius = "5px";
+    });
+    alert("Ahora puedes tocar los datos para corregirlos");
+  }
+  
 </script>
 </body>
 </html>
+
 
 
 
