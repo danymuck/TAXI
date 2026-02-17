@@ -62,18 +62,19 @@
     .capture-btn { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; border-radius: 50%; border: 5px solid #f5c400; background: rgba(255,255,255,0.2); z-index: 10000; cursor: pointer; }
 
     /* El Panel con entrada suave */
+    /* Panel desde abajo con diseño más limpio */
     .bottom-sheet { 
       position: fixed; 
       bottom: -100%; 
       left: 0; 
       width: 100%; 
-      background: #1c1c1e; /* Gris Apple muy elegante */
-      border-radius: 30px 30px 0 0; 
-      padding: 30px 25px; 
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); /* Movimiento ultra suave */
+      background: #1a1a1a; 
+      border-radius: 25px 25px 0 0; 
+      padding: 25px; 
+      transition: transform 0.5s ease-out; 
       z-index: 10001; 
       color: white;
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 -5px 25px rgba(0,0,0,0.8);
     }
 
     .bottom-sheet.show { 
@@ -81,43 +82,40 @@
       bottom: 0;
     }
 
-    /* Contenedor para 3 botones */
+    /* Tres botones iguales uno al lado del otro */
     .actions { 
-      display: grid; 
-      grid-template-columns: 1fr 1fr; /* Dos columnas */
-      gap: 12px; 
+      display: flex;
+      justify-content: space-between;
+      gap: 8px; 
       margin-top: 25px; 
     }
 
     .btn {
+      flex: 1; /* Todos el mismo tamaño */
       border: none;
-      border-radius: 15px;
-      padding: 18px; /* Un poco más altos para que sea fácil darles con el pulgar */
-      font-family: 'Russo One', sans-serif;
+      border-radius: 12px;
+      padding: 15px 5px;
+      font-family: system-ui, -apple-system, sans-serif; /* Fuente neutra */
       font-size: 13px;
-      letter-spacing: 1px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
       cursor: pointer;
       transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       text-transform: uppercase;
     }
 
-    .btn:active { transform: scale(0.95); }
+    .btn:active { transform: scale(0.92); }
 
-    .btn-back { background: #3a3a3c; color: #ebebeb; }
-    
-    /* Botón EDITAR (Gris un poco más claro o azulado) */
-    .btn-edit { background: #48484a; color: #f5c400; }
+    .btn-back { background: #333; color: #ccc; }
+    .btn-edit { background: #444; color: #fff; }
+    .btn-accept { background: #f5c400; color: #000; }
 
-    /* Botón ACEPTAR (Amarillo Taxi - Ocupa las dos columnas abajo) */
-    .btn-accept { 
-      background: #f5c400; 
-      color: #000; 
-      grid-column: span 2; /* Este ocupa todo el ancho abajo */
-      font-size: 16px;
-      box-shadow: 0 4px 15px rgba(245, 196, 0, 0.4);
+    /* Clase para resaltar campos editables */
+    .editable-active {
+      background: rgba(245, 196, 0, 0.15) !important;
+      border-bottom: 2px solid #f5c400 !important;
+      padding: 2px 5px;
+      transition: all 0.3s;
     }
     
     .ticket-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #333; }
@@ -179,7 +177,7 @@
   <div class="carbon-bg">
     <button class="scan-btn" onclick="openScanner()">
       <div class="scan-title">📸 Escanear Ticket</div>
-      <div style="color: #333; font-style: italic;">Registrar nuevo servicio</div>
+      <div style="color: #333; font-style: italic;">Escanear tickets del taxímetro</div>
     </button>
   </div>
 </div>
@@ -306,6 +304,7 @@
 </script>
 </body>
 </html>
+
 
 
 
