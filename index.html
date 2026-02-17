@@ -63,6 +63,7 @@
 
     /* El Panel con entrada suave */
     /* Panel desde abajo con diseño más limpio */
+    /* Panel anclado abajo (ya no sube hasta la mitad) */
     .bottom-sheet { 
       position: fixed; 
       bottom: -100%; 
@@ -70,15 +71,16 @@
       width: 100%; 
       background: #1a1a1a; 
       border-radius: 25px 25px 0 0; 
-      padding: 25px; 
-      transition: transform 0.5s ease-out; 
+      padding: 20px 25px 35px 25px; /* Más espacio abajo para móviles sin botón físico */
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
       z-index: 10001; 
       color: white;
       box-shadow: 0 -5px 25px rgba(0,0,0,0.8);
     }
 
+    /* Solo sube lo justo para mostrar los datos y botones */
     .bottom-sheet.show { 
-      transform: translateY(-100%); 
+      transform: translateY(0); 
       bottom: 0;
     }
 
@@ -97,7 +99,7 @@
       padding: 15px 5px;
       font-family: system-ui, -apple-system, sans-serif; /* Fuente neutra */
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 800;
       letter-spacing: 0.5px;
       cursor: pointer;
       transition: all 0.2s;
@@ -111,11 +113,12 @@
     .btn-accept { background: #f5c400; color: #000; }
 
     /* Clase para resaltar campos editables */
+    /* Contorno para el modo edición */
     .editable-active {
-      background: rgba(245, 196, 0, 0.15) !important;
-      border-bottom: 2px solid #f5c400 !important;
-      padding: 2px 5px;
-      transition: all 0.3s;
+      outline: 2px solid #f5c400 !important;
+      outline-offset: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
     }
     
     .ticket-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #333; }
@@ -270,6 +273,9 @@
   function resetScan() { location.reload(); }
 
   function guardarEnSheets() {
+    // VIBRACIÓN DE ÉXITO
+    if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+
     const datos = {
       action: "guardar",
       datos: {
@@ -280,30 +286,40 @@
         tiempo: document.getElementById("tiempoField").innerText
       }
     };
+
+    // Cambiamos el botón a "Enviando..." visualmente
+    const btn = event.target;
+    btn.innerText = "ESPERA...";
+    btn.style.opacity = "0.7";
+
     fetch(SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
       body: JSON.stringify(datos)
     }).then(() => {
-      alert("✅ Ticket enviado correctamente");
-      resetScan();
+      // AQUÍ IRÁ EL POPUP DEL PASO 4. Por ahora solo reinicia sin alert.
+      setTimeout(() => {
+        resetScan();
+      }, 500);
     });
+    // Eliminado el alert "Ticket enviado correctamente"
   }
 
   function habilitarEdicion() {
-    // Hace que los campos brillen para avisar que se pueden tocar
+    if (navigator.vibrate) navigator.vibrate(30);
+
     const campos = ["fechaField", "importeField", "serviciosField", "kmField", "tiempoField"];
     campos.forEach(id => {
       const el = document.getElementById(id);
-      el.style.backgroundColor = "rgba(245, 196, 0, 0.1)";
-      el.style.borderRadius = "5px";
+      el.classList.add("editable-active");
     });
-    alert("Ahora puedes tocar los datos para corregirlos");
+    // Eliminado el alert "Ahora puedes editar"
   }
   
 </script>
 </body>
 </html>
+
 
 
 
