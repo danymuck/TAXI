@@ -10,7 +10,14 @@
     body { margin: 0; background: #000; font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; }
     
     .top-bar { background: #f5c400; height: 80px; display: flex; align-items: center; justify-content: center; width: 100%; }
-    .top-bar h1 { font-family: 'Russo One', sans-serif; margin: 0; font-size: 28px; color: #000; }
+    .top-bar h1 { 
+      font-family: system-ui, sans-serif; 
+      font-weight: 800; 
+      font-style: italic;
+      margin: 0; 
+      font-size: 24px; 
+      color: #000; 
+    }
     
     .hero-image { position: relative; width: 100%; }
     .hero-image img { width: 100%; height: 200px; object-fit: cover; display: block; }
@@ -39,13 +46,14 @@
     /* La tarjeta del mensaje */
     .popup-card {
       background: #1c1c1e;
-      width: 85%;
-      max-width: 320px;
-      border-radius: 24px;
-      padding: 30px;
+      width: 80%;
+      max-width: 280px;
+      border-radius: 20px;
+      padding: 25px;
       text-align: center;
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      font-family: system-ui, -apple-system, sans-serif; /* Fuente neutra */
       transform: scale(0.8);
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
@@ -64,8 +72,9 @@
     /* Títulos del popup */
     .popup-title {
       color: #fff;
-      font-family: 'Russo One', sans-serif;
-      font-size: 20px;
+      font-size: 18px;
+      font-weight: 700;
+      font-style: italic; /* Cursiva */
       margin: 0 0 8px 0;
       display: block;
     }
@@ -73,8 +82,7 @@
     .popup-subtitle {
       color: #aaa;
       font-size: 14px;
-      font-family: system-ui, sans-serif;
-      line-height: 1.4;
+      font-style: italic; /* Cursiva */
       display: block;
     }
     
@@ -223,22 +231,22 @@
 
     /* Botón OK dentro del Popup */
     .btn-popup-ok {
-      margin-top: 25px;
-      width: 100%;
+      margin-top: 20px;
       background: #f5c400;
       color: #000;
       border: none;
-      border-radius: 12px;
-      padding: 14px;
-      font-family: 'Russo One', sans-serif;
-      font-size: 16px;
+      border-radius: 12px; /* Cuadrado con apenas redondeo */
+      padding: 8px 20px;  /* Tamaño justo para la palabra */
+      font-family: system-ui, sans-serif;
+      font-weight: 800;
+      font-size: 14px;
       cursor: pointer;
+      display: inline-block; /* Para que no ocupe todo el ancho */
       transition: transform 0.1s;
-      box-shadow: 0 4px 15px rgba(245, 196, 0, 0.2);
     }
 
     .btn-popup-ok:active {
-      transform: scale(0.95);
+      transform: scale(0.9);
     }
     
   </style>
@@ -288,7 +296,7 @@
     <div class="popup-card">
       <span class="popup-icon">✅</span>
       <span class="popup-title">Ticket guardado</span>
-      <span class="popup-subtitle">Se ha registrado correctamente.</span>
+      <span class="popup-subtitle">Se ha registrado correctamente</span>
       <button class="btn-popup-ok" onclick="cerrarExito()">OK</button>
     </div>
   </div>
@@ -412,6 +420,7 @@
 </script>
 </body>
 </html>
+
 
 
 
