@@ -99,44 +99,54 @@
     }
   }
 
-  function capturePhoto() {
+  async function capturePhoto() {
   const video = document.getElementById("camera");
   const canvas = document.createElement("canvas");
+  
+  // ESPERA DE METADATOS: Nos aseguramos de tener las dimensiones reales
+  if (video.readyState < 2) {
+    alert("Esperando a que la cámara esté lista...");
+    return;
+  }
+
+  // Ajustamos el canvas a la resolución REAL de la cámara, no al tamaño de la pantalla
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  canvas.getContext("2d").drawImage(video, 0, 0);
   
-  const dataURL = canvas.toDataURL("image/jpeg", 0.8);
-  document.getElementById("photo").src = dataURL;
-  document.getElementById("photo").style.display = "block";
-  video.style.display = "none";
-  document.getElementById("loadingOverlay").style.display = "flex";
+  const ctx = canvas.getContext("2d");
+  
+  // OPCIONAL: Pequeño retardo de 300ms para asegurar el auto-enfoque
+  setTimeout(() => {
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    const dataURL = canvas.toDataURL("image/jpeg", 0.9); // Calidad alta (0.9)
+    document.getElementById("photo").src = dataURL;
+    document.getElementById("photo").style.display = "block";
+    video.style.display = "none";
+    document.getElementById("loadingOverlay").style.display = "flex";
 
-  // ENVIAR SIN 'no-cors' PERO COMO TEXTO PLANO
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({ action: "ocr", image: dataURL })
-  })
-  .then(response => response.json()) // Ahora SÍ nos dejará leerlo
-  .then(res => {
-    document.getElementById("loadingOverlay").style.display = "none";
-    if (res.status === "ok" && res.datos) {
-      document.getElementById("fechaField").innerText = res.datos.fecha || "-";
-      document.getElementById("importeField").innerText = res.datos.importe || "0.00";
-      document.getElementById("serviciosField").innerText = res.datos.servicios || "-";
-      document.getElementById("kmField").innerText = res.datos.kilometros || "-";
-      document.getElementById("tiempoField").innerText = res.datos.tiempo || "-";
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "ocr", image: dataURL })
+    })
+    .then(response => response.json())
+    .then(res => {
+      document.getElementById("loadingOverlay").style.display = "none";
+      if (res.status === "ok" && res.datos) {
+        document.getElementById("fechaField").innerText = res.datos.fecha || "-";
+        document.getElementById("importeField").innerText = res.datos.importe || "0.00";
+        document.getElementById("serviciosField").innerText = res.datos.servicios || "-";
+        document.getElementById("kmField").innerText = res.datos.kilometros || "-";
+        document.getElementById("tiempoField").innerText = res.datos.tiempo || "-";
+        document.getElementById("resultPanel").classList.add("show");
+      }
+    })
+    .catch(err => {
+      document.getElementById("loadingOverlay").style.display = "none";
+      alert("Error en proceso: " + err);
       document.getElementById("resultPanel").classList.add("show");
-    } else {
-      alert("Error en OCR: " + (res.message || "Desconocido"));
-      document.getElementById("resultPanel").classList.add("show");
-    }
-  })
-  .catch(err => {
-    document.getElementById("loadingOverlay").style.display = "none";
-    alert("Fallo de comunicación (CORS): " + err);
-    document.getElementById("resultPanel").classList.add("show");
-  });
+    });
+  }, 300); // 300ms de cortesía para el enfoque
 }
 
   function resetScan() {
@@ -169,6 +179,7 @@
 </body>
 
 </html>
+
 
 
 
