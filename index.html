@@ -83,7 +83,7 @@
 
 <script>
   // Tu URL de Google Script
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFsl6ZfzfQsSITn6ePesl7qFIGk30UbPR5lSqwPsfEFmWcp_m0pcTiDMSm9_kIHzYvNA/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnbZohq9RvBu5EAqKA5aq59EftWh7d04IBCJf9QKMPo5u7SRUdDoCgVkC3QOnK9y2_xw/exec";
   let stream;
 
   async function openScanner() {
@@ -100,45 +100,44 @@
   }
 
   function capturePhoto() {
-    const video = document.getElementById("camera");
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext("2d").drawImage(video, 0, 0);
-    
-    const dataURL = canvas.toDataURL("image/jpeg", 0.8);
-    document.getElementById("photo").src = dataURL;
-    document.getElementById("photo").style.display = "block";
-    video.style.display = "none";
-    document.getElementById("loadingOverlay").style.display = "flex";
+  const video = document.getElementById("camera");
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext("2d").drawImage(video, 0, 0);
+  
+  const dataURL = canvas.toDataURL("image/jpeg", 0.8);
+  document.getElementById("photo").src = dataURL;
+  document.getElementById("photo").style.display = "block";
+  video.style.display = "none";
+  document.getElementById("loadingOverlay").style.display = "flex";
 
-    // ENVIAR A GOOGLE
-    fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({ action: "ocr", image: dataURL })
-    })
-    .then(res => res.json()) // Intentamos leer la respuesta como JSON
-    .then(res => {
-      document.getElementById("loadingOverlay").style.display = "none";
+  // ENVIAR SIN 'no-cors' PERO COMO TEXTO PLANO
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({ action: "ocr", image: dataURL })
+  })
+  .then(response => response.json()) // Ahora SÍ nos dejará leerlo
+  .then(res => {
+    document.getElementById("loadingOverlay").style.display = "none";
+    if (res.status === "ok" && res.datos) {
+      document.getElementById("fechaField").innerText = res.datos.fecha || "-";
+      document.getElementById("importeField").innerText = res.datos.importe || "0.00";
+      document.getElementById("serviciosField").innerText = res.datos.servicios || "-";
+      document.getElementById("kmField").innerText = res.datos.kilometros || "-";
+      document.getElementById("tiempoField").innerText = res.datos.tiempo || "-";
       document.getElementById("resultPanel").classList.add("show");
-      
-      // Si el OCR de Google nos devuelve datos, los ponemos en los campos
-      if(res.datos) {
-        document.getElementById("importeField").innerText = res.datos.importe || "0.00";
-        document.getElementById("fechaField").innerText = res.datos.fecha || "-";
-        // Si tienes más campos (km, servicios), añádelos aquí
-      }
-    })
-    .catch(err => {
-      // Si da error de CORS (muy probable), usamos el plan B: esperar y dejar editar a mano
-      console.log("Error de lectura directa, pasando a modo manual");
-      setTimeout(() => {
-        document.getElementById("loadingOverlay").style.display = "none";
-        document.getElementById("resultPanel").classList.add("show");
-        alert("Imagen enviada. Si no ves los datos, rellénalos a mano y dale a Aceptar.");
-      }, 3000);
-    });
-  }
+    } else {
+      alert("Error en OCR: " + (res.message || "Desconocido"));
+      document.getElementById("resultPanel").classList.add("show");
+    }
+  })
+  .catch(err => {
+    document.getElementById("loadingOverlay").style.display = "none";
+    alert("Fallo de comunicación (CORS): " + err);
+    document.getElementById("resultPanel").classList.add("show");
+  });
+}
 
   function resetScan() {
     location.reload();
@@ -170,5 +169,6 @@
 </body>
 
 </html>
+
 
 
