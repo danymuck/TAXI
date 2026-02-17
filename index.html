@@ -142,37 +142,26 @@
     fetch(SCRIPT_URL, {
   method: "POST",
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "text/plain"
   },
-  body: JSON.stringify({ action: "ocr", image: dataURL, filename: "ticket.jpg" })
+  body: JSON.stringify({
+    action: "ocr",
+    image: dataURL,
+    filename: "ticket.jpg"
+  })
 })
-.then(res => res.json())
+.then(res => res.text()) // 👈 IMPORTANTE
 .then(res => {
-
-  document.getElementById("loadingOverlay").style.display = "none";
-
-  if (res.status === "ok") {
-
-    document.getElementById("fechaField").innerText = res.datos.fecha || "-";
-    document.getElementById("importeField").innerText = res.datos.importe || "0.00";
-    document.getElementById("serviciosField").innerText = res.datos.servicios || "-";
-    document.getElementById("kmField").innerText = res.datos.kilometros || "-";
-    document.getElementById("tiempoField").innerText = res.datos.tiempo || "-";
-
-    document.getElementById("resultPanel").classList.add("show");
-
-  } else {
-    alert(res.message || "Error OCR");
-  }
-
+  console.log("RESPUESTA RAW:", res);
+  alert(res); // 👈 para verlo claro en móvil
 })
 .catch(err => {
-  alert("Error conexión OCR");
+  alert("Error conexión: " + err);
   console.error(err);
 });
-    });
-  }
+    
 </script>
 </body>
 
 </html>
+
