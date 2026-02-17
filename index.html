@@ -82,14 +82,13 @@
 </div>
 
 <script>
-  // REEMPLAZA ESTA URL POR LA TUYA DE GOOGLE
+  // Tu URL de Google Script
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFsl6ZfzfQsSITn6ePesl7qFIGk30UbPR5lSqwPsfEFmWcp_m0pcTiDMSm9_kIHzYvNA/exec";
   let stream;
 
   async function openScanner() {
     document.getElementById("homeScreen").style.display = "none";
     document.getElementById("scannerScreen").style.display = "block";
-    
     try {
       stream = await navigator.mediaDevices.getUserMedia({ 
         video: { facingMode: "environment" } 
@@ -113,20 +112,31 @@
     video.style.display = "none";
     document.getElementById("loadingOverlay").style.display = "flex";
 
-    // Enviamos a Google para procesar el OCR
+    // ENVIAR A GOOGLE
     fetch(SCRIPT_URL, {
       method: "POST",
-      mode: "no-cors", // Google requiere esto desde dominios externos
-      body: JSON.stringify({ action: "ocr", image: dataURL, filename: "ticket.jpg" })
-    }).then(() => {
-      // Como el modo 'no-cors' no deja leer la respuesta,
-      // damos 3 segundos para que el script de Google termine de escribir en el Excel
-      // y luego mostramos el panel para que tú verifiques.
+      body: JSON.stringify({ action: "ocr", image: dataURL })
+    })
+    .then(res => res.json()) // Intentamos leer la respuesta como JSON
+    .then(res => {
+      document.getElementById("loadingOverlay").style.display = "none";
+      document.getElementById("resultPanel").classList.add("show");
+      
+      // Si el OCR de Google nos devuelve datos, los ponemos en los campos
+      if(res.datos) {
+        document.getElementById("importeField").innerText = res.datos.importe || "0.00";
+        document.getElementById("fechaField").innerText = res.datos.fecha || "-";
+        // Si tienes más campos (km, servicios), añádelos aquí
+      }
+    })
+    .catch(err => {
+      // Si da error de CORS (muy probable), usamos el plan B: esperar y dejar editar a mano
+      console.log("Error de lectura directa, pasando a modo manual");
       setTimeout(() => {
         document.getElementById("loadingOverlay").style.display = "none";
         document.getElementById("resultPanel").classList.add("show");
-        alert("¡Procesado! Si el OCR ha funcionado, verás los datos en el Excel. Revisa y pulsa Aceptar.");
-      }, 3500);
+        alert("Imagen enviada. Si no ves los datos, rellénalos a mano y dale a Aceptar.");
+      }, 3000);
     });
   }
 
@@ -136,32 +146,29 @@
 
   function guardarEnSheets() {
     const datos = {
-      importe: document.getElementById("importeField").innerText,
-      fecha: document.getElementById("fechaField").innerText
+      action: "guardar",
+      datos: {
+        importe: document.getElementById("importeField").innerText,
+        fecha: document.getElementById("fechaField").innerText,
+        servicios: document.getElementById("serviciosField") ? document.getElementById("serviciosField").innerText : "",
+        kilometros: document.getElementById("kmField") ? document.getElementById("kmField").innerText : "",
+        tiempo: document.getElementById("tiempoField") ? document.getElementById("tiempoField").innerText : ""
+      }
     };
+
     fetch(SCRIPT_URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "text/plain"
-  },
-  body: JSON.stringify({
-    action: "ocr",
-    image: dataURL,
-    filename: "ticket.jpg"
-  })
-})
-.then(res => res.text()) // 👈 IMPORTANTE
-.then(res => {
-  console.log("RESPUESTA RAW:", res);
-  alert(res); // 👈 para verlo claro en móvil
-})
-.catch(err => {
-  alert("Error conexión: " + err);
-  console.error(err);
-});
-    
+      method: "POST",
+      mode: "no-cors", // Para guardar no necesitamos leer respuesta
+      body: JSON.stringify(datos)
+    }).then(() => {
+      alert("✅ Ticket enviado correctamente");
+      resetScan();
+    });
+  }
 </script>
+
 </body>
 
 </html>
+
 
