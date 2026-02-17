@@ -7,6 +7,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
+
+    /* Elimina el recuadro azul de enfoque en todos los elementos */
+    *:focus {
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent; /* Elimina el destello al tocar en móviles */
+    }
+
+    /* Opcional: Específicamente para botones y campos editables */
+    button:focus, strong:focus, div:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
     body { margin: 0; background: #000; font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; }
     
     .top-bar { background: #f5c400; height: 80px; display: flex; align-items: center; justify-content: center; width: 100%; }
@@ -420,6 +432,7 @@
 </script>
 </body>
 </html>
+
 
 
 
