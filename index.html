@@ -28,24 +28,24 @@
     .scanner-overlay { 
       position: absolute; 
       inset: 0; 
+      background: rgba(0,0,0,0.55); /* El fondo oscurecido que te gustaba */
       display: flex; 
       flex-direction: column; 
       align-items: center; 
       justify-content: flex-start;
-      padding-top: 15vh;
+      padding-top: 10%;           /* Tu ajuste del 10% */
       pointer-events: none; 
     }
 
-    .scan-frame { 
-      width: 85%; 
-      height: 60%; 
+   .scan-frame { 
+      width: 75%;          /* Más estrecho */
+      height: 70%;         /* Más largo */
       border: 3px solid #f5c400; 
-      border-radius: 15px; 
-      box-shadow: 0 0 0 2000px rgba(0,0,0,0.6); 
+      border-radius: 20px; /* Bordes un pelín más redondeados para que sea más moderno */
       position: relative;
     }
 
-    /* TEXTO GUÍA BAJO EL MARCO */
+    /* EL TEXTO BAJO EL MARCO */
     .scan-frame::after {
       content: "Coloca el ticket dentro del marco";
       position: absolute;
@@ -53,11 +53,10 @@
       left: 0;
       width: 100%;
       text-align: center;
-      color: #f5c400;
-      font-size: 14px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      color: #ffffff;             /* Letras blancas */
+      font-size: 16px;
+      font-style: italic;         /* En cursiva */
+      font-weight: normal;
     }
     
     .capture-btn { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; border-radius: 50%; border: 5px solid #f5c400; background: rgba(255,255,255,0.2); z-index: 10000; cursor: pointer; }
@@ -196,6 +195,7 @@
 </script>
 </body>
 </html>
+
 
 
 
