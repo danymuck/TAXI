@@ -293,11 +293,11 @@
   <button class="capture-btn" onclick="capturePhoto()"></button>
 
   <div class="bottom-sheet" id="resultPanel">
-    <div class="ticket-row"><span>Fecha</span><strong id="fechaField" contenteditable="true">-</strong></div>
-    <div class="ticket-row"><span>Importe</span><strong id="importeField" contenteditable="true">0.00</strong></div>
-    <div class="ticket-row"><span>Servicios</span><strong id="serviciosField" contenteditable="true">-</strong></div>
-    <div class="ticket-row"><span>Kilómetros</span><strong id="kmField" contenteditable="true">-</strong></div>
-    <div class="ticket-row"><span>Tiempo</span><strong id="tiempoField" contenteditable="true">-</strong></div>
+    <div class="ticket-row"><span>Fecha</span><strong id="fechaField" contenteditable="false">-</strong></div>
+    <div class="ticket-row"><span>Importe</span><strong id="importeField" contenteditable="false">0.00</strong></div>
+    <div class="ticket-row"><span>Servicios</span><strong id="serviciosField" contenteditable="false">-</strong></div>
+    <div class="ticket-row"><span>Kilómetros</span><strong id="kmField" contenteditable="false">-</strong></div>
+    <div class="ticket-row"><span>Tiempo</span><strong id="tiempoField" contenteditable="false">-</strong></div>
     <div class="actions">
       <button class="btn btn-back" onclick="resetScan()">VOLVER</button>
       <button class="btn btn-edit" onclick="habilitarEdicion()">EDITAR</button>
@@ -425,9 +425,16 @@
     const campos = ["fechaField", "importeField", "serviciosField", "kmField", "tiempoField"];
     campos.forEach(id => {
       const el = document.getElementById(id);
+      
+      // 1. Activamos la edición
+      el.contentEditable = "true"; 
+      
+      // 2. Añadimos el resaltado visual (contorno)
       el.classList.add("editable-active");
     });
-    // Eliminado el alert "Ahora puedes editar"
+    
+    // 3. Ponemos el foco en el importe para que el teclado suba automáticamente
+    document.getElementById("importeField").focus();
   }
 
   // Esta función se activa cuando pulsas el OK del popup
@@ -439,6 +446,7 @@
 </script>
 </body>
 </html>
+
 
 
 
