@@ -385,10 +385,13 @@
   function guardarEnSheets() {
     if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
 
+    let importeTexto = document.getElementById("importeField").innerText;
+    let importeLimpio = importeTexto.replace('.', ','); 
+
     const datos = {
       action: "guardar",
       datos: {
-        importe: document.getElementById("importeField").innerText,
+        importe: importeLimpio, // Enviamos el número con coma
         fecha: document.getElementById("fechaField").innerText,
         servicios: document.getElementById("serviciosField").innerText,
         kilometros: document.getElementById("kmField").innerText,
@@ -446,6 +449,7 @@
 </script>
 </body>
 </html>
+
 
 
 
