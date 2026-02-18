@@ -448,7 +448,14 @@ async function openScanner(tipo) {
         video.setAttribute("muted", "true");
         video.muted = true;
 
-        await video.play();
+      await video.play();
+
+// DEBUG - bórralo después
+console.log("Video width:", video.videoWidth);
+console.log("Video height:", video.videoHeight);
+console.log("Ready state:", video.readyState);
+console.log("Stream active:", stream.active);
+alert(`Stream: ${stream.active} | Tamaño: ${video.videoWidth}x${video.videoHeight} | ReadyState: ${video.readyState}`);
 
     } catch (err) {
         alert("Error de cámara: " + err.message);
@@ -609,6 +616,7 @@ function habilitarEdicionFactura() {
 </script>
 </body>
 </html>
+
 
 
 
