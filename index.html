@@ -51,6 +51,25 @@
     .carbon-bg { min-height: 100vh; background: #0a0a0a; padding: 20px; }
     .scan-btn { width: 100%; background: #f5c400; border: none; border-radius: 14px; padding: 20px; text-align: left; box-shadow: 0 8px 20px rgba(245,196,0,0.3); cursor: pointer; }
     .scan-title { font-family: "Russo One", sans-serif; font-size: 20px; color: #000; }
+
+    /* Estilo para el nuevo botón blanco */
+    .btn-factura-blanco {
+        background: #ffffff !important; /* Fondo blanco */
+        margin-top: 15px; /* Separación con el de arriba */
+        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1); /* Sombra suave */
+    }
+
+    /* Ajuste de color de texto para el botón blanco */
+    .btn-factura-blanco .scan-title, 
+    .btn-factura-blanco .scan-subtitle {
+        color: #000000 !important; /* Texto negro */
+    }
+
+    /* Aseguramos que el subtítulo esté alineado a la izquierda (heredado del original) */
+    .scan-subtitle {
+        display: block;
+        text-align: left;
+    }
     
     #scannerScreen { position: fixed; inset: 0; background: #000; display: none; z-index: 9999; }
     #camera { width: 100%; height: 100%; object-fit: cover; }
@@ -460,4 +479,5 @@
 </script>
 </body>
 </html>
+
 
