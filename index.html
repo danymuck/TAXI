@@ -286,10 +286,15 @@
   </div>
   <div class="carbon-bg">
     <button class="scan-btn" onclick="openScanner()">
-      <div class="scan-title">📸 Escanear Ticket</div>
-      <div style="color: #333; font-style: italic;">Escanear tickets del taxímetro</div>
+      <span class="scan-title">📸 ESCANEAR TICKET</span>
+      <span class="scan-subtitle">Escanear tickets del taxímetro</span>
     </button>
-  </div>
+
+    <button class="scan-btn btn-factura-blanco" onclick="alert('Abriendo escáner de facturas...')">
+      <span class="scan-title">📄 ESCANEAR FACTURAS</span>
+      <span class="scan-subtitle">Escanea facturas físicas</span>
+    </button>
+</div>
 </div>
 
 <div id="scannerScreen">
@@ -455,3 +460,4 @@
 </script>
 </body>
 </html>
+
