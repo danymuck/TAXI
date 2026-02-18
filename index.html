@@ -208,6 +208,35 @@
       border-radius: 4px;
     }
     
+    /* Estilo para los botones con tus imágenes en % */
+.boton-principal {
+    width: 94%;           /* El botón ocupa casi todo el ancho */
+    max-width: 450px;     /* Límite para que en tablets no se vea gigante */
+    height: auto;         /* El alto se ajusta a la proporción de la imagen */
+    aspect-ratio: 360 / 70; /* Mantiene la forma original de tus botones */
+    margin: 18px auto;    /* 18px de separación entre uno y otro */
+    display: block;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    background-size: contain; 
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.1s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Animación de pulsado */
+.boton-principal:active {
+    transform: scale(0.96); /* Efecto sutil de presión */
+    filter: brightness(0.85);
+}
+
+/* Tus imágenes en la raíz */
+#btn-ticket { background-image: url('escaneartickets.png'); }
+#btn-factura { background-image: url('escanearfacturas.png'); }
+#btn-digital { background-image: url('subirfacturas.png'); }
+    
     .ticket-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #333; }
     
     /* Pantalla de carga profesional */
@@ -277,7 +306,18 @@
   </style>
 </head>
 <body>
+  
+<div id="contenedor-botones" style="width: 100%; padding: 10px 0; text-align: center;">
+    
+    <button id="btn-ticket" class="boton-principal" onclick="abrirCamara('ticket')"></button>
 
+    <button id="btn-factura" class="boton-principal" onclick="abrirCamara('factura')"></button>
+
+    <button id="btn-digital" class="boton-principal" onclick="document.getElementById('inputDigital').click()"></button>
+    
+    <input type="file" id="inputDigital" style="display: none;" accept="image/*,application/pdf" onchange="subirArchivo(this)">
+</div>
+  
 <div id="homeScreen">
   <div class="top-bar"><h1>TAXI APP</h1></div>
   <div class="hero-image">
@@ -455,6 +495,7 @@
 </script>
 </body>
 </html>
+
 
 
 
