@@ -111,13 +111,11 @@
     left: 0;
 }
     #photo { 
-      document.getElementById("photo").style.display = "none";
-      width: 100%; 
-      height: 100%; 
-      object-fit: 
-      cover; 
-      display: none; }
-
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  display: none; 
+}
     /* Contenedor del Popup */
     .custom-popup {
       position: fixed;
@@ -416,35 +414,36 @@
   let tipoDocumento = 'ticket'; 
 
 async function openScanner(tipo) {
-    tipoDocumento = tipo; 
-    
+    tipoDocumento = tipo;
+
     const video = document.getElementById("camera");
     const photo = document.getElementById("photo");
-    
-    // RESET TOTAL
+
     photo.style.display = "none";
     video.style.display = "block";
-    video.style.opacity = "0"; // Lo hacemos invisible un segundo...
+    video.style.opacity = "1"; // ← Sin animación de opacidad, directo a visible
 
+    // Primero mostramos la pantalla, LUEGO asignamos el stream
     document.getElementById("homeScreen").style.display = "none";
     document.getElementById("scannerScreen").style.display = "block";
-    
+
     if (stream) {
-      stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach(track => track.stop());
     }
 
     try {
-      stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: "environment" } 
-      });
-      video.srcObject = stream;
-      
-      video.onloadedmetadata = () => {
-        video.play();
-        setTimeout(() => { video.style.opacity = "1"; }, 300); // ...y lo encendemos tras el play
-      };
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment" }
+        });
+
+        // Pequeño delay para que el DOM procese el display:block antes del srcObject
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        video.srcObject = stream;
+        await video.play(); // Esperamos a que el play sea efectivo
+
     } catch (err) {
-      alert("Error: " + err.message);
+        alert("Error de cámara: " + err.message);
     }
 }
   
@@ -602,6 +601,7 @@ function habilitarEdicionFactura() {
 </script>
 </body>
 </html>
+
 
 
 
