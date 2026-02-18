@@ -207,32 +207,37 @@
       background: rgba(255, 255, 255, 0.05);
       border-radius: 4px;
     }
+
+    /* Contenedor para asegurar que todo vaya debajo del título */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
     
     /* Estilo para los botones con tus imágenes en % */
 .boton-principal {
-    width: 94%;           /* El botón ocupa casi todo el ancho */
-    max-width: 450px;     /* Límite para que en tablets no se vea gigante */
-    height: auto;         /* El alto se ajusta a la proporción de la imagen */
-    aspect-ratio: 360 / 70; /* Mantiene la forma original de tus botones */
-    margin: 18px auto;    /* 18px de separación entre uno y otro */
-    display: block;
+    width: 94%;           /* Margen de seguridad a los lados */
+    max-width: 500px;
+    height: 85px;         /* Altura ajustada para tus nuevas imágenes */
+    margin: 10px 0;       /* Espacio entre botones */
     border: none;
     cursor: pointer;
     background-color: transparent;
-    background-size: contain; 
+    background-size: 100% 100%; /* Fuerza a la imagen a ocupar todo el botón */
     background-repeat: no-repeat;
     background-position: center;
     transition: transform 0.1s ease;
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Animación de pulsado */
 .boton-principal:active {
-    transform: scale(0.96); /* Efecto sutil de presión */
-    filter: brightness(0.85);
+    transform: scale(0.95);
 }
 
-/* Tus imágenes en la raíz */
+/* Enlaces exactos a tus archivos subidos */
 #btn-ticket { background-image: url('escaneartickets.png'); }
 #btn-factura { background-image: url('escanearfacturas.png'); }
 #btn-digital { background-image: url('subirfacturas.png'); }
@@ -495,6 +500,7 @@
 </script>
 </body>
 </html>
+
 
 
 
