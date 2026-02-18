@@ -311,8 +311,15 @@
   </style>
 </head>
 <body>
-  
-<div id="contenedor-botones" style="width: 100%; padding: 10px 0; text-align: center;">
+
+<div id="homeScreen">
+  <div class="top-bar"><h1>TAXI APP</h1></div>
+  <div class="hero-image">
+    <img src="https://images.unsplash.com/photo-1593950315186-76a92975b60c?auto=format&fit=crop&w=800&q=80">
+    <div class="hero-greeting">👋 ¡Hola, Dani!</div>
+  </div>
+  <div class="carbon-bg">
+    <div class="main-content">
     
     <button id="btn-ticket" class="boton-principal" onclick="abrirCamara('ticket')"></button>
 
@@ -321,19 +328,9 @@
     <button id="btn-digital" class="boton-principal" onclick="document.getElementById('inputDigital').click()"></button>
     
     <input type="file" id="inputDigital" style="display: none;" accept="image/*,application/pdf" onchange="subirArchivo(this)">
+    
 </div>
-  
-<div id="homeScreen">
-  <div class="top-bar"><h1>TAXI APP</h1></div>
-  <div class="hero-image">
-    <img src="https://images.unsplash.com/photo-1593950315186-76a92975b60c?auto=format&fit=crop&w=800&q=80">
-    <div class="hero-greeting">👋 ¡Hola, Dani!</div>
-  </div>
-  <div class="carbon-bg">
-    <button class="scan-btn" onclick="openScanner()">
-      <div class="scan-title">📸 Escanear Ticket</div>
-      <div style="color: #333; font-style: italic;">Escanear tickets del taxímetro</div>
-    </button>
+
   </div>
 </div>
 
@@ -500,6 +497,7 @@
 </script>
 </body>
 </html>
+
 
 
 
