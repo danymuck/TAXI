@@ -176,7 +176,7 @@
       position: absolute; 
       inset: 0; 
       background: transparent; /* rgba(0,0,0,0.55) El fondo oscurecido que te gustaba */ 
-      display: flex; 
+      display: none; 
       flex-direction: column; 
       align-items: center; 
       justify-content: flex-start;
@@ -433,7 +433,7 @@ async function openScanner(tipo) {
 
     try {
         stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: "environment" }
+            video: true
         });
 
         // Pequeño delay para que el DOM procese el display:block antes del srcObject
@@ -601,6 +601,7 @@ function habilitarEdicionFactura() {
 </script>
 </body>
 </html>
+
 
 
 
