@@ -439,16 +439,23 @@ async function openScanner(tipo) {
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
     try {
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: "environment" }
-        });
+    stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" }
+    });
+    alert("1. Stream OK - activo: " + stream.active);
 
-        video.srcObject = stream;
-        video.setAttribute("playsinline", "true");
-        video.setAttribute("muted", "true");
-        video.muted = true;
+    video.srcObject = stream;
+    alert("2. srcObject asignado");
 
-      await video.play();
+    video.setAttribute("playsinline", "true");
+    video.muted = true;
+
+    await video.play();
+    alert("3. Play OK - tamaño: " + video.videoWidth + "x" + video.videoHeight);
+
+} catch (err) {
+    alert("ERROR en paso: " + err.name + " | " + err.message);
+}
 
 // DEBUG - bórralo después
 console.log("Video width:", video.videoWidth);
@@ -616,6 +623,7 @@ function habilitarEdicionFactura() {
 </script>
 </body>
 </html>
+
 
 
 
