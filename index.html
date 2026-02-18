@@ -48,7 +48,15 @@
     .hero-image img { width: 100%; height: 200px; object-fit: cover; display: block; }
     .hero-greeting { position: absolute; left: 10%; top: 50%; transform: translateY(-50%); color: #fff; font-size: 24px; font-weight: bold; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
 
-    .carbon-bg { min-height: 100vh; background: #0a0a0a; padding: 20px; }
+    .carbon-bg { 
+        min-height: 100vh; 
+        background: #0a0a0a; 
+        padding: 20px 0; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+    }
+    
     .scan-btn { width: 100%; background: #f5c400; border: none; border-radius: 14px; padding: 20px; text-align: left; box-shadow: 0 8px 20px rgba(245,196,0,0.3); cursor: pointer; }
     .scan-title { font-family: "Russo One", sans-serif; font-size: 20px; color: #000; }
 
@@ -65,6 +73,19 @@
         color: #000000 !important; /* Texto negro */
     }
 
+    /* Estilo para los botones blancos */
+    .btn-blanco {
+        background: #ffffff !important;
+        margin-top: 15px; /* Espaciado entre botones */
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+    }
+
+    /* Forzamos texto negro para los botones blancos */
+    .btn-blanco .scan-title, 
+    .btn-blanco .scan-subtitle {
+        color: #000000 !important;
+    }
+    
     /* Aseguramos que el subtítulo esté alineado a la izquierda (heredado del original) */
     .scan-subtitle {
         display: block;
@@ -313,6 +334,11 @@
       <span class="scan-title">📄 ESCANEAR FACTURAS</span>
       <span class="scan-subtitle">Escanea facturas físicas</span>
     </button>
+
+    <button class="scan-btn btn-blanco" onclick="alert('Abriendo selector de archivos...')">
+      <span class="scan-title">📁 IMPORTAR DIGITAL</span>
+      <span class="scan-subtitle">Sube capturas y/o archivos digitales</span>
+    </button>
 </div>
 </div>
 
@@ -479,5 +505,6 @@
 </script>
 </body>
 </html>
+
 
 
