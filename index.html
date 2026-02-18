@@ -177,7 +177,7 @@
     .scanner-overlay { 
       position: absolute; 
       inset: 0; 
-      background: rgba(0,0,0,0.55); /* El fondo oscurecido que te gustaba */
+      background: transparent; /* rgba(0,0,0,0.55) El fondo oscurecido que te gustaba */ 
       display: flex; 
       flex-direction: column; 
       align-items: center; 
@@ -418,38 +418,33 @@
 async function openScanner(tipo) {
     tipoDocumento = tipo; 
     
-    const home = document.getElementById("homeScreen");
-    const scanner = document.getElementById("scannerScreen");
     const video = document.getElementById("camera");
+    const photo = document.getElementById("photo");
+    
+    // RESET TOTAL
+    photo.style.display = "none";
+    video.style.display = "block";
+    video.style.opacity = "0"; // Lo hacemos invisible un segundo...
 
-    // Limpiamos cualquier stream previo para resetear el hardware de la cámara
+    document.getElementById("homeScreen").style.display = "none";
+    document.getElementById("scannerScreen").style.display = "block";
+    
     if (stream) {
       stream.getTracks().forEach(track => track.stop());
     }
 
-    home.style.display = "none";
-    scanner.style.display = "block";
-    
     try {
-      const constraints = { 
-        video: { 
-          facingMode: "environment",
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        } 
-      };
-      
-      stream = await navigator.mediaDevices.getUserMedia(constraints);
+      stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: "environment" } 
+      });
       video.srcObject = stream;
-      video.style.zIndex = "1";
-
-      // FORZAR REPRODUCCIÓN: Crucial para evitar el cuadro negro
+      
       video.onloadedmetadata = () => {
-        video.play().catch(e => console.log("Error forzando play:", e));
+        video.play();
+        setTimeout(() => { video.style.opacity = "1"; }, 300); // ...y lo encendemos tras el play
       };
-
     } catch (err) {
-      alert("Error de acceso a cámara: " + err.message);
+      alert("Error: " + err.message);
     }
 }
   
@@ -607,6 +602,7 @@ function habilitarEdicionFactura() {
 </script>
 </body>
 </html>
+
 
 
 
