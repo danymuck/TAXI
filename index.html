@@ -427,7 +427,13 @@ async function openScanner(tipo) {
 
     try {
       stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: "environment" } 
+    video: { 
+        facingMode: "environment",
+        width: { ideal: 3840 },
+        height: { ideal: 2160 },
+        focusMode: "continuous"
+    } 
+});
       });
       video.srcObject = stream;
       video.setAttribute("playsinline", "true");
@@ -449,7 +455,7 @@ async function openScanner(tipo) {
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0);
     
-    const dataURL = canvas.toDataURL("image/jpeg", 0.8);
+    const dataURL = canvas.toDataURL("image/jpeg", 1.0);
     document.getElementById("photo").src = dataURL;
     document.getElementById("photo").style.display = "block";
     video.style.display = "none";
@@ -582,3 +588,4 @@ async function openScanner(tipo) {
 
 </body>
 </html>
+
