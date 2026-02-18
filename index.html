@@ -107,7 +107,7 @@
       z-index: 9999;
     }
 
-    /* ← ÚNICO CAMBIO EN CSS: eliminada la línea de JS que estaba dentro del bloque */
+
     #photo { 
       width: 100%; 
       height: 100%; 
@@ -395,8 +395,7 @@
   </div>
 </div>
 
-<!-- BOTÓN DE DIAGNÓSTICO - bórralo cuando funcione todo -->
-<button onclick="testVideo()" style="position:fixed;top:0;left:0;z-index:999999;background:red;color:white;padding:20px;font-size:20px;">TEST</button>
+
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnbZohq9RvBu5EAqKA5aq59EftWh7d04IBCJf9QKMPo5u7SRUdDoCgVkC3QOnK9y2_xw/exec";
@@ -433,13 +432,7 @@ async function openScanner(tipo) {
       video.srcObject = stream;
       video.setAttribute("playsinline", "true");
       video.muted = true;
-      // Justo antes del await video.play()
-document.getElementById("scannerScreen").style.display = "block";
-document.getElementById("scannerScreen").style.visibility = "visible";
-video.style.width = "100vw";
-video.style.height = "100vh";
-
-await video.play();
+      await video.play();
     } catch (err) {
       alert("Error de cámara: " + err.name + " | " + err.message);
     }
@@ -584,24 +577,8 @@ await video.play();
     resetScan();
   }
 
-  // FUNCIÓN DE DIAGNÓSTICO - bórrala cuando funcione todo
-  function testVideo() {
-    const video = document.getElementById("camera");
-    const rect = video.getBoundingClientRect();
-    alert(
-        "Display: " + getComputedStyle(video).display + "\n" +
-        "Visibility: " + getComputedStyle(video).visibility + "\n" +
-        "Opacity: " + getComputedStyle(video).opacity + "\n" +
-        "Z-index: " + getComputedStyle(video).zIndex + "\n" +
-        "Width: " + rect.width + "\n" +
-        "Height: " + rect.height + "\n" +
-        "Top: " + rect.top + "\n" +
-        "Left: " + rect.left + "\n" +
-        "Parent display: " + getComputedStyle(video.parentElement).display
-    );
-  }
+
 </script>
 
 </body>
 </html>
-
