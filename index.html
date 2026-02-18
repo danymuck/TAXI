@@ -464,9 +464,6 @@ console.log("Ready state:", video.readyState);
 console.log("Stream active:", stream.active);
 alert(`Stream: ${stream.active} | Tamaño: ${video.videoWidth}x${video.videoHeight} | ReadyState: ${video.readyState}`);
 
-    } catch (err) {
-        alert("Error de cámara: " + err.message);
-    }
 }
   
     async function capturePhoto() {
@@ -623,6 +620,7 @@ function habilitarEdicionFactura() {
 </script>
 </body>
 </html>
+
 
 
 
