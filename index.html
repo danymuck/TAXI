@@ -109,9 +109,14 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1; /* Asegura que está sobre el fondo negro */
 }
-    #photo { width: 100%; height: 100%; object-fit: cover; display: none; }
+    #photo { 
+      document.getElementById("photo").style.display = "none";
+      width: 100%; 
+      height: 100%; 
+      object-fit: 
+      cover; 
+      display: none; }
 
     /* Contenedor del Popup */
     .custom-popup {
@@ -436,6 +441,7 @@ async function openScanner(tipo) {
       
       stream = await navigator.mediaDevices.getUserMedia(constraints);
       video.srcObject = stream;
+      video.style.zIndex = "1";
 
       // FORZAR REPRODUCCIÓN: Crucial para evitar el cuadro negro
       video.onloadedmetadata = () => {
@@ -601,6 +607,7 @@ function habilitarEdicionFactura() {
 </script>
 </body>
 </html>
+
 
 
 
