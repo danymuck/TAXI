@@ -52,6 +52,27 @@
     .spinner { width: 60px; height: 60px; border: 4px solid rgba(255, 255, 255, 0.1); border-top: 4px solid #f5c400; border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .editable-active { outline: 2px solid #f5c400 !important; background: rgba(255, 255, 255, 0.05); }
+
+    .btn-action {
+        width: 94%; /* Ancho solicitado */
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+    }
+
+    .btn-action img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 14px; /* Opcional, para suavizar los bordes si la imagen no lo tiene */
+    }
+
+    .btn-action:active {
+        transform: scale(0.96); /* Efecto de pulsación */
+    }
+    
   </style>
 </head>
 <body>
@@ -62,10 +83,18 @@
     <img src="https://images.unsplash.com/photo-1593950315186-76a92975b60c?auto=format&fit=crop&w=800&q=80">
     <div class="hero-greeting">👋 ¡Hola, Dani!</div>
   </div>
+  
   <div class="carbon-bg">
-    <button class="scan-btn" onclick="openScanner()">
-      <span class="scan-title">📸 ESCANEAR TICKET</span>
-      <span class="scan-subtitle">Escanear tickets del taxímetro</span>
+    <button class="btn-action" onclick="openScanner()">
+        <img src="escaneartickets.png" alt="Escanear Tickets">
+    </button>
+
+    <button class="btn-action" onclick="alert('Importar Digital seleccionado')">
+        <img src="importardigital.jpg" alt="Importar Digital">
+    </button>
+
+    <button class="btn-action" onclick="alert('Escanear Facturas seleccionado')">
+        <img src="escanearfacturas.jpg" alt="Escanear Facturas">
     </button>
   </div>
 </div>
@@ -195,5 +224,6 @@
 
 </body>
 </html>
+
 
 
