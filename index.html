@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="manifest" href="manifest.json">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="TaxiScan">
-<link rel="apple-touch-icon" href="icon-192.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mi Taxi App</title>
@@ -207,40 +201,6 @@
       background: rgba(255, 255, 255, 0.05);
       border-radius: 4px;
     }
-
-    /* Contenedor para asegurar que todo vaya debajo del título */
-.main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin-top: 20px;
-}
-    
-    /* Estilo para los botones con tus imágenes en % */
-.boton-principal {
-    width: 94%;           /* Margen de seguridad a los lados */
-    max-width: 500px;
-    height: 85px;         /* Altura ajustada para tus nuevas imágenes */
-    margin: 10px 0;       /* Espacio entre botones */
-    border: none;
-    cursor: pointer;
-    background-color: transparent;
-    background-size: 100% 100%; /* Fuerza a la imagen a ocupar todo el botón */
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: transform 0.1s ease;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.boton-principal:active {
-    transform: scale(0.95);
-}
-
-/* Enlaces exactos a tus archivos subidos */
-#btn-ticket { background-image: url('escaneartickets.png'); }
-#btn-factura { background-image: url('escanearfacturas.png'); }
-#btn-digital { background-image: url('subirfacturas.png'); }
     
     .ticket-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #333; }
     
@@ -319,18 +279,10 @@
     <div class="hero-greeting">👋 ¡Hola, Dani!</div>
   </div>
   <div class="carbon-bg">
-    <div class="main-content">
-    
-    <button id="btn-ticket" class="boton-principal" onclick="abrirCamara('ticket')"></button>
-
-    <button id="btn-factura" class="boton-principal" onclick="abrirCamara('factura')"></button>
-
-    <button id="btn-digital" class="boton-principal" onclick="document.getElementById('inputDigital').click()"></button>
-    
-    <input type="file" id="inputDigital" style="display: none;" accept="image/*,application/pdf" onchange="subirArchivo(this)">
-    
-</div>
-
+    <button class="scan-btn" onclick="openScanner()">
+      <div class="scan-title">📸 Escanear Ticket</div>
+      <div style="color: #333; font-style: italic;">Escanear tickets del taxímetro</div>
+    </button>
   </div>
 </div>
 
@@ -433,13 +385,10 @@
   function guardarEnSheets() {
     if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
 
-    let importeTexto = document.getElementById("importeField").innerText;
-    let importeLimpio = importeTexto.replace('.', ','); 
-
     const datos = {
       action: "guardar",
       datos: {
-        importe: importeLimpio, // Enviamos el número con coma
+        importe: document.getElementById("importeField").innerText,
         fecha: document.getElementById("fechaField").innerText,
         servicios: document.getElementById("serviciosField").innerText,
         kilometros: document.getElementById("kmField").innerText,
@@ -497,26 +446,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
