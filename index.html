@@ -433,7 +433,13 @@ async function openScanner(tipo) {
       video.srcObject = stream;
       video.setAttribute("playsinline", "true");
       video.muted = true;
-      await video.play();
+      // Justo antes del await video.play()
+document.getElementById("scannerScreen").style.display = "block";
+document.getElementById("scannerScreen").style.visibility = "visible";
+video.style.width = "100vw";
+video.style.height = "100vh";
+
+await video.play();
     } catch (err) {
       alert("Error de cámara: " + err.name + " | " + err.message);
     }
@@ -598,3 +604,4 @@ async function openScanner(tipo) {
 
 </body>
 </html>
+
