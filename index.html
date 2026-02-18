@@ -101,15 +101,16 @@
   width: 100vw;
   height: 100vh;
 }
-    #camera { 
-    width: 100vw; 
-    height: 100vh; 
-    object-fit: cover; 
-    display: block !important; /* Aseguramos que sea visible */
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
+   #camera {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    object-fit: cover !important;
+    display: block !important;
+    opacity: 1 !important;
 }
     #photo { 
   width: 100%; 
@@ -620,6 +621,7 @@ function habilitarEdicionFactura() {
 </script>
 </body>
 </html>
+
 
 
 
