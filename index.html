@@ -109,6 +109,7 @@
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 1; /* Asegura que está sobre el fondo negro */
 }
     #photo { width: 100%; height: 100%; object-fit: cover; display: none; }
 
@@ -177,7 +178,8 @@
       align-items: center; 
       justify-content: flex-start;
       padding-top: 15%;           /* Tu ajuste del 10% */
-      pointer-events: none; 
+      pointer-events: none;
+      z-index: 10;
     }
 
    .scan-frame { 
@@ -405,7 +407,7 @@
   
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnbZohq9RvBu5EAqKA5aq59EftWh7d04IBCJf9QKMPo5u7SRUdDoCgVkC3QOnK9y2_xw/exec"; // Asegúrate de que sea la última versión implementada
-  let stream;
+  let stream = null;
   let tipoDocumento = 'ticket'; 
 
 async function openScanner(tipo) {
@@ -599,6 +601,7 @@ function habilitarEdicionFactura() {
 </script>
 </body>
 </html>
+
 
 
 
