@@ -425,23 +425,20 @@ async function openScanner(tipo) {
     // Esperamos a que el navegador pinte el DOM antes de asignar el stream
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({ 
-    video: { 
-        facingMode: "environment",
-        width: { ideal: 3840 },
-        height: { ideal: 2160 },
-        focusMode: "continuous"
-    } 
-});
-      });
-      video.srcObject = stream;
-      video.setAttribute("playsinline", "true");
-      video.muted = true;
-      await video.play();
-    } catch (err) {
-      alert("Error de cámara: " + err.name + " | " + err.message);
-    }
+   try {
+    stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+            facingMode: "environment",
+            width: { ideal: 3840 },
+            height: { ideal: 2160 }
+        } 
+    });
+    video.srcObject = stream;
+    video.setAttribute("playsinline", "true");
+    video.muted = true;
+    await video.play();
+} catch (err) {
+    alert("Error de cámara: " + err.name + " | " + err.message);
 }
   
   async function capturePhoto() {
@@ -588,5 +585,6 @@ async function openScanner(tipo) {
 
 </body>
 </html>
+
 
 
