@@ -7,111 +7,51 @@
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Russo+One&display=swap" rel="stylesheet">
 
   <style>
-    * { 
-      box-sizing: border-box; 
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body { 
-      margin: 0; 
-      background: #000; 
-      font-family: 'Josefin Slab', serif; 
-      overflow-x: hidden; 
-      color: #fff;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { margin: 0; background: #000; font-family: 'Josefin Slab', serif; overflow-x: hidden; color: #fff; }
 
     /* BARRA SUPERIOR */
     .top-bar { background: #f5c400; height: 80px; display: flex; align-items: center; justify-content: center; width: 100%; }
-    .top-bar h1 { 
-      font-family: 'Josefin Slab', serif;
-      font-weight: 800; 
-      font-style: italic;
-      margin: 0; 
-      font-size: 27px; 
-      color: #000; 
-    }
+    .top-bar h1 { font-family: 'Josefin Slab', serif; font-weight: 800; font-style: italic; margin: 0; font-size: 27px; color: #000; }
     
     .hero-image { position: relative; width: 100%; }
     .hero-image img { width: 100%; height: 200px; object-fit: cover; display: block; }
-    .hero-greeting { 
-      position: absolute; left: 10%; top: 50%; transform: translateY(-50%); 
-      color: #fff; 
-      font-size: 28px; 
-      font-weight: 700; 
-      text-shadow: 2px 2px 10px rgba(0,0,0,0.8); 
-    }
+    .hero-greeting { position: absolute; left: 10%; top: 50%; transform: translateY(-50%); color: #fff; font-size: 28px; font-weight: 700; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
 
-    /* BOTÓN PRINCIPAL ESCANEAR */
+    /* BOTÓN PRINCIPAL */
     .carbon-bg { min-height: 100vh; background: #0a0a0a; padding: 20px; }
-    .scan-btn { 
-      width: 100%; background: #f5c400; border: none; border-radius: 14px; 
-      padding: 25px; text-align: left; box-shadow: 0 8px 20px rgba(245,196,0,0.3); 
-      cursor: pointer; 
-    }
-    .scan-title { 
-      font-family: "Josefin Slab", serif; 
-      font-size: 25px; 
-      color: #000; 
-      font-weight: 800; 
-      display: block;
-    }
-    .scan-subtitle {
-      color: #000; 
-      font-style: italic; 
-      font-size: 16px; /* Bajado un punto como pediste */
-      font-weight: 400; /* Bajada la negrura (normal) */
-    }
+    .scan-btn { width: 100%; background: #f5c400; border: none; border-radius: 14px; padding: 25px; text-align: left; box-shadow: 0 8px 20px rgba(245,196,0,0.3); cursor: pointer; }
+    .scan-title { font-family: "Josefin Slab", serif; font-size: 25px; color: #000; font-weight: 800; display: block; }
+    .scan-subtitle { color: #000; font-style: italic; font-size: 16px; font-weight: 400; }
 
-    /* PANEL DE RESULTADOS (OCR) */
-    .bottom-sheet { 
-      position: fixed; bottom: -100%; left: 0; width: 100%; background: #1a1a1a; 
-      border-radius: 25px 25px 0 0; padding: 25px; 
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
-      z-index: 10001; color: white;
-    }
-    .bottom-sheet.show { transform: translateY(0); bottom: 0; }
-    
-    .ticket-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #333; }
-    .ticket-row span { font-size: 18px; font-weight: 600; color: #ccc; }
-    .ticket-row strong { font-size: 20px; font-weight: 700; color: #fff; }
-
-    /* BOTONES ACCIÓN */
-    .actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 30px; }
-    .btn {
-      flex: 1; border: none; border-radius: 12px; padding: 18px 5px;
-      font-family: 'Josefin Slab', serif; font-size: 16px; 
-      font-weight: 700; letter-spacing: 0.5px; cursor: pointer; text-transform: uppercase;
-    }
-    .btn-back { background: #333; color: #ccc; }
-    .btn-edit { background: #444; color: #fff; }
-    .btn-accept { background: #f5c400; color: #000; font-weight: 800 !important; }
-
-    /* POPUP ÉXITO */
-    .custom-popup { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 20000; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); }
-    .popup-card { background: #1c1c1e; width: 85%; max-width: 300px; border-radius: 25px; padding: 30px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); }
-    .popup-title { color: #fff; font-size: 22px; font-weight: 800; font-style: italic; margin-bottom: 10px; display: block; }
-    .popup-subtitle { color: #aaa; font-size: 17px; font-style: italic; font-weight: 600; }
-    .btn-popup-ok { margin-top: 25px; background: #f5c400; color: #000; border: none; border-radius: 12px; padding: 12px 30px; font-size: 17px; font-weight: 800; }
-
-    /* SCANNER ELEMENTOS */
-    .scan-frame::after {
-      content: "Coloca el ticket dentro del marco";
-      position: absolute; bottom: -65px; left: 0; width: 100%; text-align: center;
-      color: #fff; font-size: 19px; font-style: italic; font-weight: 600;
-    }
-    .loading-text { color: #f5c400; margin-top: 25px; font-size: 18px; font-style: italic; font-weight: 700; animation: pulse 2s infinite; }
-    .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 10002; }
-
-    /* Utilidades */
-    .editable-active { outline: 2px solid #f5c400 !important; outline-offset: 4px; background: rgba(255, 255, 255, 0.05); }
+    /* SCANNER */
     #scannerScreen { position: fixed; inset: 0; background: #000; display: none; z-index: 9999; }
     #camera, #photo { width: 100%; height: 100%; object-fit: cover; }
     .scanner-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.55); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 15%; pointer-events: none; }
     .scan-frame { width: 75%; height: 65%; border: 3px solid #f5c400; border-radius: 20px; position: relative; }
+    .scan-frame::after { content: "Coloca el ticket dentro del marco"; position: absolute; bottom: -65px; left: 0; width: 100%; text-align: center; color: #fff; font-size: 19px; font-style: italic; font-weight: 600; }
     .capture-btn { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 85px; height: 85px; border-radius: 50%; border: 6px solid #f5c400; background: rgba(255,255,255,0.2); z-index: 10000; cursor: pointer; }
-    
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* PANEL OCR */
+    .bottom-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: #1a1a1a; border-radius: 25px 25px 0 0; padding: 25px; transition: transform 0.5s ease; z-index: 10001; color: white; }
+    .bottom-sheet.show { transform: translateY(0); bottom: 0; }
+    .ticket-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #333; }
+    .ticket-row span { font-size: 18px; font-weight: 600; color: #ccc; }
+    .ticket-row strong { font-size: 20px; font-weight: 700; color: #fff; }
+
+    .actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 30px; }
+    .btn { flex: 1; border: none; border-radius: 12px; padding: 18px 5px; font-family: 'Josefin Slab', serif; font-size: 16px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+    .btn-back { background: #333; color: #ccc; }
+    .btn-edit { background: #444; color: #fff; }
+    .btn-accept { background: #f5c400; color: #000; font-weight: 800 !important; }
+
+    /* POPUP & LOADING */
+    .custom-popup { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 20000; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); }
+    .popup-card { background: #1c1c1e; width: 85%; max-width: 300px; border-radius: 25px; padding: 30px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); }
+    .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 10002; }
     .spinner { width: 60px; height: 60px; border: 4px solid rgba(255, 255, 255, 0.1); border-top: 4px solid #f5c400; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .editable-active { outline: 2px solid #f5c400 !important; background: rgba(255, 255, 255, 0.05); }
   </style>
 </head>
 <body>
@@ -151,18 +91,107 @@
 
   <div id="loadingOverlay" class="loading-overlay">
     <div class="spinner"></div>
-    <div class="loading-text">Leyendo ticket...</div>
+    <div style="color:#f5c400; margin-top:20px; font-weight:700;">Leyendo ticket...</div>
   </div>
 </div>
 
 <div id="successPopup" class="custom-popup">
   <div class="popup-card">
-    <span class="popup-icon">✅</span>
-    <span class="popup-title">Ticket guardado</span>
-    <span class="popup-subtitle">Se ha registrado correctamente</span>
-    <button class="btn-popup-ok" onclick="cerrarExito()">OK</button>
+    <div style="font-size:50px;">✅</div>
+    <h2 style="color:#fff; font-family:'Josefin Slab';">Ticket guardado</h2>
+    <p style="color:#aaa;">Se ha registrado correctamente</p>
+    <button class="btn" style="background:#f5c400; width:100px;" onclick="resetScan()">OK</button>
   </div>
 </div>
 
 <script>
-  const SCRIPT_URL = "
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnbZohq9RvBu5EAqKA5aq59EftWh7d04IBCJf9QKMPo5u7SRUdDoCgVkC3QOnK9y2_xw/exec";
+  let stream;
+
+  async function openScanner() {
+    const home = document.getElementById("homeScreen");
+    const scanner = document.getElementById("scannerScreen");
+    home.style.display = "none";
+    scanner.style.display = "block";
+    
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+      document.getElementById("camera").srcObject = stream;
+    } catch (err) {
+      alert("Error de cámara: " + err.message);
+    }
+  }
+
+  async function capturePhoto() {
+    const video = document.getElementById("camera");
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0);
+    
+    const dataURL = canvas.toDataURL("image/jpeg", 0.8);
+    document.getElementById("photo").src = dataURL;
+    document.getElementById("photo").style.display = "block";
+    video.style.display = "none";
+    document.getElementById("loadingOverlay").style.display = "flex";
+
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "ocr", image: dataURL })
+      });
+      const res = await response.json();
+      document.getElementById("loadingOverlay").style.display = "none";
+      
+      if (res.status === "ok") {
+        document.getElementById("fechaField").innerText = res.datos.fecha || "-";
+        document.getElementById("importeField").innerText = res.datos.importe || "0.00";
+        document.getElementById("serviciosField").innerText = res.datos.servicios || "-";
+        document.getElementById("kmField").innerText = res.datos.kilometros || "-";
+        document.getElementById("tiempoField").innerText = res.datos.tiempo || "-";
+        document.getElementById("resultPanel").classList.add("show");
+      }
+    } catch (e) {
+      document.getElementById("loadingOverlay").style.display = "none";
+      alert("Error procesando imagen");
+    }
+  }
+
+  function habilitarEdicion() {
+    const ids = ["fechaField", "importeField", "serviciosField", "kmField", "tiempoField"];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      el.contentEditable = "true";
+      el.classList.add("editable-active");
+    });
+  }
+
+  function guardarEnSheets() {
+    const btn = document.getElementById("btnAceptar");
+    btn.innerText = "ENVIANDO...";
+    btn.disabled = true;
+
+    const payload = {
+      action: "guardar",
+      datos: {
+        importe: document.getElementById("importeField").innerText,
+        fecha: document.getElementById("fechaField").innerText,
+        servicios: document.getElementById("serviciosField").innerText,
+        kilometros: document.getElementById("kmField").innerText,
+        tiempo: document.getElementById("tiempoField").innerText
+      }
+    };
+
+    fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
+      .then(() => {
+        document.getElementById("successPopup").style.display = "flex";
+      })
+      .catch(err => alert("Error al guardar"));
+  }
+
+  function resetScan() { location.reload(); }
+</script>
+
+</body>
+</html>
