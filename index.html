@@ -417,31 +417,38 @@
 async function openScanner(tipo) {
     tipoDocumento = tipo;
 
+    // 1. Mostramos TODO antes de tocar la cámara
+    document.getElementById("homeScreen").style.display = "none";
+    const scannerScreen = document.getElementById("scannerScreen");
+    scannerScreen.style.display = "block";
+    scannerScreen.style.visibility = "visible";
+
     const video = document.getElementById("camera");
     const photo = document.getElementById("photo");
 
     photo.style.display = "none";
     video.style.display = "block";
-    video.style.opacity = "1"; // ← Sin animación de opacidad, directo a visible
-
-    // Primero mostramos la pantalla, LUEGO asignamos el stream
-    document.getElementById("homeScreen").style.display = "none";
-    document.getElementById("scannerScreen").style.display = "block";
+    video.style.opacity = "1";
+    video.style.visibility = "visible";
 
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
     }
 
+    // 2. Esperamos a que el navegador pinte el DOM
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
     try {
         stream = await navigator.mediaDevices.getUserMedia({
-            video: true
+            video: { facingMode: "environment" }
         });
 
-        // Pequeño delay para que el DOM procese el display:block antes del srcObject
-        await new Promise(resolve => setTimeout(resolve, 50));
-
         video.srcObject = stream;
-        await video.play(); // Esperamos a que el play sea efectivo
+        video.setAttribute("playsinline", "true");
+        video.setAttribute("muted", "true");
+        video.muted = true;
+
+        await video.play();
 
     } catch (err) {
         alert("Error de cámara: " + err.message);
@@ -602,6 +609,7 @@ function habilitarEdicionFactura() {
 </script>
 </body>
 </html>
+
 
 
 
