@@ -48,57 +48,9 @@
     .hero-image img { width: 100%; height: 200px; object-fit: cover; display: block; }
     .hero-greeting { position: absolute; left: 10%; top: 50%; transform: translateY(-50%); color: #fff; font-size: 24px; font-weight: bold; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
 
-    /* CONTENEDOR PRINCIPAL */
-    .carbon-bg { 
-        min-height: 100vh; 
-        background: #0a0a0a; 
-        padding: 25px 0; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        gap: 15px; 
-    }
-    
-    /* ESTILO DE LOS BOTONES CON TEXTURA */
-    .scan-btn { 
-        width: 94%; 
-        height: 90px; /* Altura fija para que todos sean iguales */
-        border: none; 
-        border-radius: 14px; 
-        cursor: pointer; 
-        display: flex; 
-        flex-direction: column; 
-        justify-content: center; 
-        padding-left: 25px; 
-        background-size: cover; 
-        background-position: center;
-        transition: transform 0.1s active;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
-
-    /* Asignación de texturas individuales */
-    .btn-tickets { background-image: url('escaneartickets.png'); }
-    .btn-import { background-image: url('importardigital.jpg'); }
-    .btn-facturas { background-image: url('escanearfacturas.jpg'); }
-    
- /* Estilos del texto sobre la textura */
-    .scan-title { 
-        font-family: "Josefin Slab", serif; 
-        font-size: 22px; 
-        color: #000; 
-        font-weight: 800; 
-        display: block; 
-        text-transform: uppercase;
-    }
-    .scan-subtitle { 
-        color: #000; 
-        font-style: italic; 
-        font-size: 14px; 
-        font-weight: 500; 
-        opacity: 0.8;
-    }
-
-    .scan-btn:active { transform: scale(0.97); }
+    .carbon-bg { min-height: 100vh; background: #0a0a0a; padding: 20px; }
+    .scan-btn { width: 100%; background: #f5c400; border: none; border-radius: 14px; padding: 20px; text-align: left; box-shadow: 0 8px 20px rgba(245,196,0,0.3); cursor: pointer; }
+    .scan-title { font-family: "Russo One", sans-serif; font-size: 20px; color: #000; }
     
     #scannerScreen { position: fixed; inset: 0; background: #000; display: none; z-index: 9999; }
     #camera { width: 100%; height: 100%; object-fit: cover; }
@@ -503,6 +455,3 @@
 </script>
 </body>
 </html>
-
-
-
