@@ -179,14 +179,13 @@
 
     /* ── Marco ticket: dimensiones originales ── */
     .scan-frame {
-      width: 85%;
-      max-width: 340px;
-      height: 75%;
+      width: 75%;
+      height: 70%;
       border: 3px solid #f5c400;
-      border-radius: 12px;
-      position: relative;  /* ← añade esta línea */
+      border-radius: 20px;
+      position: relative;
+      flex-shrink: 0;
     }
-
 
     .scan-frame::after {
       content: attr(data-label);
@@ -658,5 +657,3 @@
 
 </body>
 </html>
-
-
