@@ -158,6 +158,7 @@
       display: block;
     }
 
+    /* ── Overlay compartido ── */
     .scanner-overlay {
       position: absolute;
       inset: 0;
@@ -171,6 +172,7 @@
       z-index: 10000;
     }
 
+    /* ── Marco ticket (apaisado/cuadrado) ── */
     .scan-frame {
       width: 75%;
       height: 70%;
@@ -180,7 +182,7 @@
     }
 
     .scan-frame::after {
-      content: "Coloca el ticket dentro del marco";
+      content: attr(data-label);
       position: absolute;
       bottom: -55px;
       left: 0;
@@ -190,6 +192,13 @@
       font-size: 16px;
       font-style: italic;
       font-weight: normal;
+    }
+
+    /* ── Marco factura (más alto, formato A4) ── */
+    .scan-frame.factura {
+      width: 80%;
+      height: 80%;
+      border-color: #00c2ff;
     }
 
     .capture-btn {
@@ -204,6 +213,11 @@
       background: rgba(255,255,255,0.2);
       z-index: 10001;
       cursor: pointer;
+    }
+
+    /* Botón captura azul para facturas */
+    .capture-btn.factura {
+      border-color: #00c2ff;
     }
 
     .bottom-sheet {
@@ -261,6 +275,7 @@
 
     .ticket-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #333; }
 
+    /* ── Loading overlay ── */
     .loading-overlay {
       position: fixed;
       inset: 0;
@@ -281,6 +296,12 @@
       border-radius: 50%;
       animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
       box-shadow: 0 0 10px rgba(245, 196, 0, 0.1);
+    }
+
+    /* Spinner azul para facturas */
+    .spinner.factura {
+      border-top-color: #00c2ff;
+      box-shadow: 0 0 10px rgba(0, 194, 255, 0.1);
     }
 
     @keyframes spin {
@@ -352,9 +373,15 @@
 <div id="scannerScreen">
   <video id="camera" autoplay playsinline muted></video>
   <img id="photo">
-  <div class="scanner-overlay"><div class="scan-frame"></div></div>
-  <button class="capture-btn" onclick="capturePhoto()"></button>
 
+  <!-- Overlay dinámico: cambia texto y estilo según tipo -->
+  <div class="scanner-overlay">
+    <div class="scan-frame" id="scanFrame" data-label="Coloca el ticket dentro del marco"></div>
+  </div>
+
+  <button class="capture-btn" id="captureBtn" onclick="capturePhoto()"></button>
+
+  <!-- Panel resultado TICKET -->
   <div class="bottom-sheet" id="resultPanel">
     <div class="ticket-row"><span>Fecha</span><strong id="fechaField" contenteditable="false">-</strong></div>
     <div class="ticket-row"><span>Importe</span><strong id="importeField" contenteditable="false">0.00</strong></div>
@@ -368,10 +395,11 @@
     </div>
   </div>
 
+  <!-- Panel resultado FACTURA -->
   <div class="bottom-sheet" id="facturaPanel">
-    <div class="ticket-row"><span>Fecha</span><strong id="fechaFactura">-</strong></div>
-    <div class="ticket-row"><span>Importe</span><strong id="importeFactura">0.00</strong></div>
-    <div class="ticket-row"><span>Categoría</span><strong id="catFactura">-</strong></div>
+    <div class="ticket-row"><span>Fecha</span><strong id="fechaFactura" contenteditable="false">-</strong></div>
+    <div class="ticket-row"><span>Importe</span><strong id="importeFactura" contenteditable="false">0.00</strong></div>
+    <div class="ticket-row"><span>Categoría</span><strong id="catFactura" contenteditable="false">-</strong></div>
     <div class="actions">
       <button class="btn btn-back" onclick="resetScan()">VOLVER</button>
       <button class="btn btn-edit" onclick="habilitarEdicionFactura()">EDITAR</button>
@@ -379,17 +407,18 @@
     </div>
   </div>
 
+  <!-- Loading overlay (único, texto dinámico) -->
   <div id="loadingOverlay" class="loading-overlay">
-    <div class="spinner"></div>
-    <div class="loading-text">Leyendo ticket...</div>
+    <div class="spinner" id="loadingSpinner"></div>
+    <div class="loading-text" id="loadingText">Leyendo ticket...</div>
   </div>
 </div>
 
 <div id="successPopup" class="custom-popup">
   <div class="popup-card">
     <span class="popup-icon">✅</span>
-    <span class="popup-title">Ticket guardado</span>
-    <span class="popup-subtitle">Se ha registrado correctamente</span>
+    <span class="popup-title" id="popupTitle">Ticket guardado</span>
+    <span class="popup-subtitle" id="popupSubtitle">Se ha registrado correctamente</span>
     <button class="btn-popup-ok" onclick="cerrarExito()">OK</button>
   </div>
 </div>
@@ -401,6 +430,27 @@
 
   async function openScanner(tipo) {
     tipoDocumento = tipo;
+    const esFactura = tipo === 'factura';
+
+    // Adaptar UI al tipo de documento
+    const frame = document.getElementById("scanFrame");
+    const captureBtn = document.getElementById("captureBtn");
+    const spinner = document.getElementById("loadingSpinner");
+    const loadingText = document.getElementById("loadingText");
+
+    if (esFactura) {
+      frame.classList.add("factura");
+      frame.setAttribute("data-label", "Coloca la factura dentro del marco");
+      captureBtn.classList.add("factura");
+      spinner.classList.add("factura");
+      loadingText.textContent = "Leyendo factura...";
+    } else {
+      frame.classList.remove("factura");
+      frame.setAttribute("data-label", "Coloca el ticket dentro del marco");
+      captureBtn.classList.remove("factura");
+      spinner.classList.remove("factura");
+      loadingText.textContent = "Leyendo ticket...";
+    }
 
     document.getElementById("homeScreen").style.display = "none";
     const scannerScreen = document.getElementById("scannerScreen");
@@ -425,8 +475,9 @@
       stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: "environment",
-          width: { ideal: 3840 },
-          height: { ideal: 2160 }
+          // ⚡ Reducido de 4K a Full HD — suficiente para OCR y mucho más rápido de subir
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
         }
       });
       video.srcObject = stream;
@@ -449,7 +500,9 @@
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0);
 
-    const dataURL = canvas.toDataURL("image/jpeg", 1.0);
+    // Calidad reducida a 0.85 — buen equilibrio legibilidad/peso para OCR
+    const dataURL = canvas.toDataURL("image/jpeg", 0.85);
+
     document.getElementById("photo").src = dataURL;
     document.getElementById("photo").style.display = "block";
     video.style.display = "none";
@@ -482,6 +535,9 @@
           document.getElementById("tiempoField").innerText = res.datos.tiempo || "-";
           document.getElementById("resultPanel").classList.add("show");
         }
+      } else {
+        alert("No se pudieron extraer los datos. Inténtalo de nuevo.\n" + (res.message || ""));
+        resetScan();
       }
     } catch (e) {
       document.getElementById("loadingOverlay").style.display = "none";
@@ -495,10 +551,11 @@
     if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
 
     let importeTexto = document.getElementById("importeField").innerText;
+    // El backend espera el importe con coma decimal para Sheets
     let importeLimpio = importeTexto.replace('.', ',');
 
     const datos = {
-      action: "guardar",
+      action: "guardar",           // ✅ CORREGIDO: acción que el backend sí maneja
       datos: {
         importe: importeLimpio,
         fecha: document.getElementById("fechaField").innerText,
@@ -518,9 +575,7 @@
       mode: "no-cors",
       body: JSON.stringify(datos)
     }).then(() => {
-      const popup = document.getElementById("successPopup");
-      popup.style.display = "flex";
-      setTimeout(() => popup.classList.add("show"), 10);
+      mostrarExito("Ticket guardado", "Se ha registrado en INGRESOS");
     }).catch(err => {
       alert("Error: " + err);
       btnAceptar.innerText = "ACEPTAR";
@@ -553,24 +608,28 @@
 
     fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
       .then(() => {
-        const popup = document.getElementById("successPopup");
-        popup.style.display = "flex";
-        setTimeout(() => popup.classList.add("show"), 10);
+        mostrarExito("Factura guardada", "Se ha registrado en GASTOS");
       })
       .catch(err => alert("Error al guardar el gasto: " + err));
   }
 
   function habilitarEdicion() {
     if (navigator.vibrate) navigator.vibrate(30);
-
     const campos = ["fechaField", "importeField", "serviciosField", "kmField", "tiempoField"];
     campos.forEach(id => {
       const el = document.getElementById(id);
       el.contentEditable = "true";
       el.classList.add("editable-active");
     });
-
     document.getElementById("importeField").focus();
+  }
+
+  function mostrarExito(titulo, subtitulo) {
+    document.getElementById("popupTitle").innerText = titulo;
+    document.getElementById("popupSubtitle").innerText = subtitulo;
+    const popup = document.getElementById("successPopup");
+    popup.style.display = "flex";
+    setTimeout(() => popup.classList.add("show"), 10);
   }
 
   function cerrarExito() {
