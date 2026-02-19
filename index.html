@@ -158,7 +158,6 @@
       display: block;
     }
 
-    /* ── Overlay compartido ── */
     .scanner-overlay {
       position: absolute;
       inset: 0;
@@ -172,12 +171,10 @@
       z-index: 10000;
     }
 
-    /* Overlay en modo factura: margen lateral mínimo y top pequeño */
     .scanner-overlay.factura {
       padding: 20px 12px 0 12px;
     }
 
-    /* ── Marco ticket: dimensiones originales ── */
     .scan-frame {
       width: 75%;
       height: 70%;
@@ -200,15 +197,13 @@
       font-weight: normal;
     }
 
-    /* ── Marco factura: ancho máximo con márgenes pequeños, alto hasta dejar hueco al botón ── */
     .scan-frame.factura {
       width: 100%;
       aspect-ratio: auto;
-      height: calc(100vh - 220px); /* deja 220px abajo para texto + botón de captura */
+      height: calc(100vh - 220px);
       border-color: #00c2ff;
     }
 
-    /* Texto label más abajo en factura para no solapar con el botón */
     .scan-frame.factura::after {
       bottom: -36px;
     }
@@ -227,7 +222,6 @@
       cursor: pointer;
     }
 
-    /* Botón captura azul para facturas */
     .capture-btn.factura {
       border-color: #00c2ff;
     }
@@ -287,7 +281,6 @@
 
     .ticket-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #333; }
 
-    /* ── Loading overlay ── */
     .loading-overlay {
       position: fixed;
       inset: 0;
@@ -310,7 +303,6 @@
       box-shadow: 0 0 10px rgba(245, 196, 0, 0.1);
     }
 
-    /* Spinner azul para facturas */
     .spinner.factura {
       border-top-color: #00c2ff;
       box-shadow: 0 0 10px rgba(0, 194, 255, 0.1);
@@ -353,6 +345,175 @@
     .btn-popup-ok:active {
       transform: scale(0.9);
     }
+
+    /* ── Menú Importar Digital ── */
+    #menuImportar {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      z-index: 15000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .import-card {
+      background: #1a1a2e;
+      border-radius: 20px;
+      padding: 24px 20px 20px;
+      width: 100%;
+      max-width: 340px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .import-card h3 {
+      color: #fff;
+      text-align: center;
+      margin: 0 0 20px;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .import-btn {
+      width: 100%;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 13px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: opacity 0.15s;
+    }
+
+    .import-btn:active { opacity: 0.75; }
+
+    .import-btn .import-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .import-btn .import-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .import-btn .import-label strong {
+      font-size: 15px;
+    }
+
+    .import-btn .import-label small {
+      font-size: 11px;
+      opacity: 0.75;
+      font-weight: 500;
+    }
+
+    .import-btn-whatsapp { background: #25D366; color: #fff; }
+    .import-btn-factura  { background: #00c2ff; color: #fff; }
+    .import-btn-banco    { background: #6c63ff; color: #fff; }
+    .import-btn-cancel   { background: transparent; color: #888; border: 1px solid #333; margin-bottom: 0; justify-content: center; }
+
+    /* ── Panel confirmación WhatsApp ── */
+    #whatsappPanel {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      z-index: 15000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .whatsapp-sheet {
+      background: #1a1a1a;
+      border-radius: 25px 25px 0 0;
+      padding: 20px 20px 40px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+
+    .whatsapp-sheet h3 {
+      color: #fff;
+      margin: 0 0 4px;
+      font-size: 16px;
+    }
+
+    .whatsapp-sheet .wa-subtitle {
+      color: #888;
+      font-size: 12px;
+      margin: 0 0 16px;
+    }
+
+    .viaje-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #2a2a2a;
+      gap: 8px;
+    }
+
+    .viaje-fecha {
+      color: #aaa;
+      font-size: 13px;
+      min-width: 90px;
+    }
+
+    .viaje-importe {
+      color: #f5c400;
+      font-size: 16px;
+      font-weight: 700;
+      flex: 1;
+      text-align: right;
+    }
+
+    .viaje-delete {
+      background: none;
+      border: none;
+      color: #555;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px 8px;
+      transition: color 0.15s;
+    }
+    .viaje-delete:active { color: #e05; }
+
+    .wa-total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 0 0;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .wa-total-row span:last-child { color: #f5c400; }
+
+    /* Loading fullscreen (importar) */
+    #importLoadingOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(5px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 16000;
+    }
   </style>
 </head>
 <body>
@@ -375,18 +536,20 @@
       <span class="scan-subtitle">Escanea facturas físicas</span>
     </button>
 
-    <button class="scan-btn btn-blanco" onclick="alert('Función de archivos en desarrollo...')">
+    <button class="scan-btn btn-blanco" onclick="abrirMenuImportar()">
       <span class="scan-title">📁 IMPORTAR DIGITAL</span>
       <span class="scan-subtitle">Sube capturas y/o archivos digitales</span>
     </button>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SCANNER SCREEN (sin cambios)
+══════════════════════════════════════════ -->
 <div id="scannerScreen">
   <video id="camera" autoplay playsinline muted></video>
   <img id="photo">
 
-  <!-- Overlay dinámico: cambia texto y estilo según tipo -->
   <div class="scanner-overlay">
     <div class="scan-frame" id="scanFrame" data-label="Coloca el ticket dentro del marco"></div>
   </div>
@@ -426,13 +589,78 @@
     </div>
   </div>
 
-  <!-- Loading overlay (único, texto dinámico) -->
   <div id="loadingOverlay" class="loading-overlay">
     <div class="spinner" id="loadingSpinner"></div>
     <div class="loading-text" id="loadingText">Leyendo ticket...</div>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     MENÚ IMPORTAR DIGITAL
+══════════════════════════════════════════ -->
+<div id="menuImportar">
+  <div class="import-card">
+    <h3>¿Qué quieres importar?</h3>
+
+    <button class="import-btn import-btn-whatsapp" onclick="seleccionarTipoImport('whatsapp')">
+      <span class="import-icon">📱</span>
+      <span class="import-label">
+        <strong>Captura de WhatsApp</strong>
+        <small>Extrae viajes → columna Pendientes</small>
+      </span>
+    </button>
+
+    <button class="import-btn import-btn-factura" onclick="seleccionarTipoImport('factura')">
+      <span class="import-icon">📄</span>
+      <span class="import-label">
+        <strong>Factura digital</strong>
+        <small>Imagen o PDF → GASTOS</small>
+      </span>
+    </button>
+
+    <button class="import-btn import-btn-banco" onclick="seleccionarTipoImport('banco')">
+      <span class="import-icon">🏦</span>
+      <span class="import-label">
+        <strong>Captura del banco</strong>
+        <small>Justificante de pago → GASTOS</small>
+      </span>
+    </button>
+
+    <button class="import-btn import-btn-cancel" onclick="cerrarMenuImportar()">Cancelar</button>
+  </div>
+</div>
+
+<!-- Input de archivo oculto -->
+<input type="file" id="inputImportar" style="display:none" accept="image/*" onchange="procesarArchivoImportado(this)">
+
+<!-- ══════════════════════════════════════════
+     PANEL CONFIRMACIÓN WHATSAPP
+══════════════════════════════════════════ -->
+<div id="whatsappPanel">
+  <div class="whatsapp-sheet">
+    <h3>📱 Viajes encontrados</h3>
+    <p class="wa-subtitle">Revisa y elimina los que no quieras guardar</p>
+    <div id="viajesList"></div>
+    <div class="wa-total-row">
+      <span>Total</span>
+      <span id="waTotal">0.00 €</span>
+    </div>
+    <div class="actions" style="margin-top: 20px;">
+      <button class="btn btn-back" onclick="cerrarPanelWhatsapp()">VOLVER</button>
+      <button class="btn btn-accept" onclick="confirmarGuardarPendientes()" id="btnGuardarWA">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- Loading para importar (separado del scanner) -->
+<div id="importLoadingOverlay">
+  <div class="spinner factura"></div>
+  <div class="loading-text" id="importLoadingText">Procesando...</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     POPUP ÉXITO
+══════════════════════════════════════════ -->
 <div id="successPopup" class="custom-popup">
   <div class="popup-card">
     <span class="popup-icon">✅</span>
@@ -447,11 +675,18 @@
   let stream = null;
   let tipoDocumento = 'ticket';
 
+  // Variables para importar digital
+  let tipoImportActual = null;
+  let viajesWhatsapp = [];      // lista editable de viajes extraídos
+
+  // ════════════════════════════════════════
+  // SCANNER (sin cambios)
+  // ════════════════════════════════════════
+
   async function openScanner(tipo) {
     tipoDocumento = tipo;
     const esFactura = tipo === 'factura';
 
-    // Adaptar UI al tipo de documento
     const frame = document.getElementById("scanFrame");
     const overlay = document.querySelector(".scanner-overlay");
     const captureBtn = document.getElementById("captureBtn");
@@ -497,7 +732,6 @@
       stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: "environment",
-          // ⚡ Reducido de 4K a Full HD — suficiente para OCR y mucho más rápido de subir
           width: { ideal: 1920 },
           height: { ideal: 1080 }
         }
@@ -524,7 +758,6 @@
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0);
 
-    // Calidad reducida a 0.85 — buen equilibrio legibilidad/peso para OCR
     const dataURL = canvas.toDataURL("image/jpeg", 0.85);
 
     document.getElementById("photo").src = dataURL;
@@ -550,7 +783,6 @@
           document.getElementById("fechaFactura").innerText = res.datos.fecha || "-";
           document.getElementById("importeFactura").innerText = res.datos.importe || "0.00";
           document.getElementById("catFactura").innerText = res.datos.categoria || "Varios";
-          // DEBUG — muestra lo que leyó el OCR y lo que devolvió Gemini
           document.getElementById("debugOCR").innerText = res.debug_ocr || "(vacío)";
           document.getElementById("debugGemini").innerText = res.debug_gemini || "(vacío)";
           document.getElementById("facturaPanel").classList.add("show");
@@ -578,11 +810,10 @@
     if (navigator.vibrate) navigator.vibrate(40);
 
     let importeTexto = document.getElementById("importeField").innerText;
-    // El backend espera el importe con coma decimal para Sheets
     let importeLimpio = importeTexto.replace('.', ',');
 
     const datos = {
-      action: "guardar",           // ✅ CORREGIDO: acción que el backend sí maneja
+      action: "guardar",
       datos: {
         importe: importeLimpio,
         fecha: document.getElementById("fechaField").innerText,
@@ -664,6 +895,231 @@
   function cerrarExito() {
     if (navigator.vibrate) navigator.vibrate(40);
     resetScan();
+  }
+
+  // ════════════════════════════════════════
+  // IMPORTAR DIGITAL
+  // ════════════════════════════════════════
+
+  function abrirMenuImportar() {
+    if (navigator.vibrate) navigator.vibrate(30);
+    document.getElementById('menuImportar').style.display = 'flex';
+  }
+
+  function cerrarMenuImportar() {
+    document.getElementById('menuImportar').style.display = 'none';
+  }
+
+  function seleccionarTipoImport(tipo) {
+    if (navigator.vibrate) navigator.vibrate(30);
+    cerrarMenuImportar();
+    tipoImportActual = tipo;
+
+    const input = document.getElementById('inputImportar');
+    // PDFs solo para facturas y banco
+    input.accept = (tipo === 'factura' || tipo === 'banco') ? 'image/*,application/pdf' : 'image/*';
+    input.click();
+  }
+
+  async function procesarArchivoImportado(input) {
+    if (!input.files || !input.files[0]) return;
+    const archivo = input.files[0];
+    input.value = ''; // reset para poder re-seleccionar
+
+    // Convertir a base64
+    const base64 = await new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = () => res(reader.result.split(',')[1]);
+      reader.onerror = rej;
+      reader.readAsDataURL(archivo);
+    });
+
+    mostrarImportLoading(tipoImportActual === 'whatsapp' ? 'Extrayendo viajes...' : 'Leyendo documento...');
+
+    try {
+      if (tipoImportActual === 'whatsapp') {
+        await procesarImportWhatsapp(base64, archivo.type);
+      } else {
+        await procesarImportGasto(base64, archivo.type);
+      }
+    } catch (e) {
+      ocultarImportLoading();
+      alert('Error procesando el archivo: ' + e.message);
+    }
+  }
+
+  // ─── WhatsApp ───────────────────────────
+
+  async function procesarImportWhatsapp(base64, mimeType) {
+    const resp = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'ocrWhatsapp', image: base64, mimeType: mimeType })
+    });
+    const data = await resp.json();
+    ocultarImportLoading();
+
+    if (!data.ok || !data.viajes || data.viajes.length === 0) {
+      alert('No se encontraron viajes en la imagen. Comprueba que la captura sea legible.');
+      return;
+    }
+
+    mostrarPanelWhatsapp(data.viajes);
+  }
+
+  function mostrarPanelWhatsapp(viajes) {
+    viajesWhatsapp = viajes.map((v, i) => ({ ...v, id: i }));
+    renderizarViajesList();
+    document.getElementById('whatsappPanel').style.display = 'flex';
+  }
+
+  function renderizarViajesList() {
+    const lista = document.getElementById('viajesList');
+    lista.innerHTML = '';
+
+    viajesWhatsapp.forEach(v => {
+      const row = document.createElement('div');
+      row.className = 'viaje-row';
+      row.innerHTML = `
+        <span class="viaje-fecha">${formatearFechaViaje(v.fecha)}</span>
+        <span class="viaje-importe">${parseFloat(v.importe).toFixed(2)} €</span>
+        <button class="viaje-delete" onclick="eliminarViaje(${v.id})">✕</button>
+      `;
+      lista.appendChild(row);
+    });
+
+    const total = viajesWhatsapp.reduce((s, v) => s + parseFloat(v.importe), 0);
+    document.getElementById('waTotal').innerText = total.toFixed(2) + ' €';
+  }
+
+  function formatearFechaViaje(fecha) {
+    // Convierte YYYY-MM-DD a DD/MM/YYYY para mostrar
+    if (!fecha) return '-';
+    const p = fecha.split('-');
+    if (p.length === 3) return `${p[2]}/${p[1]}/${p[0]}`;
+    return fecha;
+  }
+
+  function eliminarViaje(id) {
+    if (navigator.vibrate) navigator.vibrate(20);
+    viajesWhatsapp = viajesWhatsapp.filter(v => v.id !== id);
+    if (viajesWhatsapp.length === 0) {
+      cerrarPanelWhatsapp();
+      return;
+    }
+    renderizarViajesList();
+  }
+
+  function cerrarPanelWhatsapp() {
+    document.getElementById('whatsappPanel').style.display = 'none';
+    viajesWhatsapp = [];
+  }
+
+  async function confirmarGuardarPendientes() {
+    if (navigator.vibrate) navigator.vibrate(40);
+    if (viajesWhatsapp.length === 0) return;
+
+    const btn = document.getElementById('btnGuardarWA');
+    btn.innerText = 'GUARDANDO...';
+    btn.disabled = true;
+
+    try {
+      const resp = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'guardarPendiente', viajes: viajesWhatsapp })
+      });
+      const data = await resp.json();
+
+      cerrarPanelWhatsapp();
+
+      if (data.ok) {
+        let msg = `${data.guardados} viaje(s) añadidos a Pendientes`;
+        if (data.noEncontrados && data.noEncontrados.length > 0) {
+          msg += `\n\n⚠️ Fechas no encontradas en la hoja:\n${data.noEncontrados.join(', ')}`;
+        }
+        mostrarExitoImport('Pendientes guardados', msg);
+      } else {
+        alert('Error al guardar: ' + (data.error || 'desconocido'));
+        btn.innerText = 'GUARDAR';
+        btn.disabled = false;
+      }
+    } catch (e) {
+      alert('Error de conexión: ' + e.message);
+      btn.innerText = 'GUARDAR';
+      btn.disabled = false;
+    }
+  }
+
+  // ─── Factura / Banco (mismo flujo que factura física) ───
+
+  async function procesarImportGasto(base64, mimeType) {
+    // Construimos un dataURL completo para que el backend lo procese igual que la cámara
+    const dataURL = `data:${mimeType};base64,${base64}`;
+
+    const resp = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'ocr', image: dataURL, tipo: 'factura' })
+    });
+    const data = await resp.json();
+    ocultarImportLoading();
+
+    if (!data.status || data.status !== 'ok') {
+      alert('No se pudieron extraer los datos.\n' + (data.message || ''));
+      return;
+    }
+
+    // Rellenamos el panel de factura del scanner screen y lo mostramos
+    document.getElementById('fechaFactura').innerText = data.datos.fecha || '-';
+    document.getElementById('importeFactura').innerText = data.datos.importe || '0.00';
+    document.getElementById('catFactura').innerText = data.datos.categoria || 'Varios';
+    document.getElementById('debugOCR').innerText = data.debug_ocr || '(vacío)';
+    document.getElementById('debugGemini').innerText = data.debug_gemini || '(vacío)';
+
+    // Mostramos el scanner screen solo con el panel (sin cámara)
+    document.getElementById('homeScreen').style.display = 'none';
+    const ss = document.getElementById('scannerScreen');
+    ss.style.display = 'block';
+    // Ocultamos la cámara, no necesitamos video
+    document.getElementById('camera').style.display = 'none';
+    document.getElementById('facturaPanel').classList.add('show');
+  }
+
+  // ─── Loading helpers ───────────────────
+
+  function mostrarImportLoading(texto) {
+    document.getElementById('importLoadingText').textContent = texto || 'Procesando...';
+    document.getElementById('importLoadingOverlay').style.display = 'flex';
+  }
+
+  function ocultarImportLoading() {
+    document.getElementById('importLoadingOverlay').style.display = 'none';
+  }
+
+  function mostrarExitoImport(titulo, subtitulo) {
+    document.getElementById('popupTitle').innerText = titulo;
+    document.getElementById('popupSubtitle').innerText = subtitulo;
+    const popup = document.getElementById('successPopup');
+    popup.style.display = 'flex';
+    setTimeout(() => popup.classList.add('show'), 10);
+  }
+
+  // Sobrescribimos cerrarExito para que en importar vuelva al home en lugar de recargar
+  // (el reload de scanner es innecesario aquí)
+  const _cerrarExitoOriginal = cerrarExito;
+  function cerrarExito() {
+    if (navigator.vibrate) navigator.vibrate(40);
+    const ss = document.getElementById('scannerScreen');
+    // Si el scanner está visible pero no hay stream activo (venimos de importar) → solo volver al home
+    if (ss.style.display === 'block' && !stream) {
+      const popup = document.getElementById('successPopup');
+      popup.style.display = 'none';
+      popup.classList.remove('show');
+      ss.style.display = 'none';
+      document.getElementById('homeScreen').style.display = 'block';
+      document.getElementById('facturaPanel').classList.remove('show');
+      document.getElementById('camera').style.display = 'block'; // reset para la próxima vez
+    } else {
+      location.reload();
+    }
   }
 </script>
 
