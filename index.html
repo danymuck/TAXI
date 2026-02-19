@@ -958,6 +958,14 @@
     const data = await resp.json();
     ocultarImportLoading();
 
+    // DEBUG TEMPORAL — borrar cuando funcione
+    alert('DEBUG:
+ok=' + data.ok + '
+viajes=' + (data.viajes ? data.viajes.length : 'null') + '
+OCR=' + (data._debug_ocr || '(vacío)').substring(0, 200) + '
+GEMINI=' + (data._debug_gemini || '(vacío)').substring(0, 200) + '
+ERROR=' + (data.error || 'ninguno'));
+
     if (!data.ok || !data.viajes || data.viajes.length === 0) {
       alert('No se encontraron viajes en la imagen. Comprueba que la captura sea legible.');
       return;
