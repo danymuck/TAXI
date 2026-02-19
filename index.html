@@ -490,6 +490,8 @@
   }
 
   async function capturePhoto() {
+    if (navigator.vibrate) navigator.vibrate(40);
+
     const video = document.getElementById("camera");
 
     await new Promise(resolve => setTimeout(resolve, 300));
@@ -548,7 +550,7 @@
   function resetScan() { location.reload(); }
 
   function guardarEnSheets() {
-    if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+    if (navigator.vibrate) navigator.vibrate(40);
 
     let importeTexto = document.getElementById("importeField").innerText;
     // El backend espera el importe con coma decimal para Sheets
