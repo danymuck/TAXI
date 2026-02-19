@@ -167,43 +167,55 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding-top: 15%;
+      padding: 40px 16px 0 16px;
       pointer-events: none;
       z-index: 10000;
     }
 
-    /* ── Marco ticket (apaisado/cuadrado) ── */
+    /* Overlay en modo factura: margen lateral mínimo y top pequeño */
+    .scanner-overlay.factura {
+      padding: 20px 12px 0 12px;
+    }
+
+    /* ── Marco ticket: casi cuadrado, ocupa todo el ancho con margen lateral pequeño ── */
     .scan-frame {
-      width: 75%;
-      height: 70%;
+      width: 100%;
+      aspect-ratio: 1 / 1;
       border: 3px solid #f5c400;
       border-radius: 20px;
       position: relative;
+      flex-shrink: 0;
     }
 
     .scan-frame::after {
       content: attr(data-label);
       position: absolute;
-      bottom: -55px;
+      bottom: -44px;
       left: 0;
       width: 100%;
       text-align: center;
       color: #ffffff;
-      font-size: 16px;
+      font-size: 15px;
       font-style: italic;
       font-weight: normal;
     }
 
-    /* ── Marco factura (más alto, formato A4) ── */
+    /* ── Marco factura: ancho máximo con márgenes pequeños, alto hasta dejar hueco al botón ── */
     .scan-frame.factura {
-      width: 80%;
-      height: 80%;
+      width: 100%;
+      aspect-ratio: auto;
+      height: calc(100vh - 220px); /* deja 220px abajo para texto + botón de captura */
       border-color: #00c2ff;
     }
 
+    /* Texto label más abajo en factura para no solapar con el botón */
+    .scan-frame.factura::after {
+      bottom: -36px;
+    }
+
     .capture-btn {
-      position: absolute;
-      bottom: 40px;
+      position: fixed;
+      bottom: 48px;
       left: 50%;
       transform: translateX(-50%);
       width: 80px;
@@ -434,18 +446,21 @@
 
     // Adaptar UI al tipo de documento
     const frame = document.getElementById("scanFrame");
+    const overlay = document.querySelector(".scanner-overlay");
     const captureBtn = document.getElementById("captureBtn");
     const spinner = document.getElementById("loadingSpinner");
     const loadingText = document.getElementById("loadingText");
 
     if (esFactura) {
       frame.classList.add("factura");
+      overlay.classList.add("factura");
       frame.setAttribute("data-label", "Coloca la factura dentro del marco");
       captureBtn.classList.add("factura");
       spinner.classList.add("factura");
       loadingText.textContent = "Leyendo factura...";
     } else {
       frame.classList.remove("factura");
+      overlay.classList.remove("factura");
       frame.setAttribute("data-label", "Coloca el ticket dentro del marco");
       captureBtn.classList.remove("factura");
       spinner.classList.remove("factura");
@@ -490,7 +505,7 @@
   }
 
   async function capturePhoto() {
-    if (navigator.vibrate) navigator.vibrate(50);
+    if (navigator.vibrate) navigator.vibrate(40);
 
     const video = document.getElementById("camera");
 
@@ -635,7 +650,7 @@
   }
 
   function cerrarExito() {
-    if (navigator.vibrate) navigator.vibrate(50);
+    if (navigator.vibrate) navigator.vibrate(40);
     resetScan();
   }
 </script>
