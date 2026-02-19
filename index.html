@@ -610,6 +610,8 @@
   }
 
   function guardarGastoSheet() {
+    if (navigator.vibrate) navigator.vibrate(40);
+
     const btn = document.getElementById("btnAceptarGasto");
     btn.innerText = "ENVIANDO...";
     btn.disabled = true;
