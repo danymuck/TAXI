@@ -679,9 +679,9 @@
   let tipoImportActual = null;
   let viajesWhatsapp = [];      // lista editable de viajes extraídos
 
-  // ════════════════════════════════════════
+  // -
   // SCANNER (sin cambios)
-  // ════════════════════════════════════════
+  // -
 
   async function openScanner(tipo) {
     tipoDocumento = tipo;
@@ -897,9 +897,9 @@
     resetScan();
   }
 
-  // ════════════════════════════════════════
+  // -
   // IMPORTAR DIGITAL
-  // ════════════════════════════════════════
+  // -
 
   function abrirMenuImportar() {
     if (navigator.vibrate) navigator.vibrate(30);
@@ -948,7 +948,7 @@
     }
   }
 
-  // ─── WhatsApp ───────────────────────────
+  // - WhatsApp -
 
   async function procesarImportWhatsapp(base64, mimeType) {
     const resp = await fetch(SCRIPT_URL, {
@@ -958,13 +958,8 @@
     const data = await resp.json();
     ocultarImportLoading();
 
-    // DEBUG TEMPORAL — borrar cuando funcione
-    alert('DEBUG:
-ok=' + data.ok + '
-viajes=' + (data.viajes ? data.viajes.length : 'null') + '
-OCR=' + (data._debug_ocr || '(vacío)').substring(0, 200) + '
-GEMINI=' + (data._debug_gemini || '(vacío)').substring(0, 200) + '
-ERROR=' + (data.error || 'ninguno'));
+    // DEBUG TEMPORAL - borrar cuando funcione
+    alert('ok=' + data.ok + ' | viajes=' + (data.viajes ? data.viajes.length : 'null') + ' | error=' + (data.error || 'none') + ' | OCR=' + String(data._debug_ocr || 'empty').substring(0, 150) + ' | GEMINI=' + String(data._debug_gemini || 'empty').substring(0, 150));
 
     if (!data.ok || !data.viajes || data.viajes.length === 0) {
       alert('No se encontraron viajes en la imagen. Comprueba que la captura sea legible.');
@@ -989,14 +984,14 @@ ERROR=' + (data.error || 'ninguno'));
       row.className = 'viaje-row';
       row.innerHTML = `
         <span class="viaje-fecha">${formatearFechaViaje(v.fecha)}</span>
-        <span class="viaje-importe">${parseFloat(v.importe).toFixed(2)} €</span>
-        <button class="viaje-delete" onclick="eliminarViaje(${v.id})">✕</button>
+        <span class="viaje-importe">${parseFloat(v.importe).toFixed(2)} EUR</span>
+        <button class="viaje-delete" onclick="eliminarViaje(${v.id})">x</button>
       `;
       lista.appendChild(row);
     });
 
     const total = viajesWhatsapp.reduce((s, v) => s + parseFloat(v.importe), 0);
-    document.getElementById('waTotal').innerText = total.toFixed(2) + ' €';
+    document.getElementById('waTotal').innerText = total.toFixed(2) + ' EUR';
   }
 
   function formatearFechaViaje(fecha) {
@@ -1042,7 +1037,7 @@ ERROR=' + (data.error || 'ninguno'));
       if (data.ok) {
         let msg = `${data.guardados} viaje(s) añadidos a Pendientes`;
         if (data.noEncontrados && data.noEncontrados.length > 0) {
-          msg += `\n\n⚠️ Fechas no encontradas en la hoja:\n${data.noEncontrados.join(', ')}`;
+          msg += `\n\n(!!) Fechas no encontradas en la hoja:\n${data.noEncontrados.join(', ')}`;
         }
         mostrarExitoImport('Pendientes guardados', msg);
       } else {
@@ -1057,7 +1052,7 @@ ERROR=' + (data.error || 'ninguno'));
     }
   }
 
-  // ─── Factura / Banco (mismo flujo que factura física) ───
+  // - Factura / Banco (mismo flujo que factura física) -
 
   async function procesarImportGasto(base64, mimeType) {
     // Construimos un dataURL completo para que el backend lo procese igual que la cámara
@@ -1091,7 +1086,7 @@ ERROR=' + (data.error || 'ninguno'));
     document.getElementById('facturaPanel').classList.add('show');
   }
 
-  // ─── Loading helpers ───────────────────
+  // - Loading helpers -
 
   function mostrarImportLoading(texto) {
     document.getElementById('importLoadingText').textContent = texto || 'Procesando...';
@@ -1116,7 +1111,7 @@ ERROR=' + (data.error || 'ninguno'));
   function cerrarExito() {
     if (navigator.vibrate) navigator.vibrate(40);
     const ss = document.getElementById('scannerScreen');
-    // Si el scanner está visible pero no hay stream activo (venimos de importar) → solo volver al home
+    // Si el scanner está visible pero no hay stream activo (venimos de importar) -> solo volver al home
     if (ss.style.display === 'block' && !stream) {
       const popup = document.getElementById('successPopup');
       popup.style.display = 'none';
