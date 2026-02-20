@@ -85,19 +85,20 @@
     backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
     border-bottom: 1px solid rgba(0,255,255,0.15); overflow: visible;
   }
-  .top-bar::before, .top-bar::after {
-    content: ''; position: absolute; bottom: -1px; width: 30%; height: 1px;
-  }
   .top-bar::before {
-    left: 0;
-    background: linear-gradient(90deg, transparent, rgba(0,255,255,0.8));
-    box-shadow: 0 0 10px rgba(0,255,255,0.5);
+    content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(0,255,255,0.5) 8%,
+      rgba(0,255,255,0.9) 30%,
+      #0ff 50%,
+      rgba(0,255,255,0.9) 70%,
+      rgba(0,255,255,0.5) 92%,
+      transparent 100%
+    );
+    box-shadow: 0 0 12px 2px rgba(0,255,255,0.5), 0 0 30px 4px rgba(0,255,255,0.2);
   }
-  .top-bar::after {
-    right: 0;
-    background: linear-gradient(270deg, transparent, rgba(0,255,255,0.8));
-    box-shadow: 0 0 10px rgba(0,255,255,0.5);
-  }
+  .top-bar::after { display: none; }
   .top-bar h1 {
     font-family: 'Orbitron', sans-serif; font-weight: 900;
     font-size: 20px; letter-spacing: 10px; text-transform: uppercase; color: #fff;
@@ -114,12 +115,28 @@
   .top-bar-gear svg { width: 22px; height: 22px; }
 
   /* ─── Hero ─── */
-  .hero-section { padding: 22px 20px 10px; text-align: center; }
-  .hero-greeting { font-size: 11px; font-weight: 500; letter-spacing: 5px; color: rgba(0,255,255,0.7); text-transform: uppercase; margin-bottom: 5px; }
-  .hero-date { font-size: 10px; font-weight: 400; letter-spacing: 3px; color: rgba(255,255,255,0.25); text-transform: uppercase; }
+  .hero-section {
+    padding: 20px 20px 10px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-greeting {
+    display: block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px; font-weight: 500; letter-spacing: 5px;
+    color: rgba(0,255,255,0.75); text-transform: uppercase; margin-bottom: 6px;
+    text-shadow: 0 0 12px rgba(0,255,255,0.5);
+  }
+  .hero-date {
+    display: block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px; font-weight: 400; letter-spacing: 3px;
+    color: rgba(255,255,255,0.3); text-transform: uppercase;
+  }
 
   /* ─── Buttons grid ─── */
-  .buttons-grid { padding: 16px 14px 36px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .buttons-grid { padding: 16px 14px 36px; display: flex; flex-direction: column; gap: 10px; flex: 1; position: relative; z-index: 2; }
 
   .section-label {
     font-size: 8px; font-weight: 600; letter-spacing: 4px;
@@ -176,26 +193,26 @@
   /* Icon */
   .btn-icon {
     flex-shrink: 0; position: relative; z-index: 12;
-    width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+    width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
   }
-  .btn-icon svg { width: 26px; height: 26px; filter: drop-shadow(0 0 7px currentColor); }
+  .btn-icon svg { width: 46px; height: 46px; filter: drop-shadow(0 0 8px currentColor); }
 
-  /* Text block */
+  /* Text block — full-width buttons: centered */
   .btn-text { display: flex; flex-direction: column; gap: 5px; flex: 1; position: relative; z-index: 12; }
-  .scan-title { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1; }
-  .scan-subtitle { font-size: 9px; font-weight: 400; letter-spacing: 1.5px; opacity: 0.55; text-transform: uppercase; text-align: left; display: block; }
+  .scan-title { font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1; text-align: center; }
+  .scan-subtitle { font-size: 12px; font-weight: 400; letter-spacing: 1.5px; opacity: 0.55; text-transform: uppercase; text-align: center; display: block; }
 
   .btn-arrow { font-size: 20px; opacity: 0.3; flex-shrink: 0; position: relative; z-index: 12; font-family: sans-serif; }
 
   /* ─── Two-column row ─── */
   .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .btn-row .scan-btn { width: 100%; }
-  .btn-row .btn-inner { flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px 14px; }
+  .btn-row .btn-inner { flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; }
   .btn-row .btn-arrow { display: none; }
-  .btn-row .scan-title { font-size: 10px; letter-spacing: 1.5px; }
-  .btn-row .scan-subtitle { font-size: 8px; text-align: left; }
-  .btn-row .btn-icon { width: 30px; height: 30px; }
-  .btn-row .btn-icon svg { width: 24px; height: 24px; }
+  .btn-row .scan-title { font-size: 13px; letter-spacing: 1.5px; text-align: center; }
+  .btn-row .scan-subtitle { font-size: 10px; text-align: center; }
+  .btn-row .btn-icon { width: 52px; height: 52px; }
+  .btn-row .btn-icon svg { width: 46px; height: 46px; }
 
   /* ════════════════════════════════
      COLOR THEMES — 3D versions
