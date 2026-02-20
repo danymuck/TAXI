@@ -584,13 +584,13 @@
       outline: none;
     }
 
-    /* Pantalla de configuracion */
+    /* Config panel */
     #configPanel {
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.8);
       backdrop-filter: blur(6px);
-      z-index: 15000;
+      z-index: 20000;
       display: none;
       flex-direction: column;
       align-items: center;
@@ -607,18 +607,8 @@
       border: 1px solid rgba(255,255,255,0.08);
     }
 
-    .config-card h3 {
-      color: #fff;
-      margin: 0 0 6px;
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .config-card p {
-      color: #888;
-      font-size: 12px;
-      margin: 0 0 16px;
-    }
+    .config-card h3 { color: #fff; margin: 0 0 6px; font-size: 16px; font-weight: 700; }
+    .config-card p { color: #888; font-size: 12px; margin: 0 0 16px; }
 
     .config-card input {
       background: #2a2a2a;
@@ -634,12 +624,16 @@
     }
 
     .config-card input:focus { border-color: #25D366; outline: none; }
+
   </style>
 </head>
 <body>
 
 <div id="homeScreen">
-  <div class="top-bar"><h1>TAXI APP</h1></div>
+  <div class="top-bar" style="position:relative;">
+    <h1>TAXI APP</h1>
+    <button onclick="abrirConfig()" style="position:absolute;right:16px;background:none;border:none;font-size:13px;font-weight:700;cursor:pointer;padding:8px;color:#000;letter-spacing:0.5px;">AJUSTES</button>
+  </div>
   <div class="hero-image">
     <img src="https://images.unsplash.com/photo-1593950315186-76a92975b60c?auto=format&fit=crop&w=800&q=80">
     <div class="hero-greeting">👋 ¡Hola, Dani!</div>
@@ -813,7 +807,7 @@
     </div>
     <div class="np-field">
       <label>Cliente</label>
-      <input type="text" id="npCliente" placeholder="Nombre del cliente">
+      <input type="text" id="npCliente" placeholder="Nombre del cliente" autocomplete="off" oninput="this.value=this.value.toUpperCase()" style="text-transform:uppercase;">
     </div>
     <div class="np-field">
       <label>Recogida</label>
@@ -831,18 +825,7 @@
   </div>
 </div>
 
-<!-- PANEL CONFIGURACION -->
-<div id="configPanel">
-  <div class="config-card">
-    <h3>⚙️ Configuración</h3>
-    <p>Número de WhatsApp al que se envían los viajes (con prefijo, sin +)</p>
-    <input type="tel" id="configNumeroWA" placeholder="34612345678">
-    <div class="actions" style="margin-top:0;">
-      <button class="btn btn-back" onclick="cerrarConfig()">CANCELAR</button>
-      <button class="btn btn-accept" onclick="guardarConfig()">GUARDAR</button>
-    </div>
-  </div>
-</div>
+
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnbZohq9RvBu5EAqKA5aq59EftWh7d04IBCJf9QKMPo5u7SRUdDoCgVkC3QOnK9y2_xw/exec";
@@ -1135,9 +1118,6 @@
     const data = await resp.json();
     ocultarImportLoading();
 
-    // DEBUG TEMPORAL - borrar cuando funcione
-    alert('ok=' + data.ok + ' | viajes=' + (data.viajes ? data.viajes.length : 'null') + ' | error=' + (data.error || 'none') + ' | OCR=' + String(data._debug_ocr || 'empty').substring(0, 150) + ' | GEMINI=' + String(data._debug_gemini || 'empty').substring(0, 150));
-
     if (!data.ok || !data.viajes || data.viajes.length === 0) {
       alert('No se encontraron viajes en la imagen. Comprueba que la captura sea legible.');
       return;
@@ -1321,7 +1301,7 @@
   function abrirNuevoPendiente() {
     if (navigator.vibrate) navigator.vibrate(30);
     if (!getNumeroWA()) {
-      abrirConfig(true);
+      abrirConfig(true); // abre config y al guardar vuelve aqui
       return;
     }
     const hoy = new Date();
@@ -1388,7 +1368,7 @@
       const numero = getNumeroWA();
       window.open('https://wa.me/' + numero + '?text=' + encodeURIComponent(msg), '_blank');
 
-      mostrarExitoImport('Pendiente guardado', 'Guardado en Sheets. Abre WhatsApp y pulsa Enviar.');
+      mostrarExitoImport('Viaje guardado', 'Registrado en Sheets. WhatsApp abierto, pulsa Enviar.');
 
     } catch (e) {
       alert('Error de conexion: ' + e.message);
@@ -1396,6 +1376,7 @@
       btn.disabled = false;
     }
   }
+
 
   // -----------------------------------------------
   // CONFIGURACION (numero de WA)
@@ -1422,7 +1403,23 @@
     cerrarConfig();
     if (_configDespuesAbrirPendiente) abrirNuevoPendiente();
   }
+
+
 </script>
+
+<!-- PANEL CONFIGURACION -->
+<div id="configPanel">
+  <div class="config-card">
+    <h3>Configuracion</h3>
+    <p>Numero de WhatsApp al que se enviaran los viajes (con prefijo pais, sin +)</p>
+    <input type="tel" id="configNumeroWA" placeholder="34612345678">
+    <p style="color:#555;font-size:11px;margin:-8px 0 16px;">Ejemplo: 34612345678</p>
+    <div class="actions" style="margin-top:0;">
+      <button class="btn btn-back" onclick="cerrarConfig()">CANCELAR</button>
+      <button class="btn btn-accept" onclick="guardarConfig()">GUARDAR</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
