@@ -630,9 +630,9 @@
 <body>
 
 <div id="homeScreen">
-  <div class="top-bar" style="position:relative;">
+  <div class="top-bar">
+    <!-- TODO: añadir engranaje de ajustes aqui (abrirConfig) -->
     <h1>TAXI APP</h1>
-    <button onclick="abrirConfig()" style="position:absolute;right:16px;background:none;border:none;font-size:13px;font-weight:700;cursor:pointer;padding:8px;color:#000;letter-spacing:0.5px;">AJUSTES</button>
   </div>
   <div class="hero-image">
     <img src="https://images.unsplash.com/photo-1593950315186-76a92975b60c?auto=format&fit=crop&w=800&q=80">
@@ -1368,7 +1368,7 @@
       const numero = getNumeroWA();
       window.open('https://wa.me/' + numero + '?text=' + encodeURIComponent(msg), '_blank');
 
-      mostrarExitoImport('Viaje guardado', 'Registrado en Sheets. WhatsApp abierto, pulsa Enviar.');
+      mostrarExitoImport('Pendiente guardado', 'Servicio de abonado registrado en pendientes.');
 
     } catch (e) {
       alert('Error de conexion: ' + e.message);
