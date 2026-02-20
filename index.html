@@ -11,278 +11,368 @@
   <title>Mi Taxi App</title>
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
   <style>
-    /* ── Reset & base ── */
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    *:focus, *:active, *:focus-visible { outline: none !important; box-shadow: none !important; }
-    button, a, div, strong, span { -webkit-user-select: none; user-select: none; }
-    .btn, .btn-popup-ok, .scan-btn, .capture-btn { outline: none !important; -webkit-appearance: none; }
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&display=swap');
 
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600&display=swap');
+  :root {
+    --tron-blue:    #0ff;
+    --tron-blue2:   #00aaff;
+    --tron-orange:  #ff6a00;
+    --tron-yellow:  #f5c400;
+    --tron-green:   #25d366;
+    --tron-purple:  #7b5ea7;
+    --bg:           #000;
+    --bg2:          #030810;
+  }
 
-    :root {
-      --neon-yellow:  #f5c400;
-      --neon-cyan:    #00e5ff;
-      --neon-green:   #39ff14;
-      --neon-purple:  #bf00ff;
-      --neon-white:   rgba(255,255,255,0.9);
-      --glass-bg:     rgba(255,255,255,0.04);
-      --glass-border: rgba(255,255,255,0.10);
-      --bg-deep:      #020408;
-    }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+  *:focus, *:active, *:focus-visible { outline: none !important; box-shadow: none !important; }
+  button, a, div, strong, span { -webkit-user-select: none; user-select: none; }
+  .btn, .btn-popup-ok, .scan-btn, .capture-btn { outline: none !important; -webkit-appearance: none; }
 
-    body {
-      margin: 0;
-      background: var(--bg-deep);
-      font-family: 'Rajdhani', system-ui, sans-serif;
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
+  body {
+    background: var(--bg);
+    font-family: 'Orbitron', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
 
-    /* ── Animated background grid ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
+  /* ── Deep grid background ── */
+  .tron-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,180,255,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 110%, rgba(0,80,200,0.08) 0%, transparent 60%),
+      #000408;
+    overflow: hidden;
+  }
 
-    /* ── Home screen ── */
-    #homeScreen {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+  /* Horizontal scan line */
+  .tron-bg::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, rgba(0,255,255,0.6) 30%, rgba(0,255,255,1) 50%, rgba(0,255,255,0.6) 70%, transparent 100%);
+    box-shadow: 0 0 20px 4px rgba(0,255,255,0.4), 0 0 60px 8px rgba(0,255,255,0.15);
+    animation: scanline 6s linear infinite;
+    top: -4px;
+  }
 
-    /* ── Top bar ── */
-    .top-bar {
-      position: relative;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.6);
-      border-bottom: 1px solid rgba(0,229,255,0.2);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
+  @keyframes scanline {
+    0%   { top: -4px; opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { top: 110vh; opacity: 0; }
+  }
 
-    .top-bar::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 10%; right: 10%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-      box-shadow: 0 0 12px var(--neon-cyan);
-    }
+  /* Circuit grid lines */
+  .tron-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,200,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
 
-    .top-bar h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 900;
-      font-size: 22px;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      margin: 0;
-      background: linear-gradient(135deg, #fff 0%, var(--neon-cyan) 50%, var(--neon-yellow) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 8px rgba(0,229,255,0.4));
-    }
+  /* ── Circuit nodes (decorative dots at grid intersections) ── */
+  .circuit-nodes {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
 
-    /* ── Hero section ── */
-    .hero-section {
-      position: relative;
-      padding: 28px 20px 20px;
-      text-align: center;
-    }
+  .circuit-nodes span {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(0,200,255,0.35);
+    box-shadow: 0 0 6px rgba(0,200,255,0.6);
+    animation: nodepulse 3s ease-in-out infinite;
+  }
 
-    .hero-greeting {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 4px;
-      color: var(--neon-cyan);
-      text-transform: uppercase;
-      opacity: 0.8;
-      margin-bottom: 4px;
-    }
+  @keyframes nodepulse {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50%       { opacity: 1;   transform: scale(1.8); }
+  }
 
-    .hero-date {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 12px;
-      letter-spacing: 2px;
-      color: rgba(255,255,255,0.3);
-      text-transform: uppercase;
-    }
+  /* ── Home screen ── */
+  #homeScreen {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-    /* ── Buttons grid ── */
-    .buttons-grid {
-      padding: 8px 16px 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      flex: 1;
-    }
+  /* ── Top bar ── */
+  .top-bar {
+    position: relative;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(0,255,255,0.15);
+    overflow: visible;
+  }
 
-    /* ── Base scan button ── */
-    .scan-btn {
-      position: relative;
-      width: 100%;
-      border: none;
-      border-radius: 16px;
-      padding: 18px 20px;
-      text-align: left;
-      cursor: pointer;
-      overflow: hidden;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+  /* corner accents */
+  .top-bar::before, .top-bar::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    width: 30%;
+    height: 1px;
+  }
+  .top-bar::before {
+    left: 0;
+    background: linear-gradient(90deg, transparent, rgba(0,255,255,0.8));
+    box-shadow: 0 0 10px rgba(0,255,255,0.5);
+  }
+  .top-bar::after {
+    right: 0;
+    background: linear-gradient(270deg, transparent, rgba(0,255,255,0.8));
+    box-shadow: 0 0 10px rgba(0,255,255,0.5);
+  }
 
-    .scan-btn:active { transform: scale(0.97); }
+  .top-bar h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow:
+      0 0 10px rgba(0,255,255,0.8),
+      0 0 30px rgba(0,255,255,0.4),
+      0 0 60px rgba(0,255,255,0.15);
+  }
 
-    /* Shine sweep on tap */
-    .scan-btn::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 60%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
-      transition: left 0.4s ease;
-      pointer-events: none;
-    }
-    .scan-btn:active::before { left: 150%; }
+  /* ── Hero ── */
+  .hero-section {
+    padding: 22px 20px 10px;
+    text-align: center;
+    position: relative;
+  }
 
-    .btn-icon {
-      font-size: 26px;
-      flex-shrink: 0;
-      filter: drop-shadow(0 0 6px currentColor);
-      line-height: 1;
-    }
+  .hero-greeting {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 5px;
+    color: rgba(0,255,255,0.7);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
 
-    .btn-text { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+  .hero-date {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.25);
+    text-transform: uppercase;
+  }
 
-    .scan-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      line-height: 1.2;
-    }
+  /* ── Buttons grid ── */
+  .buttons-grid {
+    padding: 16px 14px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
 
-    .scan-subtitle {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      opacity: 0.6;
-      display: block;
-    }
+  /* ── Section label ── */
+  .section-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.18);
+    text-transform: uppercase;
+    padding: 6px 6px 0;
+  }
 
-    .btn-arrow {
-      font-size: 18px;
-      opacity: 0.4;
-      flex-shrink: 0;
-      font-family: sans-serif;
-    }
+  /* ── Base scan button ── */
+  .scan-btn {
+    position: relative;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.12s ease, filter 0.12s ease;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: transparent;
+    -webkit-appearance: none;
+  }
 
-    /* ── Row: two buttons side by side ── */
-    .btn-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+  .scan-btn:active { transform: scale(0.975); filter: brightness(1.2); }
 
-    .btn-row .scan-btn {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 16px 14px;
-    }
+  /* Glass inner layer */
+  .btn-inner {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 18px;
+    border-radius: 12px;
+    overflow: hidden;
+    z-index: 1;
+  }
 
-    .btn-row .btn-arrow { display: none; }
-    .btn-row .scan-title { font-size: 11px; letter-spacing: 1px; }
+  /* top edge highlight */
+  .btn-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  }
 
-    /* ── Color themes per button ── */
+  /* animated corner brackets */
+  .btn-corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    opacity: 0.7;
+  }
+  .btn-corner-tl { top: 6px; left: 6px; border-top: 1.5px solid; border-left: 1.5px solid; border-radius: 3px 0 0 0; }
+  .btn-corner-tr { top: 6px; right: 6px; border-top: 1.5px solid; border-right: 1.5px solid; border-radius: 0 3px 0 0; }
+  .btn-corner-bl { bottom: 6px; left: 6px; border-bottom: 1.5px solid; border-left: 1.5px solid; border-radius: 0 0 0 3px; }
+  .btn-corner-br { bottom: 6px; right: 6px; border-bottom: 1.5px solid; border-right: 1.5px solid; border-radius: 0 0 3px 0; }
 
-    /* TICKET — yellow neon */
-    .btn-ticket {
-      background: linear-gradient(135deg, rgba(245,196,0,0.12) 0%, rgba(245,196,0,0.04) 100%);
-      border-color: rgba(245,196,0,0.3);
-      box-shadow: 0 4px 24px rgba(245,196,0,0.1), inset 0 1px 0 rgba(245,196,0,0.15);
-    }
-    .btn-ticket:active { box-shadow: 0 2px 12px rgba(245,196,0,0.2), 0 0 0 1px rgba(245,196,0,0.4); }
-    .btn-ticket .scan-title { color: #f5c400; }
-    .btn-ticket .scan-subtitle { color: rgba(245,196,0,0.6); }
-    .btn-ticket .btn-icon { color: #f5c400; }
+  .btn-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px currentColor);
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+  }
 
-    /* FACTURA FISICA — cyan */
-    .btn-factura {
-      background: linear-gradient(135deg, rgba(0,229,255,0.10) 0%, rgba(0,229,255,0.03) 100%);
-      border-color: rgba(0,229,255,0.25);
-      box-shadow: 0 4px 24px rgba(0,229,255,0.08), inset 0 1px 0 rgba(0,229,255,0.1);
-    }
-    .btn-factura:active { box-shadow: 0 2px 12px rgba(0,229,255,0.2), 0 0 0 1px rgba(0,229,255,0.4); }
-    .btn-factura .scan-title { color: #00e5ff; }
-    .btn-factura .scan-subtitle { color: rgba(0,229,255,0.6); }
-    .btn-factura .btn-icon { color: #00e5ff; }
+  .btn-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
 
-    /* FACTURA DIGITAL — softer cyan */
-    .btn-factura-digital {
-      background: linear-gradient(135deg, rgba(0,194,255,0.10) 0%, rgba(0,194,255,0.03) 100%);
-      border-color: rgba(0,194,255,0.25);
-      box-shadow: 0 4px 20px rgba(0,194,255,0.08), inset 0 1px 0 rgba(0,194,255,0.1);
-    }
-    .btn-factura-digital:active { box-shadow: 0 0 0 1px rgba(0,194,255,0.5); }
-    .btn-factura-digital .scan-title { color: #00c2ff; }
-    .btn-factura-digital .scan-subtitle { color: rgba(0,194,255,0.6); }
-    .btn-factura-digital .btn-icon { color: #00c2ff; }
+  .scan-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
 
-    /* BANCO — purple */
-    .btn-banco {
-      background: linear-gradient(135deg, rgba(100,80,255,0.14) 0%, rgba(100,80,255,0.04) 100%);
-      border-color: rgba(100,80,255,0.3);
-      box-shadow: 0 4px 20px rgba(100,80,255,0.1), inset 0 1px 0 rgba(100,80,255,0.15);
-    }
-    .btn-banco:active { box-shadow: 0 0 0 1px rgba(100,80,255,0.5); }
-    .btn-banco .scan-title { color: #8b6fff; }
-    .btn-banco .scan-subtitle { color: rgba(139,111,255,0.6); }
-    .btn-banco .btn-icon { color: #8b6fff; }
+  .scan-subtitle {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    opacity: 0.55;
+    display: block;
+    text-transform: uppercase;
+  }
 
-    /* WHATSAPP — green */
-    .btn-whatsapp {
-      background: linear-gradient(135deg, rgba(37,211,102,0.12) 0%, rgba(37,211,102,0.04) 100%);
-      border-color: rgba(37,211,102,0.3);
-      box-shadow: 0 4px 24px rgba(37,211,102,0.1), inset 0 1px 0 rgba(37,211,102,0.15);
-    }
-    .btn-whatsapp:active { box-shadow: 0 2px 12px rgba(37,211,102,0.2), 0 0 0 1px rgba(37,211,102,0.4); }
-    .btn-whatsapp .scan-title { color: #25d366; }
-    .btn-whatsapp .scan-subtitle { color: rgba(37,211,102,0.6); }
-    .btn-whatsapp .btn-icon { color: #25d366; }
+  .btn-arrow {
+    font-size: 20px;
+    opacity: 0.35;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    font-family: sans-serif;
+  }
 
-    /* ── Divider label ── */
-    .section-label {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 9px;
-      letter-spacing: 3px;
-      color: rgba(255,255,255,0.2);
-      text-transform: uppercase;
-      padding: 4px 4px 0;
-    }
+  /* ── Row: two buttons side by side ── */
+  .btn-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .btn-row .scan-btn { width: 100%; }
+  .btn-row .btn-inner { flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px 14px; }
+  .btn-row .btn-arrow { display: none; }
+  .btn-row .scan-title { font-size: 10px; letter-spacing: 1.5px; }
+  .btn-row .scan-subtitle { font-size: 8px; }
+
+  /* ── TICKET — amber/yellow ── */
+  .btn-ticket .btn-inner {
+    background: linear-gradient(135deg, rgba(245,196,0,0.13) 0%, rgba(245,196,0,0.04) 60%, rgba(0,0,0,0.3) 100%);
+    border: 1px solid rgba(245,196,0,0.3);
+    box-shadow: 0 0 20px rgba(245,196,0,0.08) inset, 0 4px 24px rgba(245,196,0,0.1);
+  }
+  .btn-ticket .btn-corner { border-color: rgba(245,196,0,0.7); }
+  .btn-ticket .scan-title { color: #f5c400; text-shadow: 0 0 12px rgba(245,196,0,0.7); }
+  .btn-ticket .scan-subtitle { color: rgba(245,196,0,0.6); }
+  .btn-ticket .btn-icon { color: #f5c400; }
+  .btn-ticket .btn-arrow { color: rgba(245,196,0,0.5); }
+
+  /* ── FACTURA FISICA — electric cyan ── */
+  .btn-factura .btn-inner {
+    background: linear-gradient(135deg, rgba(0,229,255,0.11) 0%, rgba(0,229,255,0.03) 60%, rgba(0,0,0,0.3) 100%);
+    border: 1px solid rgba(0,229,255,0.25);
+    box-shadow: 0 0 20px rgba(0,229,255,0.06) inset, 0 4px 24px rgba(0,229,255,0.08);
+  }
+  .btn-factura .btn-corner { border-color: rgba(0,229,255,0.7); }
+  .btn-factura .scan-title { color: #00e5ff; text-shadow: 0 0 12px rgba(0,229,255,0.7); }
+  .btn-factura .scan-subtitle { color: rgba(0,229,255,0.55); }
+  .btn-factura .btn-icon { color: #00e5ff; }
+  .btn-factura .btn-arrow { color: rgba(0,229,255,0.5); }
+
+  /* ── FACTURA DIGITAL — ice blue ── */
+  .btn-factura-digital .btn-inner {
+    background: linear-gradient(135deg, rgba(0,160,255,0.12) 0%, rgba(0,100,200,0.05) 60%, rgba(0,0,0,0.3) 100%);
+    border: 1px solid rgba(0,160,255,0.25);
+    box-shadow: 0 0 16px rgba(0,160,255,0.06) inset, 0 4px 20px rgba(0,160,255,0.08);
+  }
+  .btn-factura-digital .btn-corner { border-color: rgba(0,160,255,0.7); }
+  .btn-factura-digital .scan-title { color: #00aaff; text-shadow: 0 0 10px rgba(0,160,255,0.7); }
+  .btn-factura-digital .scan-subtitle { color: rgba(0,160,255,0.55); }
+  .btn-factura-digital .btn-icon { color: #00aaff; }
+
+  /* ── BANCO — violet/purple ── */
+  .btn-banco .btn-inner {
+    background: linear-gradient(135deg, rgba(110,80,255,0.14) 0%, rgba(80,50,200,0.05) 60%, rgba(0,0,0,0.3) 100%);
+    border: 1px solid rgba(110,80,255,0.28);
+    box-shadow: 0 0 16px rgba(110,80,255,0.08) inset, 0 4px 20px rgba(110,80,255,0.1);
+  }
+  .btn-banco .btn-corner { border-color: rgba(110,80,255,0.7); }
+  .btn-banco .scan-title { color: #8b6fff; text-shadow: 0 0 10px rgba(110,80,255,0.7); }
+  .btn-banco .scan-subtitle { color: rgba(110,80,255,0.55); }
+  .btn-banco .btn-icon { color: #8b6fff; }
+
+  /* ── WHATSAPP — neon green ── */
+  .btn-whatsapp .btn-inner {
+    background: linear-gradient(135deg, rgba(37,211,102,0.12) 0%, rgba(37,211,102,0.04) 60%, rgba(0,0,0,0.3) 100%);
+    border: 1px solid rgba(37,211,102,0.28);
+    box-shadow: 0 0 20px rgba(37,211,102,0.07) inset, 0 4px 24px rgba(37,211,102,0.1);
+  }
+  .btn-whatsapp .btn-corner { border-color: rgba(37,211,102,0.7); }
+  .btn-whatsapp .scan-title { color: #25d366; text-shadow: 0 0 12px rgba(37,211,102,0.7); }
+  .btn-whatsapp .scan-subtitle { color: rgba(37,211,102,0.55); }
+  .btn-whatsapp .btn-icon { color: #25d366; }
+  .btn-whatsapp .btn-arrow { color: rgba(37,211,102,0.5); }
+
     #scannerScreen {
       position: fixed;
       inset: 0;
@@ -352,17 +442,19 @@
 
     .popup-title {
       color: #fff;
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 700;
-      font-style: italic;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
       margin: 0 0 8px 0;
       display: block;
     }
 
     .popup-subtitle {
-      color: #aaa;
-      font-size: 14px;
-      font-style: italic;
+      color: rgba(0,229,255,0.7);
+      font-size: 10px;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 1px;
       display: block;
     }
 
@@ -439,7 +531,7 @@
       bottom: -100%;
       left: 0;
       width: 100%;
-      background: #1a1a1a;
+      background: rgba(2,8,20,0.97);
       border-radius: 25px 25px 0 0;
       padding: 20px 25px 35px 25px;
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -465,9 +557,10 @@
       border: none;
       border-radius: 12px;
       padding: 15px 5px;
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 13px;
-      font-weight: 800;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
       letter-spacing: 0.5px;
       cursor: pointer;
       transition: all 0.2s;
@@ -487,7 +580,7 @@
       border-radius: 4px;
     }
 
-    .ticket-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #333; }
+    .ticket-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-family: 'Orbitron', sans-serif; font-size: 12px; letter-spacing: 1px; }
 
     .loading-overlay {
       position: fixed;
@@ -523,7 +616,7 @@
     .loading-text {
       color: rgba(255, 255, 255, 0.8);
       margin-top: 20px;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: 'Orbitron', sans-serif;
       font-size: 15px;
       font-style: italic;
       letter-spacing: 0.5px;
@@ -769,26 +862,29 @@
 
     .np-field label {
       color: #888;
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 9px;
+      font-weight: 600;
+      font-family: 'Orbitron', sans-serif;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1.5px;
     }
 
     .np-field input {
-      background: #2a2a2a;
-      border: 1px solid #333;
+      background: #0a0e1a;
+      border: 1px solid rgba(0,229,255,0.15);
       border-radius: 10px;
-      color: #fff;
-      font-size: 16px;
+      color: #00e5ff;
+      font-size: 14px;
       padding: 12px 14px;
       width: 100%;
-      font-family: system-ui, sans-serif;
+      font-family: 'Orbitron', sans-serif;
       -webkit-appearance: none;
+      letter-spacing: 1px;
     }
 
     .np-field input:focus {
-      border-color: #25D366;
+      border-color: rgba(0,229,255,0.6);
+      box-shadow: 0 0 10px rgba(0,229,255,0.15);
       outline: none;
     }
 
@@ -834,64 +930,101 @@
     .config-card input:focus { border-color: #25D366; outline: none; }
 
   
-  </style>
+  
+</style>
 
 <div id="homeScreen">
+
+  <!-- Tron background layers -->
+  <div class="tron-bg"></div>
+  <div class="circuit-nodes" id="circuitNodes"></div>
+
   <div class="top-bar">
     <!-- TODO: engranaje ajustes aqui -->
     <h1>TAXI APP</h1>
   </div>
 
   <div class="hero-section">
-    <div class="hero-greeting">Hola, Dani</div>
+    <div class="hero-greeting">HOLA, DANI</div>
     <div class="hero-date" id="heroDate"></div>
   </div>
 
   <div class="buttons-grid">
 
     <button class="scan-btn btn-ticket" onclick="openScanner('ticket')">
-      <span class="btn-icon">📸</span>
-      <span class="btn-text">
-        <span class="scan-title">Escanear Ticket</span>
-        <span class="scan-subtitle">Registra el taxímetro</span>
-      </span>
-      <span class="btn-arrow">›</span>
+      <div class="btn-inner">
+        <span class="btn-corner btn-corner-tl"></span>
+        <span class="btn-corner btn-corner-tr"></span>
+        <span class="btn-corner btn-corner-bl"></span>
+        <span class="btn-corner btn-corner-br"></span>
+        <span class="btn-icon">📸</span>
+        <span class="btn-text">
+          <span class="scan-title">Escanear Ticket</span>
+          <span class="scan-subtitle">Registra el taxímetro</span>
+        </span>
+        <span class="btn-arrow">›</span>
+      </div>
     </button>
 
     <button class="scan-btn btn-factura" onclick="openScanner('factura')">
-      <span class="btn-icon">📄</span>
-      <span class="btn-text">
-        <span class="scan-title">Escanear Factura</span>
-        <span class="scan-subtitle">Captura facturas físicas</span>
-      </span>
-      <span class="btn-arrow">›</span>
+      <div class="btn-inner">
+        <span class="btn-corner btn-corner-tl"></span>
+        <span class="btn-corner btn-corner-tr"></span>
+        <span class="btn-corner btn-corner-bl"></span>
+        <span class="btn-corner btn-corner-br"></span>
+        <span class="btn-icon">📷</span>
+        <span class="btn-text">
+          <span class="scan-title">Escanear Factura</span>
+          <span class="scan-subtitle">Captura facturas físicas</span>
+        </span>
+        <span class="btn-arrow">›</span>
+      </div>
     </button>
 
-    <div class="section-label">Importar digital</div>
+    <div class="section-label">▸ Importar digital</div>
+
     <div class="btn-row">
       <button class="scan-btn btn-factura-digital" onclick="seleccionarTipoImport('factura')">
-        <span class="btn-icon">🧾</span>
-        <span class="btn-text">
-          <span class="scan-title">Factura Digital</span>
-          <span class="scan-subtitle">PDF o imagen</span>
-        </span>
+        <div class="btn-inner">
+          <span class="btn-corner btn-corner-tl"></span>
+          <span class="btn-corner btn-corner-tr"></span>
+          <span class="btn-corner btn-corner-bl"></span>
+          <span class="btn-corner btn-corner-br"></span>
+          <span class="btn-icon">🧾</span>
+          <span class="btn-text">
+            <span class="scan-title">Factura Digital</span>
+            <span class="scan-subtitle">PDF o imagen</span>
+          </span>
+        </div>
       </button>
       <button class="scan-btn btn-banco" onclick="seleccionarTipoImport('banco')">
-        <span class="btn-icon">🏦</span>
-        <span class="btn-text">
-          <span class="scan-title">Captura Banco</span>
-          <span class="scan-subtitle">Justificante pago</span>
-        </span>
+        <div class="btn-inner">
+          <span class="btn-corner btn-corner-tl"></span>
+          <span class="btn-corner btn-corner-tr"></span>
+          <span class="btn-corner btn-corner-bl"></span>
+          <span class="btn-corner btn-corner-br"></span>
+          <span class="btn-icon">🏦</span>
+          <span class="btn-text">
+            <span class="scan-title">Captura Banco</span>
+            <span class="scan-subtitle">Justificante pago</span>
+          </span>
+        </div>
       </button>
     </div>
 
     <button class="scan-btn btn-whatsapp" onclick="abrirNuevoPendiente()">
-      <span class="btn-icon">💬</span>
-      <span class="btn-text">
-        <span class="scan-title">Nuevo Pendiente</span>
-        <span class="scan-subtitle">Viaje abonado vía WhatsApp</span>
-      </span>
-      <span class="btn-arrow">›</span>
+      <div class="btn-inner">
+        <span class="btn-corner btn-corner-tl"></span>
+        <span class="btn-corner btn-corner-tr"></span>
+        <span class="btn-corner btn-corner-bl"></span>
+        <span class="btn-corner btn-corner-br"></span>
+        <span class="btn-icon">💬</span>
+        <span class="btn-text">
+          <span class="scan-title">Nuevo Pendiente</span>
+          <span class="scan-subtitle">Viaje abonado vía WhatsApp</span>
+        </span>
+        <span class="btn-arrow">›</span>
+      </div>
     </button>
 
   </div>
@@ -1639,13 +1772,30 @@
   }
 
 
-  // Set hero date
+  // Hero date + circuit nodes
   (function() {
-    const days = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
-    const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    const days = ['DOM','LUN','MAR','MIE','JUE','VIE','SAB'];
+    const months = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
     const d = new Date();
     const el = document.getElementById('heroDate');
-    if (el) el.textContent = days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    if (el) el.textContent = days[d.getDay()] + '  //  ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+
+    // Scatter circuit node dots at grid intersections
+    const container = document.getElementById('circuitNodes');
+    if (container) {
+      const positions = [
+        [10,15],[10,63],[10,87],[48,15],[48,39],[48,63],[48,87],
+        [86,15],[86,39],[86,87],[25,50],[75,25],[75,75],[60,10],[40,90]
+      ];
+      positions.forEach(([x, y], i) => {
+        const s = document.createElement('span');
+        s.style.left = x + '%';
+        s.style.top = y + '%';
+        s.style.animationDelay = (i * 0.37) + 's';
+        s.style.animationDuration = (2.5 + (i % 3) * 0.8) + 's';
+        container.appendChild(s);
+      });
+    }
   })();
 
 </script>
