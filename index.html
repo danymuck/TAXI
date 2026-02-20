@@ -176,7 +176,7 @@
     }
 
     .scan-frame {
-      width: 85%;
+      width: 75%;
       height: 70%;
       border: 3px solid #f5c400;
       border-radius: 20px;
@@ -638,7 +638,10 @@
 ══════════════════════════════════════════ -->
 <div id="whatsappPanel">
   <div class="whatsapp-sheet">
-    <h3>📱 Viajes encontrados</h3>
+    <img id="waImagePreview" src="" alt="Captura WhatsApp"
+         style="display:none; width:100%; max-height:280px; object-fit:contain;
+                border-radius:12px; margin-bottom:14px; background:#111;">
+    <h3>Viajes encontrados</h3>
     <p class="wa-subtitle">Revisa y elimina los que no quieras guardar</p>
     <div id="viajesList"></div>
     <div class="wa-total-row">
@@ -678,6 +681,7 @@
   // Variables para importar digital
   let tipoImportActual = null;
   let viajesWhatsapp = [];      // lista editable de viajes extraídos
+  let imagenWhatsappURL = null;  // preview de la captura importada
 
   // -
   // SCANNER (sin cambios)
@@ -926,13 +930,15 @@
     const archivo = input.files[0];
     input.value = ''; // reset para poder re-seleccionar
 
-    // Convertir a base64
-    const base64 = await new Promise((res, rej) => {
+    // Convertir a base64 y guardar preview
+    const dataURL = await new Promise((res, rej) => {
       const reader = new FileReader();
-      reader.onload = () => res(reader.result.split(',')[1]);
+      reader.onload = () => res(reader.result);
       reader.onerror = rej;
       reader.readAsDataURL(archivo);
     });
+    if (tipoImportActual === 'whatsapp') imagenWhatsappURL = dataURL;
+    const base64 = dataURL.split(',')[1];
 
     mostrarImportLoading(tipoImportActual === 'whatsapp' ? 'Extrayendo viajes...' : 'Leyendo documento...');
 
@@ -972,6 +978,12 @@
   function mostrarPanelWhatsapp(viajes) {
     viajesWhatsapp = viajes.map((v, i) => ({ ...v, id: i }));
     renderizarViajesList();
+    // Mostrar preview de la imagen
+    const preview = document.getElementById('waImagePreview');
+    if (imagenWhatsappURL) {
+      preview.src = imagenWhatsappURL;
+      preview.style.display = 'block';
+    }
     document.getElementById('whatsappPanel').style.display = 'flex';
   }
 
@@ -1015,6 +1027,8 @@
   function cerrarPanelWhatsapp() {
     document.getElementById('whatsappPanel').style.display = 'none';
     viajesWhatsapp = [];
+    imagenWhatsappURL = null;
+    document.getElementById('waImagePreview').style.display = 'none';
   }
 
   async function confirmarGuardarPendientes() {
@@ -1128,5 +1142,3 @@
 
 </body>
 </html>
-
-
