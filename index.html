@@ -514,6 +514,126 @@
       justify-content: center;
       z-index: 16000;
     }
+
+    /* Boton verde WhatsApp en home */
+    .btn-whatsapp {
+      background: #25D366 !important;
+      margin-top: 15px;
+      box-shadow: 0 8px 20px rgba(37,211,102,0.3);
+    }
+    .btn-whatsapp .scan-title,
+    .btn-whatsapp .scan-subtitle { color: #fff !important; }
+
+    /* Panel nuevo pendiente */
+    #nuevoPendientePanel {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(6px);
+      z-index: 15000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .np-sheet {
+      background: #1a1a1a;
+      border-radius: 25px 25px 0 0;
+      padding: 24px 20px 40px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .np-sheet h3 {
+      color: #fff;
+      margin: 0 0 18px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .np-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+
+    .np-field label {
+      color: #888;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .np-field input {
+      background: #2a2a2a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 16px;
+      padding: 12px 14px;
+      width: 100%;
+      font-family: system-ui, sans-serif;
+      -webkit-appearance: none;
+    }
+
+    .np-field input:focus {
+      border-color: #25D366;
+      outline: none;
+    }
+
+    /* Pantalla de configuracion */
+    #configPanel {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(6px);
+      z-index: 15000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .config-card {
+      background: #1a1a2e;
+      border-radius: 20px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 340px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .config-card h3 {
+      color: #fff;
+      margin: 0 0 6px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .config-card p {
+      color: #888;
+      font-size: 12px;
+      margin: 0 0 16px;
+    }
+
+    .config-card input {
+      background: #2a2a2a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 16px;
+      padding: 12px 14px;
+      width: 100%;
+      font-family: system-ui, sans-serif;
+      -webkit-appearance: none;
+      margin-bottom: 14px;
+    }
+
+    .config-card input:focus { border-color: #25D366; outline: none; }
   </style>
 </head>
 <body>
@@ -539,6 +659,11 @@
     <button class="scan-btn btn-blanco" onclick="abrirMenuImportar()">
       <span class="scan-title">📁 IMPORTAR DIGITAL</span>
       <span class="scan-subtitle">Sube capturas y/o archivos digitales</span>
+    </button>
+
+    <button class="scan-btn btn-whatsapp" onclick="abrirNuevoPendiente()">
+      <span class="scan-title">💬 NUEVO PENDIENTE</span>
+      <span class="scan-subtitle">Crea un viaje y envíalo por WhatsApp</span>
     </button>
   </div>
 </div>
@@ -670,6 +795,52 @@
     <span class="popup-title" id="popupTitle">Ticket guardado</span>
     <span class="popup-subtitle" id="popupSubtitle">Se ha registrado correctamente</span>
     <button class="btn-popup-ok" onclick="cerrarExito()">OK</button>
+  </div>
+</div>
+
+<!-- PANEL NUEVO PENDIENTE -->
+<div id="nuevoPendientePanel">
+  <div class="np-sheet">
+    <h3>💬 Nuevo viaje pendiente</h3>
+
+    <div class="np-field">
+      <label>Fecha</label>
+      <input type="date" id="npFecha">
+    </div>
+    <div class="np-field">
+      <label>Importe (EUR)</label>
+      <input type="number" id="npImporte" step="0.01" min="0" placeholder="0.00">
+    </div>
+    <div class="np-field">
+      <label>Cliente</label>
+      <input type="text" id="npCliente" placeholder="Nombre del cliente">
+    </div>
+    <div class="np-field">
+      <label>Recogida</label>
+      <input type="text" id="npRecogida" placeholder="Dirección de recogida">
+    </div>
+    <div class="np-field">
+      <label>Destino</label>
+      <input type="text" id="npDestino" placeholder="Dirección de destino">
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-back" onclick="cerrarNuevoPendiente()">VOLVER</button>
+      <button class="btn" style="background:#25D366;color:#fff;flex:2;" onclick="enviarNuevoPendiente()" id="btnEnviarWA">GUARDAR Y ENVIAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL CONFIGURACION -->
+<div id="configPanel">
+  <div class="config-card">
+    <h3>⚙️ Configuración</h3>
+    <p>Número de WhatsApp al que se envían los viajes (con prefijo, sin +)</p>
+    <input type="tel" id="configNumeroWA" placeholder="34612345678">
+    <div class="actions" style="margin-top:0;">
+      <button class="btn btn-back" onclick="cerrarConfig()">CANCELAR</button>
+      <button class="btn btn-accept" onclick="guardarConfig()">GUARDAR</button>
+    </div>
   </div>
 </div>
 
@@ -1137,6 +1308,119 @@
     } else {
       location.reload();
     }
+  }
+
+  // -----------------------------------------------
+  // NUEVO PENDIENTE
+  // -----------------------------------------------
+
+  function getNumeroWA() {
+    return localStorage.getItem('wa_numero') || '';
+  }
+
+  function abrirNuevoPendiente() {
+    if (navigator.vibrate) navigator.vibrate(30);
+    if (!getNumeroWA()) {
+      abrirConfig(true);
+      return;
+    }
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    document.getElementById('npFecha').value = yyyy + '-' + mm + '-' + dd;
+    document.getElementById('npImporte').value = '';
+    document.getElementById('npCliente').value = '';
+    document.getElementById('npRecogida').value = '';
+    document.getElementById('npDestino').value = '';
+    document.getElementById('nuevoPendientePanel').style.display = 'flex';
+  }
+
+  function cerrarNuevoPendiente() {
+    document.getElementById('nuevoPendientePanel').style.display = 'none';
+  }
+
+  async function enviarNuevoPendiente() {
+    if (navigator.vibrate) navigator.vibrate(40);
+
+    const fecha    = document.getElementById('npFecha').value;
+    const importe  = parseFloat(document.getElementById('npImporte').value);
+    const cliente  = document.getElementById('npCliente').value.trim();
+    const recogida = document.getElementById('npRecogida').value.trim();
+    const destino  = document.getElementById('npDestino').value.trim();
+
+    if (!fecha || isNaN(importe) || importe <= 0) {
+      alert('Fecha e importe son obligatorios.');
+      return;
+    }
+
+    const btn = document.getElementById('btnEnviarWA');
+    btn.textContent = 'GUARDANDO...';
+    btn.disabled = true;
+
+    try {
+      const resp = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'guardarPendiente', viajes: [{ fecha: fecha, importe: importe }] })
+      });
+      const data = await resp.json();
+
+      if (!data.ok) {
+        alert('Error al guardar en Sheets: ' + (data.error || 'desconocido'));
+        btn.textContent = 'GUARDAR Y ENVIAR';
+        btn.disabled = false;
+        return;
+      }
+
+      cerrarNuevoPendiente();
+
+      // Formatear fecha D/M/YY para el mensaje
+      const p = fecha.split('-');
+      const fechaMsg = parseInt(p[2]) + '/' + parseInt(p[1]) + '/' + p[0].substring(2);
+      const importeMsg = importe.toFixed(2).replace('.', ',');
+
+      let msg = 'Servicio Abonado ' + (cliente || '-');
+      msg += '\nRecogida: ' + (recogida || '-');
+      msg += '\nDestino: ' + (destino || '-');
+      msg += '\nImporte: ' + importeMsg + 'EUR';
+      msg += '\nFecha: ' + fechaMsg;
+
+      const numero = getNumeroWA();
+      window.open('https://wa.me/' + numero + '?text=' + encodeURIComponent(msg), '_blank');
+
+      mostrarExitoImport('Pendiente guardado', 'Guardado en Sheets. Abre WhatsApp y pulsa Enviar.');
+
+    } catch (e) {
+      alert('Error de conexion: ' + e.message);
+      btn.textContent = 'GUARDAR Y ENVIAR';
+      btn.disabled = false;
+    }
+  }
+
+  // -----------------------------------------------
+  // CONFIGURACION (numero de WA)
+  // -----------------------------------------------
+
+  let _configDespuesAbrirPendiente = false;
+
+  function abrirConfig(despues) {
+    _configDespuesAbrirPendiente = !!despues;
+    document.getElementById('configNumeroWA').value = getNumeroWA();
+    document.getElementById('configPanel').style.display = 'flex';
+  }
+
+  function cerrarConfig() {
+    document.getElementById('configPanel').style.display = 'none';
+  }
+
+  function guardarConfig() {
+    if (navigator.vibrate) navigator.vibrate(30);
+    const raw = document.getElementById('configNumeroWA').value.trim();
+    const num = raw.replace(/[^0-9]/g, '');
+    if (!num) { alert('Introduce un numero valido.'); return; }
+    localStorage.setItem('wa_numero', num);
+    cerrarConfig();
+    if (_configDespuesAbrirPendiente) abrirNuevoPendiente();
   }
 </script>
 
