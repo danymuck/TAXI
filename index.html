@@ -165,7 +165,6 @@
     background: linear-gradient(155deg, rgba(245,196,0,0.2) 0%, rgba(200,150,0,0.08) 40%, rgba(0,0,0,0.88) 100%);
     border: 1px solid rgba(245,196,0,0.3);
     box-shadow: 0 0 30px rgba(245,196,0,0.1) inset, 0 6px 24px rgba(245,196,0,0.12), 0 2px 0 rgba(245,196,0,0.2);
-    grid-column: 1 / -1;
   }
   .card-ingresos .dash-label { color: rgba(245,196,0,0.7); }
   .card-ingresos .dash-value { color: #f5c400; text-shadow: 0 0 20px rgba(245,196,0,0.6), 0 0 40px rgba(245,196,0,0.3); }
@@ -516,61 +515,6 @@
     <div class="hero-greeting">HOLA, DANI</div>
     <div class="hero-date" id="heroDate"></div>
   </div>
-
-  <!-- DASHBOARD -->
-  <div class="dashboard" id="dashboard">
-
-    <div class="dash-row">
-      <div class="dash-card card-ingresos">
-        <div class="dash-label">Total ingresos del mes</div>
-        <div class="dash-value" id="dashIngresos"><div class="dash-skeleton"></div></div>
-        <div class="dash-sub" id="dashIngSub">Cargando...</div>
-      </div>
-    </div>
-
-    <div class="dash-row">
-      <div class="dash-card card-media">
-        <div class="dash-label">Media diaria</div>
-        <div class="dash-value" id="dashMedia"><div class="dash-skeleton"></div></div>
-        <div class="dash-sub" id="dashMediaSub">&nbsp;</div>
-      </div>
-      <div class="dash-card card-dias">
-        <div class="dash-label">Dias trab.</div>
-        <div class="dash-value" id="dashDias"><div class="dash-skeleton" style="width:50%;height:22px;"></div></div>
-        <div class="dash-sub" id="dashDiasSub">este mes</div>
-      </div>
-    </div>
-
-    <div class="dash-row">
-      <div class="dash-card card-chart">
-        <div class="dash-label">Desglose cobro &mdash; mes actual</div>
-        <div class="chart-container">
-          <div class="chart-canvas-wrap">
-            <canvas id="donutCanvas" width="240" height="240"></canvas>
-            <div class="donut-center">
-              <div class="donut-center-pct" id="donutCenterPct">-</div>
-              <div class="donut-center-lbl" id="donutCenterLbl">TPV</div>
-            </div>
-          </div>
-          <div class="chart-legend">
-            <div class="legend-item">
-              <div class="legend-dot" style="background:#00e5ff;box-shadow:0 0 8px rgba(0,229,255,0.7);"></div>
-              <div class="legend-info">
-                <div class="legend-name">TPV</div>
-                <div class="legend-val" style="color:#00e5ff;" id="legendTPV">-<span class="legend-pct" id="legendTPVPct"></span></div>
-              </div>
-            </div>
-            <div class="legend-item">
-              <div class="legend-dot" style="background:#f5c400;box-shadow:0 0 8px rgba(245,196,0,0.7);"></div>
-              <div class="legend-info">
-                <div class="legend-name">Efectivo</div>
-                <div class="legend-val" style="color:#f5c400;" id="legendEfectivo">-<span class="legend-pct" id="legendEfectivoPct"></span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
   </div>
 
@@ -1115,9 +1059,6 @@
       document.getElementById('dashMedia').innerHTML = fmt(d.mediaDiaria) + '<span>EUR/dia</span>';
       document.getElementById('dashMediaSub').textContent = d.diasTrabajados + ' dias trabajados';
 
-      document.getElementById('dashDias').innerHTML = d.diasTrabajados + '<span>dias</span>';
-      document.getElementById('dashDiasSub').textContent = meses[d.mes - 1] + ' ' + d.anio;
-
       document.getElementById('legendTPV').innerHTML = fmt(d.tpv) + 'EUR<span class="legend-pct">' + d.pctTPV + '%</span>';
       document.getElementById('legendEfectivo').innerHTML = fmt(d.efectivo) + 'EUR<span class="legend-pct">' + d.pctEfectivo + '%</span>';
       document.getElementById('donutCenterPct').textContent = d.pctTPV + '%';
@@ -1220,3 +1161,50 @@
 </script>
 </body>
 </html>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashboard">
+
+    <div class="dash-row">
+      <div class="dash-card card-ingresos">
+        <div class="dash-label">Total del mes</div>
+        <div class="dash-value" id="dashIngresos"><div class="dash-skeleton"></div></div>
+        <div class="dash-sub" id="dashIngSub">Cargando...</div>
+      </div>
+      <div class="dash-card card-media">
+        <div class="dash-label">Media diaria</div>
+        <div class="dash-value" id="dashMedia"><div class="dash-skeleton"></div></div>
+        <div class="dash-sub" id="dashMediaSub">&nbsp;</div>
+      </div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-card card-chart">
+        <div class="dash-label">Desglose cobro &mdash; mes actual</div>
+        <div class="chart-container">
+          <div class="chart-canvas-wrap">
+            <canvas id="donutCanvas" width="240" height="240"></canvas>
+            <div class="donut-center">
+              <div class="donut-center-pct" id="donutCenterPct">-</div>
+              <div class="donut-center-lbl" id="donutCenterLbl">TPV</div>
+            </div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#00e5ff;box-shadow:0 0 8px rgba(0,229,255,0.7);"></div>
+              <div class="legend-info">
+                <div class="legend-name">TPV</div>
+                <div class="legend-val" style="color:#00e5ff;" id="legendTPV">-<span class="legend-pct" id="legendTPVPct"></span></div>
+              </div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#f5c400;box-shadow:0 0 8px rgba(245,196,0,0.7);"></div>
+              <div class="legend-info">
+                <div class="legend-name">Efectivo</div>
+                <div class="legend-val" style="color:#f5c400;" id="legendEfectivo">-<span class="legend-pct" id="legendEfectivoPct"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
