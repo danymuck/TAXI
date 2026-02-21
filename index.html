@@ -516,8 +516,6 @@
     <div class="hero-date" id="heroDate"></div>
   </div>
 
-  </div>
-
   <div class="buttons-grid">
 
     <button class="scan-btn btn-ticket" onclick="openScanner('ticket')">
@@ -622,6 +620,54 @@
     </button>
 
   </div>
+
+<!-- DASHBOARD -->
+  <div class="dashboard" id="dashboard">
+
+    <div class="dash-row">
+      <div class="dash-card card-ingresos">
+        <div class="dash-label">Total del mes</div>
+        <div class="dash-value" id="dashIngresos"><div class="dash-skeleton"></div></div>
+        <div class="dash-sub" id="dashIngSub">Cargando...</div>
+      </div>
+      <div class="dash-card card-media">
+        <div class="dash-label">Media diaria</div>
+        <div class="dash-value" id="dashMedia"><div class="dash-skeleton"></div></div>
+        <div class="dash-sub" id="dashMediaSub">&nbsp;</div>
+      </div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-card card-chart">
+        <div class="dash-label">Desglose cobro &mdash; mes actual</div>
+        <div class="chart-container">
+          <div class="chart-canvas-wrap">
+            <canvas id="donutCanvas" width="240" height="240"></canvas>
+            <div class="donut-center">
+              <div class="donut-center-pct" id="donutCenterPct">-</div>
+              <div class="donut-center-lbl" id="donutCenterLbl">TPV</div>
+            </div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#00e5ff;box-shadow:0 0 8px rgba(0,229,255,0.7);"></div>
+              <div class="legend-info">
+                <div class="legend-name">TPV</div>
+                <div class="legend-val" style="color:#00e5ff;" id="legendTPV">-<span class="legend-pct" id="legendTPVPct"></span></div>
+              </div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#f5c400;box-shadow:0 0 8px rgba(245,196,0,0.7);"></div>
+              <div class="legend-info">
+                <div class="legend-name">Efectivo</div>
+                <div class="legend-val" style="color:#f5c400;" id="legendEfectivo">-<span class="legend-pct" id="legendEfectivoPct"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 </div>
 
 <!-- SCANNER -->
@@ -1160,51 +1206,5 @@
   cargarDashboard();
 </script>
 </body>
+
 </html>
-
-  <!-- DASHBOARD -->
-  <div class="dashboard" id="dashboard">
-
-    <div class="dash-row">
-      <div class="dash-card card-ingresos">
-        <div class="dash-label">Total del mes</div>
-        <div class="dash-value" id="dashIngresos"><div class="dash-skeleton"></div></div>
-        <div class="dash-sub" id="dashIngSub">Cargando...</div>
-      </div>
-      <div class="dash-card card-media">
-        <div class="dash-label">Media diaria</div>
-        <div class="dash-value" id="dashMedia"><div class="dash-skeleton"></div></div>
-        <div class="dash-sub" id="dashMediaSub">&nbsp;</div>
-      </div>
-    </div>
-
-    <div class="dash-row">
-      <div class="dash-card card-chart">
-        <div class="dash-label">Desglose cobro &mdash; mes actual</div>
-        <div class="chart-container">
-          <div class="chart-canvas-wrap">
-            <canvas id="donutCanvas" width="240" height="240"></canvas>
-            <div class="donut-center">
-              <div class="donut-center-pct" id="donutCenterPct">-</div>
-              <div class="donut-center-lbl" id="donutCenterLbl">TPV</div>
-            </div>
-          </div>
-          <div class="chart-legend">
-            <div class="legend-item">
-              <div class="legend-dot" style="background:#00e5ff;box-shadow:0 0 8px rgba(0,229,255,0.7);"></div>
-              <div class="legend-info">
-                <div class="legend-name">TPV</div>
-                <div class="legend-val" style="color:#00e5ff;" id="legendTPV">-<span class="legend-pct" id="legendTPVPct"></span></div>
-              </div>
-            </div>
-            <div class="legend-item">
-              <div class="legend-dot" style="background:#f5c400;box-shadow:0 0 8px rgba(245,196,0,0.7);"></div>
-              <div class="legend-info">
-                <div class="legend-name">Efectivo</div>
-                <div class="legend-val" style="color:#f5c400;" id="legendEfectivo">-<span class="legend-pct" id="legendEfectivoPct"></span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
