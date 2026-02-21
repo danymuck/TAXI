@@ -126,7 +126,7 @@
      DASHBOARD CARDS
   ══════════════════════════════════ */
   .dashboard {
-    padding: 2px 14px 8px;
+    padding: 0px 14px 8px;
     display: flex; flex-direction: column; gap: 8px;
     position: relative; z-index: 2;
   }
@@ -243,7 +243,7 @@
   }
 
   /* Buttons grid */
-  .buttons-grid { padding: 16px 14px 36px; display: flex; flex-direction: column; gap: 10px; flex: 1; position: relative; z-index: 2; }
+  .buttons-grid { padding: 16px 14px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; position: relative; z-index: 2; }
 
   .section-label {
     font-size: 8px; font-weight: 600; letter-spacing: 4px;
@@ -257,7 +257,7 @@
     transition: transform 0.12s ease, filter 0.12s ease;
     display: flex; align-items: center; background: transparent; -webkit-appearance: none;
   }
-  .scan-btn:active { transform: scale(0.975) translateY(5px); filter: brightness(1.1); }
+  .scan-btn:active { transform: scale(0.975) translateY(3px); filter: brightness(1.08); }
 
   .btn-inner {
     position: relative; width: 100%;
@@ -271,8 +271,8 @@
   }
   .btn-inner::after {
     content: ''; position: absolute;
-    bottom: 0; left: 0; right: 0; height: 50%;
-    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.72));
+    bottom: 0; left: 0; right: 0; height: 45%;
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.6));
     border-radius: 0 0 14px 14px; pointer-events: none; z-index: 2;
   }
   .btn-ao {
@@ -311,16 +311,16 @@
 
   /* Button color themes */
   .btn-ticket .btn-inner {
-    background: linear-gradient(155deg, rgba(245,196,0,0.28) 0%, rgba(200,150,0,0.12) 30%, rgba(15,10,0,0.9) 65%, rgba(0,0,0,0.97) 100%);
-    border: 1px solid rgba(245,196,0,0.45);
+    background: linear-gradient(155deg, rgba(245,196,0,0.26) 0%, rgba(200,150,0,0.11) 30%, rgba(15,10,0,0.89) 65%, rgba(0,0,0,0.96) 100%);
+    border: 1px solid rgba(245,196,0,0.42);
     box-shadow:
-      0 0 40px rgba(245,196,0,0.18) inset,
-      0 1px 0 rgba(255,240,100,0.45) inset,
-      0 -2px 0 rgba(0,0,0,0.8) inset,
-      0 6px 0 rgba(130,100,0,0.9),
-      0 7px 2px rgba(0,0,0,0.6),
-      0 10px 30px rgba(245,196,0,0.22),
-      0 2px 0 rgba(245,196,0,0.3);
+      0 0 40px rgba(245,196,0,0.16) inset,
+      0 1px 0 rgba(255,235,90,0.38) inset,
+      0 -1px 0 rgba(0,0,0,0.75) inset,
+      0 4px 0 rgba(110,80,0,0.85),
+      0 5px 8px rgba(0,0,0,0.45),
+      0 10px 28px rgba(245,196,0,0.18),
+      0 2px 0 rgba(245,196,0,0.28);
   }
   .btn-ticket .btn-corner { border-color: rgba(245,196,0,0.8); }
   .btn-ticket .scan-title { color: var(--tron-yellow); text-shadow: 0 0 14px rgba(245,196,0,0.9), 0 0 28px rgba(245,196,0,0.4); }
@@ -329,16 +329,16 @@
   .btn-ticket .btn-arrow { color: rgba(245,196,0,0.45); }
 
   .btn-factura .btn-inner {
-    background: linear-gradient(155deg, rgba(0,229,255,0.26) 0%, rgba(0,180,220,0.12) 30%, rgba(0,10,20,0.9) 65%, rgba(0,0,0,0.97) 100%);
-    border: 1px solid rgba(0,229,255,0.42);
+    background: linear-gradient(155deg, rgba(0,229,255,0.24) 0%, rgba(0,180,220,0.11) 30%, rgba(0,10,20,0.89) 65%, rgba(0,0,0,0.96) 100%);
+    border: 1px solid rgba(0,229,255,0.38);
     box-shadow:
-      0 0 40px rgba(0,229,255,0.16) inset,
-      0 1px 0 rgba(150,255,255,0.45) inset,
-      0 -2px 0 rgba(0,0,0,0.8) inset,
-      0 6px 0 rgba(0,80,100,0.9),
-      0 7px 2px rgba(0,0,0,0.6),
-      0 10px 30px rgba(0,229,255,0.18),
-      0 2px 0 rgba(0,229,255,0.3);
+      0 0 40px rgba(0,229,255,0.14) inset,
+      0 1px 0 rgba(140,250,255,0.38) inset,
+      0 -1px 0 rgba(0,0,0,0.75) inset,
+      0 4px 0 rgba(0,60,80,0.85),
+      0 5px 8px rgba(0,0,0,0.45),
+      0 10px 28px rgba(0,229,255,0.15),
+      0 2px 0 rgba(0,229,255,0.28);
   }
   .btn-factura .btn-corner { border-color: rgba(0,229,255,0.8); }
   .btn-factura .scan-title { color: var(--tron-cyan); text-shadow: 0 0 14px rgba(0,229,255,0.9), 0 0 28px rgba(0,229,255,0.4); }
@@ -347,16 +347,16 @@
   .btn-factura .btn-arrow { color: rgba(0,229,255,0.45); }
 
   .btn-factura-digital .btn-inner {
-    background: linear-gradient(155deg, rgba(0,160,255,0.26) 0%, rgba(0,100,200,0.12) 30%, rgba(0,5,20,0.9) 65%, rgba(0,0,0,0.97) 100%);
-    border: 1px solid rgba(0,160,255,0.40);
+    background: linear-gradient(155deg, rgba(0,160,255,0.24) 0%, rgba(0,100,200,0.11) 30%, rgba(0,5,20,0.89) 65%, rgba(0,0,0,0.96) 100%);
+    border: 1px solid rgba(0,160,255,0.36);
     box-shadow:
-      0 0 32px rgba(0,160,255,0.16) inset,
-      0 1px 0 rgba(100,200,255,0.42) inset,
-      0 -2px 0 rgba(0,0,0,0.8) inset,
-      0 6px 0 rgba(0,50,100,0.9),
-      0 7px 2px rgba(0,0,0,0.6),
-      0 8px 24px rgba(0,160,255,0.18),
-      0 2px 0 rgba(0,160,255,0.25);
+      0 0 32px rgba(0,160,255,0.14) inset,
+      0 1px 0 rgba(90,190,255,0.36) inset,
+      0 -1px 0 rgba(0,0,0,0.75) inset,
+      0 4px 0 rgba(0,40,90,0.85),
+      0 5px 8px rgba(0,0,0,0.45),
+      0 8px 22px rgba(0,160,255,0.15),
+      0 2px 0 rgba(0,160,255,0.22);
   }
   .btn-factura-digital .btn-corner { border-color: rgba(0,160,255,0.8); }
   .btn-factura-digital .scan-title { color: var(--tron-blue); text-shadow: 0 0 12px rgba(0,160,255,0.9); }
@@ -364,16 +364,16 @@
   .btn-factura-digital .btn-icon svg { color: var(--tron-blue); }
 
   .btn-banco .btn-inner {
-    background: linear-gradient(155deg, rgba(110,80,255,0.28) 0%, rgba(80,50,200,0.12) 30%, rgba(5,0,20,0.9) 65%, rgba(0,0,0,0.97) 100%);
-    border: 1px solid rgba(110,80,255,0.44);
+    background: linear-gradient(155deg, rgba(110,80,255,0.26) 0%, rgba(80,50,200,0.11) 30%, rgba(5,0,20,0.89) 65%, rgba(0,0,0,0.96) 100%);
+    border: 1px solid rgba(110,80,255,0.40);
     box-shadow:
-      0 0 32px rgba(110,80,255,0.16) inset,
-      0 1px 0 rgba(190,160,255,0.42) inset,
-      0 -2px 0 rgba(0,0,0,0.8) inset,
-      0 6px 0 rgba(50,20,120,0.9),
-      0 7px 2px rgba(0,0,0,0.6),
-      0 8px 24px rgba(110,80,255,0.20),
-      0 2px 0 rgba(110,80,255,0.25);
+      0 0 32px rgba(110,80,255,0.14) inset,
+      0 1px 0 rgba(180,150,255,0.36) inset,
+      0 -1px 0 rgba(0,0,0,0.75) inset,
+      0 4px 0 rgba(40,15,100,0.85),
+      0 5px 8px rgba(0,0,0,0.45),
+      0 8px 22px rgba(110,80,255,0.17),
+      0 2px 0 rgba(110,80,255,0.22);
   }
   .btn-banco .btn-corner { border-color: rgba(110,80,255,0.8); }
   .btn-banco .scan-title { color: var(--tron-purple); text-shadow: 0 0 12px rgba(110,80,255,0.9); }
@@ -381,16 +381,16 @@
   .btn-banco .btn-icon svg { color: var(--tron-purple); }
 
   .btn-pendiente .btn-inner {
-    background: linear-gradient(155deg, rgba(37,211,102,0.28) 0%, rgba(20,160,80,0.12) 30%, rgba(0,15,5,0.9) 65%, rgba(0,0,0,0.97) 100%);
-    border: 1px solid rgba(37,211,102,0.45);
+    background: linear-gradient(155deg, rgba(37,211,102,0.26) 0%, rgba(20,160,80,0.11) 30%, rgba(0,15,5,0.89) 65%, rgba(0,0,0,0.96) 100%);
+    border: 1px solid rgba(37,211,102,0.42);
     box-shadow:
-      0 0 40px rgba(37,211,102,0.16) inset,
-      0 1px 0 rgba(120,255,170,0.45) inset,
-      0 -2px 0 rgba(0,0,0,0.8) inset,
-      0 6px 0 rgba(0,80,30,0.9),
-      0 7px 2px rgba(0,0,0,0.6),
-      0 10px 30px rgba(37,211,102,0.22),
-      0 2px 0 rgba(37,211,102,0.3);
+      0 0 40px rgba(37,211,102,0.14) inset,
+      0 1px 0 rgba(110,250,160,0.38) inset,
+      0 -1px 0 rgba(0,0,0,0.75) inset,
+      0 4px 0 rgba(0,65,25,0.85),
+      0 5px 8px rgba(0,0,0,0.45),
+      0 10px 28px rgba(37,211,102,0.18),
+      0 2px 0 rgba(37,211,102,0.28);
   }
   .btn-pendiente .btn-corner { border-color: rgba(37,211,102,0.8); }
   .btn-pendiente .scan-title { color: var(--tron-green); text-shadow: 0 0 14px rgba(37,211,102,0.9), 0 0 28px rgba(37,211,102,0.4); }
