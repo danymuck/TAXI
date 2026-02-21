@@ -79,7 +79,7 @@
 
   /* Top bar */
   .top-bar {
-    position: relative; height: 72px;
+    position: relative; height: 60px;
     display: flex; align-items: center; justify-content: center;
     background: rgba(0,0,0,0.7);
     backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
@@ -110,15 +110,15 @@
 
   /* Hero */
   .hero-section {
-    padding: 20px 20px 10px; text-align: center; position: relative; z-index: 2;
+    padding: 10px 20px 4px; text-align: center; position: relative; z-index: 2;
   }
   .hero-greeting {
-    display: block; font-size: 11px; font-weight: 500; letter-spacing: 5px;
+    display: block; font-size: 10px; font-weight: 500; letter-spacing: 4px;
     color: rgba(0,255,255,0.75); text-transform: uppercase; margin-bottom: 6px;
     text-shadow: 0 0 12px rgba(0,255,255,0.5);
   }
   .hero-date {
-    display: block; font-size: 10px; font-weight: 400; letter-spacing: 3px;
+    display: block; font-size: 9px; font-weight: 400; letter-spacing: 2px;
     color: rgba(255,255,255,0.3); text-transform: uppercase;
   }
 
@@ -126,14 +126,14 @@
      DASHBOARD CARDS
   ══════════════════════════════════ */
   .dashboard {
-    padding: 10px 14px 4px;
-    display: flex; flex-direction: column; gap: 10px;
+    padding: 6px 14px 8px;
+    display: flex; flex-direction: column; gap: 8px;
     position: relative; z-index: 2;
   }
-  .dash-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dash-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
   .dash-card {
-    border-radius: 14px; padding: 14px 16px 12px;
+    border-radius: 14px; padding: 10px 14px 8px;
     position: relative; overflow: hidden;
     display: flex; flex-direction: column; gap: 4px;
   }
@@ -196,7 +196,7 @@
     border: 1px solid rgba(0,150,255,0.2);
     box-shadow: 0 0 24px rgba(0,150,255,0.06) inset, 0 6px 20px rgba(0,150,255,0.08);
     grid-column: 1 / -1;
-    padding: 14px 16px 16px;
+    padding: 10px 14px 10px;
   }
   .card-chart .dash-label { color: rgba(0,200,255,0.6); margin-bottom: 10px; }
 
@@ -243,11 +243,11 @@
   }
 
   /* Buttons grid */
-  .buttons-grid { padding: 16px 14px 36px; display: flex; flex-direction: column; gap: 10px; flex: 1; position: relative; z-index: 2; }
+  .buttons-grid { padding: 8px 14px 12px; display: flex; flex-direction: column; gap: 8px; flex: 1; position: relative; z-index: 2; }
 
   .section-label {
     font-size: 8px; font-weight: 600; letter-spacing: 4px;
-    color: rgba(255,255,255,0.18); text-transform: uppercase; padding: 6px 6px 0;
+    color: rgba(255,255,255,0.18); text-transform: uppercase; padding: 2px 6px 0;
   }
 
   /* Base scan button */
@@ -262,7 +262,7 @@
   .btn-inner {
     position: relative; width: 100%;
     display: flex; align-items: center; gap: 14px;
-    padding: 18px 18px; border-radius: 14px; overflow: hidden; z-index: 1;
+    padding: 13px 16px; border-radius: 14px; overflow: hidden; z-index: 1;
   }
   .btn-inner::before {
     content: ''; position: absolute;
@@ -290,24 +290,24 @@
 
   .btn-icon {
     flex-shrink: 0; position: relative; z-index: 12;
-    width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
   }
-  .btn-icon svg { width: 46px; height: 46px; filter: drop-shadow(0 0 8px currentColor); }
+  .btn-icon svg { width: 38px; height: 38px; filter: drop-shadow(0 0 8px currentColor); }
 
   .btn-text { display: flex; flex-direction: column; gap: 5px; flex: 1; position: relative; z-index: 12; }
-  .scan-title { font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1; text-align: center; }
-  .scan-subtitle { font-size: 12px; font-weight: 400; letter-spacing: 1.5px; opacity: 0.55; text-transform: uppercase; text-align: center; display: block; }
+  .scan-title { font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; line-height: 1; text-align: center; }
+  .scan-subtitle { font-size: 10px; font-weight: 400; letter-spacing: 1px; opacity: 0.55; text-transform: uppercase; text-align: center; display: block; }
   .btn-arrow { font-size: 20px; opacity: 0.3; flex-shrink: 0; position: relative; z-index: 12; font-family: sans-serif; }
 
   /* Two-column row */
-  .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .btn-row .scan-btn { width: 100%; }
-  .btn-row .btn-inner { flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; }
+  .btn-row .btn-inner { flex-direction: column; align-items: center; gap: 6px; padding: 12px 10px; }
   .btn-row .btn-arrow { display: none; }
   .btn-row .scan-title { font-size: 13px; letter-spacing: 1.5px; text-align: center; }
   .btn-row .scan-subtitle { font-size: 10px; text-align: center; }
-  .btn-row .btn-icon { width: 52px; height: 52px; }
-  .btn-row .btn-icon svg { width: 46px; height: 46px; }
+  .btn-row .btn-icon { width: 40px; height: 40px; }
+  .btn-row .btn-icon svg { width: 34px; height: 34px; }
 
   /* Button color themes */
   .btn-ticket .btn-inner {
