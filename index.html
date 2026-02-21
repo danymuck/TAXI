@@ -1245,6 +1245,89 @@
   })();
 
   // DASHBOARD
+  function dibujarDonut(tpv, efectivo) {
+    const canvas = document.getElementById('donutCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+    const R = W * 0.44;
+    const r = W * 0.28;
+    const total = tpv + efectivo;
+    if (total <= 0) return;
+
+    const angTPV      = (tpv / total) * Math.PI * 2;
+    const angEfectivo = (efectivo / total) * Math.PI * 2;
+    const gap = 0.04;
+    const startAngle = -Math.PI / 2;
+
+    ctx.clearRect(0, 0, W, H);
+
+    function hexToRgb(hex) {
+      if (hex.startsWith('rgb')) { const m = hex.match(/\d+/g); return { r: +m[0], g: +m[1], b: +m[2] }; }
+      const h = hex.replace('#','');
+      return { r: parseInt(h.slice(0,2),16), g: parseInt(h.slice(2,4),16), b: parseInt(h.slice(4,6),16) };
+    }
+    function lighten(hex, amt) {
+      const c = hexToRgb(hex);
+      return 'rgba(' + Math.min(255,c.r+amt) + ',' + Math.min(255,c.g+amt) + ',' + Math.min(255,c.b+amt) + ',1)';
+    }
+    function darken(hex, amt) {
+      const c = hexToRgb(hex);
+      return 'rgba(' + Math.max(0,c.r-amt) + ',' + Math.max(0,c.g-amt) + ',' + Math.max(0,c.b-amt) + ',0.9)';
+    }
+
+    function drawSector(startA, sweepA, colorTop, colorSide, depth) {
+      if (sweepA <= gap * 2) return;
+      const s = startA + gap / 2;
+      const e = startA + sweepA - gap / 2;
+      const midA = (s + e) / 2;
+
+      ctx.save();
+      ctx.translate(0, depth);
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, s, e);
+      ctx.arc(cx, cy, r, e, s, true);
+      ctx.closePath();
+      ctx.fillStyle = colorSide;
+      ctx.fill();
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, s, e);
+      ctx.arc(cx, cy, r, e, s, true);
+      ctx.closePath();
+      const grd = ctx.createRadialGradient(
+        cx + Math.cos(midA) * (R * 0.5), cy + Math.sin(midA) * (R * 0.5), r * 0.1,
+        cx, cy, R
+      );
+      grd.addColorStop(0, lighten(colorTop, 40));
+      grd.addColorStop(0.5, colorTop);
+      grd.addColorStop(1, darken(colorTop, 30));
+      ctx.fillStyle = grd;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, s, e);
+      ctx.strokeStyle = lighten(colorTop, 60);
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    drawSector(startAngle, angTPV, '#00c8e0', '#005566', 7);
+    drawSector(startAngle + angTPV, angEfectivo, '#e0a800', '#5a4000', 7);
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    const holeGrd = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+    holeGrd.addColorStop(0, 'rgba(5,15,30,0.95)');
+    holeGrd.addColorStop(1, 'rgba(0,5,15,0.98)');
+    ctx.fillStyle = holeGrd;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,200,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
   // Month picker state
   const MESES_CORTOS = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
   let pickerAnio     = new Date().getFullYear();
