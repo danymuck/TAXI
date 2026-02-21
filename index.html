@@ -436,6 +436,246 @@
   .config-card input { background: #2a2a2a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 16px; padding: 12px 14px; width: 100%; font-family: system-ui, sans-serif; -webkit-appearance: none; margin-bottom: 14px; }
   .config-card input:focus { border-color: #25D366; outline: none; }
 
+
+  /* ══════════════════════════════════
+     DASHBOARD CARDS
+  ══════════════════════════════════ */
+  .dashboard {
+    padding: 10px 14px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .dash-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Base card */
+  .dash-card {
+    border-radius: 14px;
+    padding: 14px 16px 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* top highlight */
+  .dash-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  }
+
+  /* bottom depth shadow */
+  .dash-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 40%;
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5));
+    border-radius: 0 0 14px 14px;
+    pointer-events: none;
+  }
+
+  .dash-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 7.5px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  .dash-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.1;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 1px;
+  }
+
+  .dash-value span {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.6;
+    margin-left: 2px;
+  }
+
+  .dash-sub {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px;
+    font-weight: 400;
+    opacity: 0.4;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* INGRESOS card — yellow */
+  .card-ingresos {
+    background: linear-gradient(155deg, rgba(245,196,0,0.2) 0%, rgba(200,150,0,0.08) 40%, rgba(0,0,0,0.88) 100%);
+    border: 1px solid rgba(245,196,0,0.3);
+    box-shadow: 0 0 30px rgba(245,196,0,0.1) inset, 0 6px 24px rgba(245,196,0,0.12), 0 2px 0 rgba(245,196,0,0.2);
+    grid-column: 1 / -1; /* full width */
+  }
+  .card-ingresos .dash-label { color: rgba(245,196,0,0.7); }
+  .card-ingresos .dash-value { color: #f5c400; text-shadow: 0 0 20px rgba(245,196,0,0.6), 0 0 40px rgba(245,196,0,0.3); }
+  .card-ingresos .dash-value span { color: rgba(245,196,0,0.7); }
+
+  /* MEDIA card — cyan */
+  .card-media {
+    background: linear-gradient(155deg, rgba(0,229,255,0.18) 0%, rgba(0,150,200,0.08) 40%, rgba(0,0,0,0.88) 100%);
+    border: 1px solid rgba(0,229,255,0.25);
+    box-shadow: 0 0 24px rgba(0,229,255,0.08) inset, 0 6px 20px rgba(0,229,255,0.1), 0 2px 0 rgba(0,229,255,0.18);
+  }
+  .card-media .dash-label { color: rgba(0,229,255,0.7); }
+  .card-media .dash-value { color: #00e5ff; text-shadow: 0 0 16px rgba(0,229,255,0.6); }
+  .card-media .dash-value span { color: rgba(0,229,255,0.7); }
+
+  /* DIAS card — purple */
+  .card-dias {
+    background: linear-gradient(155deg, rgba(110,80,255,0.2) 0%, rgba(80,50,200,0.08) 40%, rgba(0,0,0,0.88) 100%);
+    border: 1px solid rgba(110,80,255,0.28);
+    box-shadow: 0 0 24px rgba(110,80,255,0.08) inset, 0 6px 20px rgba(110,80,255,0.1), 0 2px 0 rgba(110,80,255,0.18);
+  }
+  .card-dias .dash-label { color: rgba(139,111,255,0.7); }
+  .card-dias .dash-value { color: #8b6fff; text-shadow: 0 0 16px rgba(110,80,255,0.6); }
+  .card-dias .dash-value span { color: rgba(139,111,255,0.7); }
+
+  /* CHART card — full width */
+  .card-chart {
+    background: linear-gradient(155deg, rgba(0,100,180,0.15) 0%, rgba(0,50,120,0.08) 40%, rgba(0,0,0,0.9) 100%);
+    border: 1px solid rgba(0,150,255,0.2);
+    box-shadow: 0 0 24px rgba(0,150,255,0.06) inset, 0 6px 20px rgba(0,150,255,0.08);
+    grid-column: 1 / -1;
+    padding: 14px 16px 16px;
+  }
+  .card-chart .dash-label { color: rgba(0,200,255,0.6); margin-bottom: 10px; }
+
+  .chart-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 1;
+  }
+
+  .chart-canvas-wrap {
+    flex-shrink: 0;
+    position: relative;
+    width: 120px;
+    height: 120px;
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6));
+  }
+
+  #donutCanvas {
+    width: 120px;
+    height: 120px;
+  }
+
+  /* Donut center text */
+  .donut-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .donut-center-pct {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(255,255,255,0.4);
+  }
+  .donut-center-lbl {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 7px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .chart-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .legend-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .legend-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+  }
+
+  .legend-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .legend-pct {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px;
+    font-weight: 400;
+    opacity: 0.45;
+    margin-left: 4px;
+  }
+
+  /* loading skeleton shimmer */
+  .dash-skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.04) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+    height: 28px;
+    width: 70%;
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
+
   </style>
 </head>
 <body>
@@ -461,6 +701,9 @@
     <div class="hero-greeting">HOLA, DANI</div>
     <div class="hero-date" id="heroDate"></div>
   </div>
+
+
+
 
   <div class="buttons-grid">
 
@@ -572,6 +815,62 @@
 
   </div>
 </div>
+
+  <!-- ══ DASHBOARD ══ -->
+  <div class="dashboard" id="dashboard">
+
+    <!-- Fila 1: Total ingresos (ancho completo) -->
+    <div class="dash-row">
+      <div class="dash-card card-ingresos">
+        <div class="dash-label">Total ingresos del mes</div>
+        <div class="dash-value" id="dashIngresos"><div class="dash-skeleton"></div></div>
+        <div class="dash-sub" id="dashIngSub">Cargando...</div>
+      </div>
+    </div>
+
+    <!-- Fila 2: Media diaria + Días trabajados -->
+    <div class="dash-row">
+      <div class="dash-card card-media">
+        <div class="dash-label">Media diaria</div>
+        <div class="dash-value" id="dashMedia"><div class="dash-skeleton"></div></div>
+        <div class="dash-sub" id="dashMediaSub">&nbsp;</div>
+      </div>
+
+    </div>
+
+    <!-- Fila 3: Gráfico TPV vs Efectivo -->
+    <div class="dash-row">
+      <div class="dash-card card-chart">
+        <div class="dash-label">Desglose cobro — mes actual</div>
+        <div class="chart-container">
+          <div class="chart-canvas-wrap">
+            <canvas id="donutCanvas" width="240" height="240"></canvas>
+            <div class="donut-center">
+              <div class="donut-center-pct" id="donutCenterPct">—</div>
+              <div class="donut-center-lbl" id="donutCenterLbl">TPV</div>
+            </div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#00e5ff; box-shadow:0 0 8px rgba(0,229,255,0.7);"></div>
+              <div class="legend-info">
+                <div class="legend-name">TPV</div>
+                <div class="legend-val" style="color:#00e5ff;" id="legendTPV">—<span class="legend-pct" id="legendTPVPct"></span></div>
+              </div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#f5c400; box-shadow:0 0 8px rgba(245,196,0,0.7);"></div>
+              <div class="legend-info">
+                <div class="legend-name">Efectivo</div>
+                <div class="legend-val" style="color:#f5c400;" id="legendEfectivo">—<span class="legend-pct" id="legendEfectivoPct"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 <!-- ══ SCANNER ══ -->
 <div id="scannerScreen">
@@ -997,6 +1296,159 @@
       });
     }
   })();
+
+  // ═══════════════════════════════════════
+  // DASHBOARD — carga datos al iniciar
+  // ═══════════════════════════════════════
+
+  async function cargarDashboard() {
+    try {
+      const resp = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'obtenerResumen' })
+      });
+      const d = await resp.json();
+      if (!d.ok) return;
+
+      const fmt = v => v.toFixed(2).replace('.', ',');
+
+      // Total ingresos
+      document.getElementById('dashIngresos').innerHTML =
+        fmt(d.totalMes) + '<span>€</span>';
+      const meses = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+      document.getElementById('dashIngSub').textContent =
+        meses[d.mes - 1] + ' ' + d.anio;
+
+      // Media diaria
+      document.getElementById('dashMedia').innerHTML =
+        fmt(d.mediaDiaria) + '<span>€/día</span>';
+      document.getElementById('dashMediaSub').textContent =
+        'Basado en ' + d.diasTrabajados + ' días';
+
+
+
+      // Gráfico donut
+      dibujarDonut(d.tpv, d.efectivo);
+
+      // Leyenda
+      document.getElementById('legendTPV').innerHTML =
+        fmt(d.tpv) + '€<span class="legend-pct">' + d.pctTPV + '%</span>';
+      document.getElementById('legendEfectivo').innerHTML =
+        fmt(d.efectivo) + '€<span class="legend-pct">' + d.pctEfectivo + '%</span>';
+
+      // Centro donut
+      document.getElementById('donutCenterPct').textContent = d.pctTPV + '%';
+
+    } catch(e) {
+      console.log('Dashboard error:', e);
+    }
+  }
+
+  function dibujarDonut(tpv, efectivo) {
+    const canvas = document.getElementById('donutCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+    const R = W * 0.44;   // radio externo
+    const r = W * 0.28;   // radio interno (hueco)
+    const total = tpv + efectivo;
+    if (total <= 0) return;
+
+    const angTPV      = (tpv / total) * Math.PI * 2;
+    const angEfectivo = (efectivo / total) * Math.PI * 2;
+    const gap = 0.04; // separación entre sectores en radianes
+    const startAngle = -Math.PI / 2;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // ── Función para dibujar un sector 3D ──
+    function drawSector(startA, sweepA, colorTop, colorSide, depth) {
+      if (sweepA <= gap * 2) return;
+      const s = startA + gap / 2;
+      const e = startA + sweepA - gap / 2;
+      const midA = (s + e) / 2;
+
+      // Sombra lateral (efecto 3D) — desplazada hacia abajo
+      const depthY = depth;
+      ctx.save();
+      ctx.translate(0, depthY);
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, s, e);
+      ctx.arc(cx, cy, r, e, s, true);
+      ctx.closePath();
+      ctx.fillStyle = colorSide;
+      ctx.fill();
+      ctx.restore();
+
+      // Cara superior (sector principal)
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, s, e);
+      ctx.arc(cx, cy, r, e, s, true);
+      ctx.closePath();
+
+      // Gradiente radial para look 3D
+      const grd = ctx.createRadialGradient(
+        cx + Math.cos(midA) * (R * 0.5),
+        cy + Math.sin(midA) * (R * 0.5),
+        r * 0.1,
+        cx, cy, R
+      );
+      grd.addColorStop(0, lighten(colorTop, 40));
+      grd.addColorStop(0.5, colorTop);
+      grd.addColorStop(1, darken(colorTop, 30));
+      ctx.fillStyle = grd;
+      ctx.fill();
+
+      // Borde brillante en el arco exterior
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, s, e);
+      ctx.strokeStyle = lighten(colorTop, 60);
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    function lighten(hex, amt) {
+      const col = hexToRgb(hex);
+      return `rgba(${Math.min(255,col.r+amt)},${Math.min(255,col.g+amt)},${Math.min(255,col.b+amt)},1)`;
+    }
+    function darken(hex, amt) {
+      const col = hexToRgb(hex);
+      return `rgba(${Math.max(0,col.r-amt)},${Math.max(0,col.g-amt)},${Math.max(0,col.b-amt)},0.9)`;
+    }
+    function hexToRgb(hex) {
+      // handles both #rrggbb and rgb(r,g,b) strings
+      if (hex.startsWith('rgb')) {
+        const m = hex.match(/\d+/g);
+        return { r: +m[0], g: +m[1], b: +m[2] };
+      }
+      const h = hex.replace('#','');
+      return { r: parseInt(h.slice(0,2),16), g: parseInt(h.slice(2,4),16), b: parseInt(h.slice(4,6),16) };
+    }
+
+    // Sector TPV — cian
+    drawSector(startAngle, angTPV, '#00c8e0', '#005566', 7);
+    // Sector Efectivo — amarillo
+    drawSector(startAngle + angTPV, angEfectivo, '#e0a800', '#5a4000', 7);
+
+    // Agujero central oscuro (glassmorphism)
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    const holeGrd = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+    holeGrd.addColorStop(0, 'rgba(5,15,30,0.95)');
+    holeGrd.addColorStop(1, 'rgba(0,5,15,0.98)');
+    ctx.fillStyle = holeGrd;
+    ctx.fill();
+
+    // Borde interior sutil
+    ctx.strokeStyle = 'rgba(0,200,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Lanzar al cargar
+  cargarDashboard();
+
+
 </script>
 
 </body>
