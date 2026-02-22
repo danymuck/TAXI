@@ -440,12 +440,12 @@
   .scanner-overlay {
     position: absolute; inset: 0; background: transparent;
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-    padding: 40px 16px 0; pointer-events: none; z-index: 10000;
+    padding: 90px 16px 0; pointer-events: none; z-index: 10000;
   }
   .scanner-overlay.factura { padding: 20px 12px 0; }
-  .scan-frame { width: 75%; height: 70%; border: 3px solid #f5c400; border-radius: 20px; position: relative; flex-shrink: 0; }
+  .scan-frame { width: 75%; height: 52%; border: 3px solid #f5c400; border-radius: 20px; position: relative; flex-shrink: 0; }
   .scan-frame::after { content: attr(data-label); position: absolute; bottom: -44px; left: 0; width: 100%; text-align: center; color: #fff; font-size: 15px; font-style: italic; }
-  .scan-frame.factura { width: 100%; height: calc(100vh - 220px); border-color: #00c2ff; }
+  .scan-frame.factura { width: 100%; height: calc(100vh - 300px); border-color: #00c2ff; }
   .scan-frame.factura::after { bottom: -36px; }
 
   .capture-btn {
@@ -480,11 +480,11 @@
     display: flex; justify-content: space-between; padding: 12px 0;
     border-bottom: 1px solid #222;
     font-family: 'Inter', system-ui, sans-serif;
-    font-size: 13px; letter-spacing: 0.3px;
+    font-size: 15px; letter-spacing: 0.3px;
   }
   .ticket-row span {
     color: rgba(255,255,255,0.45);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: 0.2px;
   }
@@ -1035,10 +1035,13 @@
     document.getElementById('photo').style.display = 'none';
   }
 
-  // ── FACTURA DIGITAL: abre carpeta Drive directamente ──
+  // ── FACTURA DIGITAL: abre selector de archivos nativo ──
   function abrirFacturaDigital() {
     if (navigator.vibrate) navigator.vibrate(30);
-    window.open(DRIVE_FACTURAS_URL, '_blank');
+    tipoImportActual = 'factura';
+    const input = document.getElementById('inputImportar');
+    input.accept = 'image/*,application/pdf';
+    input.click();
   }
 
   async function openScanner(tipo) {
