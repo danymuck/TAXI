@@ -764,12 +764,22 @@
   }
 
   /* Arrow on ingresos card title */
-  .card-ingresos .dash-label::after {
-    content: ' ›';
-    font-size: 11px;
-    opacity: 0.5;
+  .card-ingresos .dash-label::after { content: none; }
+
+  /* Arrow indicator top-right corner for interactive cards */
+  .card-arrow-indicator {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 13px;
     font-family: sans-serif;
+    opacity: 0.55;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 2;
   }
+  .card-ingresos .card-arrow-indicator { color: rgba(245,196,0,0.9); }
+  .card-media    .card-arrow-indicator { color: rgba(0,229,255,0.9); }
 
   </style>
 </head>
@@ -905,11 +915,13 @@
 
     <div class="dash-row">
       <div class="dash-card card-ingresos" onclick="abrirMonthPicker()">
+        <span class="card-arrow-indicator">&#8964;</span>
         <div class="dash-label">Total del mes</div>
         <div class="dash-value" id="dashIngresos"><div class="dash-skeleton"></div></div>
         <div class="dash-sub" id="dashIngSub">Cargando... <span class="card-period-badge" id="periodBadge"></span></div>
       </div>
       <div class="dash-card card-media" onclick="abrirMetricPicker()">
+        <span class="card-arrow-indicator">&#8964;</span>
         <div class="dash-label" id="dashMediaLabel">Media diaria</div>
         <div class="dash-value" id="dashMedia"><div class="dash-skeleton"></div></div>
         <div class="dash-sub" id="dashMediaSub">&nbsp;<span class="card-metric-badge"></span></div>
