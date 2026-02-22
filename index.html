@@ -683,8 +683,64 @@
     margin-top: 4px;
   }
 
-  /* Make ingresos card look clickable */
-  .card-ingresos {
+  /* Make media card look clickable */
+  .card-media {
+    cursor: pointer;
+    transition: filter 0.15s, transform 0.12s;
+  }
+  .card-media:active { filter: brightness(1.15); transform: scale(0.985); }
+
+  /* Metric picker badge */
+  .card-metric-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: 'Orbitron', sans-serif; font-size: 7px;
+    letter-spacing: 1px; color: rgba(0,229,255,0.5); margin-top: 2px;
+  }
+  .card-metric-badge::after { content: '▾'; font-size: 9px; color: rgba(0,229,255,0.4); }
+
+  /* Metric picker overlay */
+  .metric-picker {
+    position: fixed; inset: 0; z-index: 18000; display: none;
+    align-items: flex-end; justify-content: center;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+  }
+  .metric-picker.show { display: flex; }
+  .metric-picker-sheet {
+    background: rgba(2,8,20,0.97); border-radius: 22px 22px 0 0;
+    padding: 20px 20px 40px; width: 100%; max-width: 480px;
+    border-top: 1px solid rgba(0,229,255,0.2);
+    box-shadow: 0 -4px 30px rgba(0,229,255,0.08);
+  }
+  .metric-picker-title {
+    font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 600;
+    letter-spacing: 3px; color: rgba(0,229,255,0.6); text-transform: uppercase;
+    text-align: center; margin-bottom: 16px;
+  }
+  .metric-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .metric-btn {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; color: rgba(255,255,255,0.5);
+    font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 600;
+    letter-spacing: 1.5px; padding: 13px 16px; cursor: pointer;
+    transition: all 0.15s; text-transform: uppercase; text-align: left;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .metric-btn:active { transform: scale(0.98); }
+  .metric-btn.active {
+    background: rgba(0,229,255,0.12); border-color: rgba(0,229,255,0.45);
+    color: #00e5ff; box-shadow: 0 0 12px rgba(0,229,255,0.12);
+  }
+  .metric-btn .metric-val {
+    font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.35);
+    font-family: 'Inter', system-ui, sans-serif; letter-spacing: 0.5px;
+  }
+  .metric-btn.active .metric-val { color: rgba(0,229,255,0.7); }
+  .metric-picker-close {
+    width: 100%; background: none; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; color: rgba(255,255,255,0.35);
+    font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 600;
+    letter-spacing: 2px; padding: 12px; cursor: pointer; text-transform: uppercase; margin-top: 4px;
+  }
     cursor: pointer;
     transition: filter 0.15s, transform 0.12s;
   }
@@ -845,10 +901,10 @@
         <div class="dash-value" id="dashIngresos"><div class="dash-skeleton"></div></div>
         <div class="dash-sub" id="dashIngSub">Cargando... <span class="card-period-badge" id="periodBadge"></span></div>
       </div>
-      <div class="dash-card card-media">
-        <div class="dash-label">Media diaria</div>
+      <div class="dash-card card-media" onclick="abrirMetricPicker()">
+        <div class="dash-label" id="dashMediaLabel">Media diaria</div>
         <div class="dash-value" id="dashMedia"><div class="dash-skeleton"></div></div>
-        <div class="dash-sub" id="dashMediaSub">&nbsp;</div>
+        <div class="dash-sub" id="dashMediaSub">&nbsp;<span class="card-metric-badge"></span></div>
       </div>
     </div>
 
@@ -1422,6 +1478,75 @@
     ctx.stroke();
   }
 
+  // Metric picker state
+  let dashExtras = {};
+  let metricaActual = 'mediaDiaria';
+
+  const METRICAS = [
+    { key: 'mediaDiaria',   label: 'Media dia',      unit: 'EUR/dia',  fmt: 'eur' },
+    { key: 'mediaHora',     label: 'Media / hora',   unit: 'EUR/h',    fmt: 'eur' },
+    { key: 'mediaServicio', label: 'Media / serv.',  unit: 'EUR/serv', fmt: 'eur' },
+    { key: 'totalKm',       label: 'Km totales',     unit: 'km',       fmt: 'num' },
+    { key: 'totalServicios',label: 'Servicios',      unit: 'serv',     fmt: 'int' },
+    { key: 'totalGastos',   label: 'Gastos',         unit: 'EUR',      fmt: 'eur' },
+    { key: 'beneficio',     label: 'Beneficio',      unit: 'EUR',      fmt: 'eur' },
+  ];
+
+  function abrirMetricPicker() {
+    if (navigator.vibrate) navigator.vibrate(20);
+    renderMetricList();
+    document.getElementById('metricPicker').classList.add('show');
+  }
+
+  function cerrarMetricPicker(e) {
+    if (e && e.target !== document.getElementById('metricPicker')) return;
+    document.getElementById('metricPicker').classList.remove('show');
+  }
+
+  function renderMetricList() {
+    const lista = document.getElementById('metricList');
+    lista.innerHTML = '';
+    METRICAS.forEach(m => {
+      const btn = document.createElement('button');
+      btn.className = 'metric-btn' + (m.key === metricaActual ? ' active' : '');
+      const val = dashExtras[m.key];
+      let valStr = '-';
+      if (val !== undefined && val !== null) {
+        if (m.fmt === 'eur') valStr = parseFloat(val).toFixed(2).replace('.', ',') + ' ' + m.unit;
+        else if (m.fmt === 'int') valStr = parseInt(val) + ' ' + m.unit;
+        else valStr = parseFloat(val).toFixed(1).replace('.', ',') + ' ' + m.unit;
+      }
+      btn.innerHTML = '<span>' + m.label + '</span><span class="metric-val">' + valStr + '</span>';
+      btn.onclick = function() { seleccionarMetrica(m.key); };
+      lista.appendChild(btn);
+    });
+  }
+
+  function seleccionarMetrica(key) {
+    if (navigator.vibrate) navigator.vibrate(20);
+    metricaActual = key;
+    document.getElementById('metricPicker').classList.remove('show');
+    actualizarCardMedia();
+  }
+
+  function actualizarCardMedia() {
+    const m = METRICAS.find(x => x.key === metricaActual);
+    if (!m) return;
+    const val = dashExtras[m.key];
+    document.getElementById('dashMediaLabel').textContent = m.label;
+    if (val === undefined || val === null) {
+      document.getElementById('dashMedia').innerHTML = '-<span>' + m.unit + '</span>';
+      document.getElementById('dashMediaSub').innerHTML = '&nbsp;<span class="card-metric-badge"></span>';
+      return;
+    }
+    let valStr;
+    if (m.fmt === 'eur') valStr = parseFloat(val).toFixed(2).replace('.', ',');
+    else if (m.fmt === 'int') valStr = parseInt(val).toString();
+    else valStr = parseFloat(val).toFixed(1).replace('.', ',');
+    document.getElementById('dashMedia').innerHTML = valStr + '<span>' + m.unit + '</span>';
+    document.getElementById('dashMediaSub').innerHTML = '&nbsp;<span class="card-metric-badge"></span>';
+  }
+
   // Month picker state
   const MESES_CORTOS = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
   let pickerAnio     = new Date().getFullYear();
@@ -1497,10 +1622,17 @@
         MESES_CORTOS[d.mes - 1] + ' ' + d.anio +
         ' <span class="card-period-badge"></span>';
 
-      document.getElementById('dashMedia').innerHTML =
-        fmt(d.mediaDiaria) + '<span>EUR/dia</span>';
-      document.getElementById('dashMediaSub').textContent =
-        d.diasTrabajados + ' dias trabajados';
+      // Guardar todas las metricas extra para el picker
+      dashExtras = {
+        mediaDiaria:    d.mediaDiaria,
+        mediaHora:      d.mediaHora,
+        mediaServicio:  d.mediaServicio,
+        totalKm:        d.totalKm,
+        totalServicios: d.totalServicios,
+        totalGastos:    d.totalGastos,
+        beneficio:      d.beneficio,
+      };
+      actualizarCardMedia();
 
       document.getElementById('legendTPV').innerHTML =
         fmt(d.tpv) + 'EUR<span class="legend-pct">' + d.pctTPV + '%</span>';
@@ -1521,6 +1653,15 @@
 
   cargarDashboard();
 </script>
+<!-- METRIC PICKER -->
+<div class="metric-picker" id="metricPicker" onclick="cerrarMetricPicker(event)">
+  <div class="metric-picker-sheet" onclick="event.stopPropagation()">
+    <div class="metric-picker-title">Seleccionar metrica</div>
+    <div class="metric-list" id="metricList"></div>
+    <button class="metric-picker-close" onclick="cerrarMetricPicker()">Cancelar</button>
+  </div>
+</div>
+
 <!-- MONTH PICKER -->
 <div class="month-picker" id="monthPicker" onclick="cerrarMonthPicker(event)">
   <div class="month-picker-sheet" onclick="event.stopPropagation()">
