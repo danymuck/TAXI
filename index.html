@@ -1486,10 +1486,10 @@
 </div>
 
 <!-- DEBUG OVERLAY -->
-<div id="debugOverlay" style="position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,0.85);
-  color:#0f0;font-family:monospace;font-size:11px;padding:8px;z-index:99999;
-  max-height:40vh;overflow-y:auto;display:none;word-break:break-all;">
-  <div style="color:#ff0;margin-bottom:4px;">DEBUG LOG <button onclick="document.getElementById('debugOverlay').style.display='none'" style="background:#f00;color:#fff;border:none;padding:2px 6px;float:right">X</button></div>
+<div id="debugOverlay" style="position:fixed;inset:0;background:#ff0;
+  color:#000;font-family:monospace;font-size:16px;padding:20px;z-index:999999;
+  overflow-y:auto;display:none;word-break:break-all;">
+  <div style="font-size:20px;font-weight:bold;margin-bottom:10px;">DEBUG LOG <button onclick="document.getElementById('debugOverlay').style.display='none'" style="background:#f00;color:#fff;border:none;padding:4px 12px;float:right;font-size:16px">X</button></div>
   <div id="debugLog"></div>
 </div>
 
