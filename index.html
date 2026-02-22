@@ -1152,7 +1152,7 @@
       const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'guardarPendiente', viajes: viajesWhatsapp }) });
       const data = await resp.json(); cerrarPanelWhatsapp();
       if (data.ok) {
-        let msg = data.guardados + ' viaje(s) añadidos a Pendientes';
+        let msg = data.guardados + ' viaje(s) guardados en Pendientes';
         if (data.noEncontrados && data.noEncontrados.length > 0) msg += '\n\n(!!) Fechas no encontradas:\n' + data.noEncontrados.join(', ');
         mostrarExitoImport('Pendientes guardados', msg);
       } else { alert('Error al guardar: ' + (data.error || 'desconocido')); btn.innerText = 'GUARDAR'; btn.disabled = false; }
