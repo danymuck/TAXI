@@ -392,8 +392,8 @@
 
   /* Scanner */
   #scannerScreen { position: fixed; inset: 0; background: #000; display: none; z-index: 9999; }
-  #camera { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-  #photo { width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; top: 0; left: 0; z-index: 2; }
+  #camera { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 9999; }
+  #photo { width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; top: 0; left: 0; z-index: 10000; }
 
   .custom-popup {
     position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
@@ -830,7 +830,7 @@
 
 <!-- SCANNER -->
 <div id="scannerScreen">
-  <video id="camera" autoplay playsinline muted></video>
+  <video id="camera" autoplay playsinline webkit-playsinline muted></video>
   <img id="photo">
   <div class="scanner-overlay">
     <div class="scan-frame" id="scanFrame" data-label="Coloca el ticket dentro del marco"></div>
@@ -979,7 +979,14 @@
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
       stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } } });
-      video.srcObject = stream; video.setAttribute("playsinline","true"); video.muted = true; await video.play();
+      // Set attributes BEFORE assigning srcObject - critical for Android Chrome
+      video.setAttribute("playsinline", "true");
+      video.setAttribute("webkit-playsinline", "true");
+      video.muted = true;
+      video.srcObject = stream;
+      // Wait for browser to process the new srcObject before playing
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      await video.play();
     } catch (err) { alert("Error de camara: " + err.name + " | " + err.message); }
   }
 
@@ -1152,7 +1159,7 @@
       const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'guardarPendiente', viajes: viajesWhatsapp }) });
       const data = await resp.json(); cerrarPanelWhatsapp();
       if (data.ok) {
-        let msg = data.guardados + ' viaje(s) añadidos a Pendientes';
+        let msg = data.guardados + ' viaje(s) guardados en Pendientes';
         if (data.noEncontrados && data.noEncontrados.length > 0) msg += '\n\n(!!) Fechas no encontradas:\n' + data.noEncontrados.join(', ');
         mostrarExitoImport('Pendientes guardados', msg);
       } else { alert('Error al guardar: ' + (data.error || 'desconocido')); btn.innerText = 'GUARDAR'; btn.disabled = false; }
