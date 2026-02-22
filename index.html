@@ -313,7 +313,7 @@
       0 2px 0 rgba(245,196,0,0.28);
   }
   .btn-ticket .btn-corner { border-color: rgba(245,196,0,0.8); }
-  .btn-ticket .scan-title { color: var(--tron-yellow); text-shadow: 0 0 14px rgba(245,196,0,0.9), 0 0 28px rgba(245,196,0,0.4); }
+  .btn-ticket .scan-title { color: var(--tron-yellow); text-shadow: 0 0 14px rgba(245,196,0,1), 0 0 35px rgba(245,196,0,0.7), 0 0 60px rgba(245,196,0,0.3); }
   .btn-ticket .scan-subtitle { color: rgba(245,196,0,0.55); }
   .btn-ticket .btn-icon svg { color: var(--tron-yellow); }
   .btn-ticket .btn-arrow { color: rgba(245,196,0,0.45); }
@@ -331,7 +331,7 @@
       0 2px 0 rgba(0,229,255,0.28);
   }
   .btn-factura .btn-corner { border-color: rgba(0,229,255,0.8); }
-  .btn-factura .scan-title { color: var(--tron-cyan); text-shadow: 0 0 14px rgba(0,229,255,0.9), 0 0 28px rgba(0,229,255,0.4); }
+  .btn-factura .scan-title { color: var(--tron-cyan); text-shadow: 0 0 14px rgba(0,229,255,1), 0 0 35px rgba(0,229,255,0.7), 0 0 60px rgba(0,229,255,0.3); }
   .btn-factura .scan-subtitle { color: rgba(0,229,255,0.55); }
   .btn-factura .btn-icon svg { color: var(--tron-cyan); }
   .btn-factura .btn-arrow { color: rgba(0,229,255,0.45); }
@@ -349,7 +349,7 @@
       0 2px 0 rgba(0,160,255,0.22);
   }
   .btn-factura-digital .btn-corner { border-color: rgba(0,160,255,0.8); }
-  .btn-factura-digital .scan-title { color: var(--tron-blue); text-shadow: 0 0 12px rgba(0,160,255,0.9); }
+  .btn-factura-digital .scan-title { color: var(--tron-blue); text-shadow: 0 0 12px rgba(0,160,255,1), 0 0 30px rgba(0,160,255,0.6), 0 0 55px rgba(0,160,255,0.25); }
   .btn-factura-digital .scan-subtitle { color: rgba(0,160,255,0.55); }
   .btn-factura-digital .btn-icon svg { color: var(--tron-blue); }
 
@@ -366,7 +366,7 @@
       0 2px 0 rgba(110,80,255,0.22);
   }
   .btn-banco .btn-corner { border-color: rgba(110,80,255,0.8); }
-  .btn-banco .scan-title { color: var(--tron-purple); text-shadow: 0 0 12px rgba(110,80,255,0.9); }
+  .btn-banco .scan-title { color: var(--tron-purple); text-shadow: 0 0 12px rgba(110,80,255,1), 0 0 30px rgba(110,80,255,0.6), 0 0 55px rgba(110,80,255,0.25); }
   .btn-banco .scan-subtitle { color: rgba(110,80,255,0.55); }
   .btn-banco .btn-icon svg { color: var(--tron-purple); }
 
@@ -383,7 +383,7 @@
       0 2px 0 rgba(37,211,102,0.28);
   }
   .btn-pendiente .btn-corner { border-color: rgba(37,211,102,0.8); }
-  .btn-pendiente .scan-title { color: var(--tron-green); text-shadow: 0 0 14px rgba(37,211,102,0.9), 0 0 28px rgba(37,211,102,0.4); }
+  .btn-pendiente .scan-title { color: var(--tron-green); text-shadow: 0 0 14px rgba(37,211,102,1), 0 0 35px rgba(37,211,102,0.7), 0 0 60px rgba(37,211,102,0.3); }
   .btn-pendiente .scan-subtitle { color: rgba(37,211,102,0.55); }
   .btn-pendiente .btn-icon svg { color: var(--tron-green); }
   .btn-pendiente .btn-arrow { color: rgba(37,211,102,0.45); }
@@ -745,7 +745,7 @@
           </svg>
         </span>
         <span class="btn-text">
-          <span class="scan-title">Escanear Ticket</span>
+          <span class="scan-title" data-text="Escanear Ticket">Escanear Ticket</span>
           <span class="scan-subtitle">Registra el taximetro</span>
         </span>
         <span class="btn-arrow">&#8250;</span>
@@ -766,7 +766,7 @@
           </svg>
         </span>
         <span class="btn-text">
-          <span class="scan-title">Escanear Factura</span>
+          <span class="scan-title" data-text="Escanear Factura">Escanear Factura</span>
           <span class="scan-subtitle">Captura facturas fisicas</span>
         </span>
         <span class="btn-arrow">&#8250;</span>
@@ -789,7 +789,7 @@
             </svg>
           </span>
           <span class="btn-text">
-            <span class="scan-title">Factura Digital</span>
+            <span class="scan-title" data-text="Factura Digital">Factura Digital</span>
             <span class="scan-subtitle">PDF o imagen</span>
           </span>
         </div>
@@ -808,7 +808,7 @@
             </svg>
           </span>
           <span class="btn-text">
-            <span class="scan-title">Captura Banco</span>
+            <span class="scan-title" data-text="Captura Banco">Captura Banco</span>
             <span class="scan-subtitle">Justificante pago</span>
           </span>
         </div>
@@ -827,7 +827,7 @@
           </svg>
         </span>
         <span class="btn-text">
-          <span class="scan-title">Enviar Pendiente</span>
+          <span class="scan-title" data-text="Enviar Pendiente">Enviar Pendiente</span>
           <span class="scan-subtitle">Viaje abonado via WhatsApp</span>
         </span>
         <span class="btn-arrow">&#8250;</span>
