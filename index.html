@@ -763,6 +763,14 @@
     color: rgba(245,196,0,0.4);
   }
 
+  /* Arrow on ingresos card title */
+  .card-ingresos .dash-label::after {
+    content: ' ›';
+    font-size: 11px;
+    opacity: 0.5;
+    font-family: sans-serif;
+  }
+
   </style>
 </head>
 <body>
@@ -1360,7 +1368,7 @@
       const p = fecha.split('-');
       const fechaMsg = parseInt(p[2]) + '/' + parseInt(p[1]) + '/' + p[0].substring(2);
       const importeMsg = importe.toFixed(2).replace('.', ',');
-      let msg = 'Servicio Abonado ' + (cliente || '-') + '\nRecogida: ' + (recogida || '-') + '\nDestino: ' + (destino || '-') + '\nImporte: ' + importeMsg + 'EUR\nFecha: ' + fechaMsg;
+      let msg = 'Servicio Abonado ' + (cliente || '-') + '\nRecogida: ' + (recogida || '-') + '\nDestino: ' + (destino || '-') + '\nImporte: ' + importeMsg + '€\nFecha: ' + fechaMsg;
       window.open('https://wa.me/' + getNumeroWA() + '?text=' + encodeURIComponent(msg), '_blank');
       mostrarExitoImport('Pendiente guardado', 'Servicio de abonado registrado en pendientes.');
     } catch (e) { alert('Error de conexion: ' + e.message); btn.textContent = 'GUARDAR Y ENVIAR'; btn.disabled = false; }
@@ -1568,7 +1576,7 @@
 
   function cambiarAnio(delta) {
     const maxAnio = new Date().getFullYear();
-    pickerAnio = Math.max(2020, Math.min(maxAnio, pickerAnio + delta));
+    pickerAnio = Math.max(2026, Math.min(maxAnio, pickerAnio + delta));
     document.getElementById('pickerYear').textContent = pickerAnio;
     renderMonthGrid();
   }
