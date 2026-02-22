@@ -951,6 +951,13 @@
   let imagenWhatsappURL = null;
 
   async function openScanner(tipo) {
+    // Emergency debug - unconditional alert
+    try {
+      const dbgDiv = document.getElementById('debugOverlay');
+      if (dbgDiv) { dbgDiv.style.display = 'block'; dbgDiv.style.zIndex = '999999'; }
+      const dbgLog = document.getElementById('debugLog');
+      if (dbgLog) { const d = document.createElement('div'); d.textContent = 'START: ' + tipo; d.style.color='#ff0'; dbgLog.appendChild(d); }
+    } catch(e2) { alert('DBG INIT ERROR: ' + e2.message); }
     dbg("openScanner called: " + tipo);
     tipoDocumento = tipo;
     const esFactura = tipo === 'factura';
@@ -999,7 +1006,7 @@
       await new Promise(r => setTimeout(r, 500));
       dbg('After 500ms: videoW=' + video.videoWidth + ' h=' + video.videoHeight);
     } catch (err) {
-      dbg('ERROR: ' + err.name + ' | ' + err.message);
+      dbg('CAM ERROR: ' + err.name + ' | ' + err.message);
       alert("Error de camara: " + err.name + " | " + err.message);
     }
   }
