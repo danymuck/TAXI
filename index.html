@@ -951,6 +951,7 @@
   let imagenWhatsappURL = null;
 
   async function openScanner(tipo) {
+    dbg("openScanner called: " + tipo);
     tipoDocumento = tipo;
     const esFactura = tipo === 'factura';
     const frame = document.getElementById("scanFrame");
@@ -972,24 +973,33 @@
     document.getElementById("homeScreen").style.display = "none";
     const scannerScreen = document.getElementById("scannerScreen");
     scannerScreen.style.display = "block"; scannerScreen.style.visibility = "visible";
+    dbg("scannerScreen shown, computed display=" + getComputedStyle(scannerScreen).display);
     const video = document.getElementById("camera");
     const photo = document.getElementById("photo");
     photo.style.display = "none"; video.style.display = "block"; video.style.opacity = "1"; video.style.visibility = "visible";
     if (stream) stream.getTracks().forEach(t => t.stop());
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
+      dbg('Pidiendo camara...');
       stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: "environment",
-          width: { ideal: 1920 },
-          height: { ideal: 1080 }
-        }
+        video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } }
       });
+      dbg('Stream OK. Tracks: ' + stream.getVideoTracks().length);
       video.srcObject = stream;
       video.setAttribute("playsinline", "true");
       video.muted = true;
       await video.play();
+      dbg('Play OK. videoW=' + video.videoWidth + ' videoH=' + video.videoHeight +
+          ' display=' + getComputedStyle(video).display +
+          ' visibility=' + getComputedStyle(video).visibility +
+          ' opacity=' + getComputedStyle(video).opacity +
+          ' zIndex=' + getComputedStyle(video).zIndex +
+          ' ssDisplay=' + getComputedStyle(document.getElementById("scannerScreen")).display);
+      // Wait 500ms and check again
+      await new Promise(r => setTimeout(r, 500));
+      dbg('After 500ms: videoW=' + video.videoWidth + ' h=' + video.videoHeight);
     } catch (err) {
+      dbg('ERROR: ' + err.name + ' | ' + err.message);
       alert("Error de camara: " + err.name + " | " + err.message);
     }
   }
@@ -1339,6 +1349,22 @@
     ctx.stroke();
   }
 
+
+  // Debug helper
+  function dbg(msg) {
+    console.log('[CAM DEBUG] ' + msg);
+    const overlay = document.getElementById('debugOverlay');
+    const log = document.getElementById('debugLog');
+    overlay.style.display = 'block';
+    const line = document.createElement('div');
+    line.style.borderBottom = '1px solid #333';
+    line.style.paddingBottom = '2px';
+    line.style.marginBottom = '2px';
+    line.textContent = new Date().toISOString().slice(11,23) + ' ' + msg;
+    log.appendChild(line);
+    overlay.scrollTop = overlay.scrollHeight;
+  }
+
   // Month picker state
   const MESES_CORTOS = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
   let pickerAnio     = new Date().getFullYear();
@@ -1450,6 +1476,14 @@
     <div class="month-grid" id="monthGrid"></div>
     <button class="month-picker-close" onclick="cerrarMonthPicker()">Cancelar</button>
   </div>
+</div>
+
+<!-- DEBUG OVERLAY -->
+<div id="debugOverlay" style="position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,0.85);
+  color:#0f0;font-family:monospace;font-size:11px;padding:8px;z-index:99999;
+  max-height:40vh;overflow-y:auto;display:none;word-break:break-all;">
+  <div style="color:#ff0;margin-bottom:4px;">DEBUG LOG <button onclick="document.getElementById('debugOverlay').style.display='none'" style="background:#f00;color:#fff;border:none;padding:2px 6px;float:right">X</button></div>
+  <div id="debugLog"></div>
 </div>
 
 </body>
