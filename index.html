@@ -392,8 +392,8 @@
 
   /* Scanner */
   #scannerScreen { position: fixed; inset: 0; background: #000; display: none; z-index: 9999; }
-  #camera { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 9999; }
-  #photo { width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; top: 0; left: 0; z-index: 10000; }
+  #camera { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+  #photo { width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; top: 0; left: 0; z-index: 2; }
 
   .custom-popup {
     position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
@@ -1152,7 +1152,7 @@
       const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'guardarPendiente', viajes: viajesWhatsapp }) });
       const data = await resp.json(); cerrarPanelWhatsapp();
       if (data.ok) {
-        let msg = data.guardados + ' viaje(s) guardados en Pendientes';
+        let msg = data.guardados + ' viaje(s) añadidos a Pendientes';
         if (data.noEncontrados && data.noEncontrados.length > 0) msg += '\n\n(!!) Fechas no encontradas:\n' + data.noEncontrados.join(', ');
         mostrarExitoImport('Pendientes guardados', msg);
       } else { alert('Error al guardar: ' + (data.error || 'desconocido')); btn.innerText = 'GUARDAR'; btn.disabled = false; }
