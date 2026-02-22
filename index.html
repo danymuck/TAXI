@@ -9,7 +9,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mi Taxi App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
   :root {
     --tron-yellow: #f5c400;
@@ -179,8 +179,6 @@
   .card-media .dash-label { color: rgba(0,229,255,0.7); }
   .card-media .dash-value { color: #00e5ff; text-shadow: 0 0 16px rgba(0,229,255,0.6); }
   .card-media .dash-value span { color: rgba(0,229,255,0.7); }
-
-
 
   /* CHART card - full width */
   .card-chart {
@@ -395,6 +393,35 @@
   #camera { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 9999; }
   #photo { width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; top: 0; left: 0; z-index: 10000; }
 
+  /* ── BOTÓN VOLVER EN SCANNER ── */
+  .scanner-back-btn {
+    position: fixed;
+    top: 18px;
+    left: 16px;
+    z-index: 10005;
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .scanner-back-btn:active {
+    background: rgba(0,229,255,0.15);
+    border-color: rgba(0,229,255,0.5);
+  }
+  .scanner-back-btn svg {
+    width: 18px;
+    height: 18px;
+    color: rgba(255,255,255,0.7);
+  }
+
   .custom-popup {
     position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
     z-index: 20000; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
@@ -428,6 +455,7 @@
   }
   .capture-btn.factura { border-color: #00c2ff; }
 
+  /* ── BOTTOM SHEETS — fuente neutra ── */
   .bottom-sheet {
     position: fixed; bottom: -100%; left: 0; width: 100%;
     background: rgba(2,8,20,0.97); border-radius: 25px 25px 0 0;
@@ -439,15 +467,44 @@
   .actions { display: flex; justify-content: space-between; gap: 8px; margin-top: 25px; }
   .btn {
     flex: 1; border: none; border-radius: 12px; padding: 15px 5px;
-    font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700;
+    font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 700;
     letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s; text-transform: uppercase;
   }
   .btn:active { transform: scale(0.92); }
   .btn-back { background: #333; color: #ccc; }
   .btn-edit { background: #444; color: #fff; }
   .btn-accept { background: #f5c400; color: #000; }
-  .editable-active { outline: 2px solid #f5c400 !important; outline-offset: 4px; background: rgba(255,255,255,0.05); border-radius: 4px; }
-  .ticket-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-family: 'Orbitron', sans-serif; font-size: 12px; letter-spacing: 1px; }
+
+  /* Ticket rows — fuente Inter */
+  .ticket-row {
+    display: flex; justify-content: space-between; padding: 12px 0;
+    border-bottom: 1px solid #222;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px; letter-spacing: 0.3px;
+  }
+  .ticket-row span {
+    color: rgba(255,255,255,0.45);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+  .ticket-row strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* ── EDITABLE: ticket = amarillo, factura = cyan ── */
+  .editable-active {
+    outline: 2px solid #f5c400 !important;
+    outline-offset: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+  }
+  /* En facturaPanel los campos activos son cyan */
+  #facturaPanel .editable-active {
+    outline-color: #00e5ff !important;
+    background: rgba(0,229,255,0.06);
+  }
 
   .loading-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
@@ -691,7 +748,7 @@
           <span class="scan-title">Escanear Ticket</span>
           <span class="scan-subtitle">Registra el taximetro</span>
         </span>
-        <span class="btn-arrow">›</span>
+        <span class="btn-arrow">&#8250;</span>
       </div>
     </button>
 
@@ -712,14 +769,14 @@
           <span class="scan-title">Escanear Factura</span>
           <span class="scan-subtitle">Captura facturas fisicas</span>
         </span>
-        <span class="btn-arrow">›</span>
+        <span class="btn-arrow">&#8250;</span>
       </div>
     </button>
 
     <div class="section-label">&#9658; Importar digital</div>
 
     <div class="btn-row">
-      <button class="scan-btn btn-factura-digital" onclick="seleccionarTipoImport('factura')">
+      <button class="scan-btn btn-factura-digital" onclick="abrirFacturaDigital()">
         <div class="btn-inner">
           <div class="btn-ao"></div>
           <span class="btn-corner btn-corner-tl"></span><span class="btn-corner btn-corner-tr"></span>
@@ -773,7 +830,7 @@
           <span class="scan-title">Enviar Pendiente</span>
           <span class="scan-subtitle">Viaje abonado via WhatsApp</span>
         </span>
-        <span class="btn-arrow">›</span>
+        <span class="btn-arrow">&#8250;</span>
       </div>
     </button>
 
@@ -833,6 +890,14 @@
 <div id="scannerScreen">
   <video id="camera" autoplay playsinline muted></video>
   <img id="photo">
+
+  <!-- BOTÓN VOLVER — discreto, esquina superior izquierda -->
+  <button class="scanner-back-btn" onclick="volverAlHome()" title="Volver">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+  </button>
+
   <div class="scanner-overlay">
     <div class="scan-frame" id="scanFrame" data-label="Coloca el ticket dentro del marco"></div>
   </div>
@@ -856,7 +921,7 @@
     <div class="actions">
       <button class="btn btn-back" onclick="resetScan()">VOLVER</button>
       <button class="btn btn-edit" onclick="habilitarEdicionFactura()">EDITAR</button>
-      <button class="btn btn-accept" onclick="guardarGastoSheet()" id="btnAceptarGasto">ACEPTAR</button>
+      <button class="btn btn-accept" style="background:#00e5ff;" onclick="guardarGastoSheet()" id="btnAceptarGasto">ACEPTAR</button>
     </div>
   </div>
   <div id="loadingOverlay" class="loading-overlay">
@@ -870,11 +935,11 @@
   <div class="import-card">
     <h3>Que quieres importar?</h3>
     <button class="import-btn import-btn-factura" onclick="seleccionarTipoImport('factura')">
-      <span class="import-icon">📄</span>
+      <span class="import-icon">&#128196;</span>
       <span class="import-label"><strong>Factura digital</strong><small>Imagen o PDF a GASTOS</small></span>
     </button>
     <button class="import-btn import-btn-banco" onclick="seleccionarTipoImport('banco')">
-      <span class="import-icon">🏦</span>
+      <span class="import-icon">&#127981;</span>
       <span class="import-label"><strong>Captura del banco</strong><small>Justificante de pago a GASTOS</small></span>
     </button>
     <button class="import-btn import-btn-cancel" onclick="cerrarMenuImportar()">Cancelar</button>
@@ -906,7 +971,7 @@
 <!-- POPUP EXITO -->
 <div id="successPopup" class="custom-popup">
   <div class="popup-card">
-    <span class="popup-icon">✅</span>
+    <span class="popup-icon">&#9989;</span>
     <span class="popup-title" id="popupTitle">Ticket guardado</span>
     <span class="popup-subtitle" id="popupSubtitle">Se ha registrado correctamente</span>
     <button class="btn-popup-ok" onclick="cerrarExito()">OK</button>
@@ -945,11 +1010,36 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnbZohq9RvBu5EAqKA5aq59EftWh7d04IBCJf9QKMPo5u7SRUdDoCgVkC3QOnK9y2_xw/exec";
+  // ID de la carpeta "Facturas 2026" en Google Drive — cambia este ID por el tuyo
+  const DRIVE_FACTURAS_URL = "https://drive.google.com/drive/folders/1BFt4sn3ei0P3X8egFG0utOFK9MDz5RQe";
+
   let stream = null;
   let tipoDocumento = 'ticket';
   let tipoImportActual = null;
   let viajesWhatsapp = [];
   let imagenWhatsappURL = null;
+
+  // ── BOTÓN VOLVER EN SCANNER ──
+  function volverAlHome() {
+    if (navigator.vibrate) navigator.vibrate(30);
+    if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+    document.getElementById('scannerScreen').style.display = 'none';
+    document.getElementById('homeScreen').style.display = 'block';
+    // Limpiar estados del scanner
+    document.getElementById('resultPanel').classList.remove('show');
+    document.getElementById('facturaPanel').classList.remove('show');
+    document.getElementById('loadingOverlay').style.display = 'none';
+    const video = document.getElementById('camera');
+    video.srcObject = null;
+    video.style.display = 'block';
+    document.getElementById('photo').style.display = 'none';
+  }
+
+  // ── FACTURA DIGITAL: abre carpeta Drive directamente ──
+  function abrirFacturaDigital() {
+    if (navigator.vibrate) navigator.vibrate(30);
+    window.open(DRIVE_FACTURAS_URL, '_blank');
+  }
 
   async function openScanner(tipo) {
     tipoDocumento = tipo;
