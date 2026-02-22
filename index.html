@@ -440,10 +440,10 @@
   .scanner-overlay {
     position: absolute; inset: 0; background: transparent;
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-    padding: 140px 16px 0; pointer-events: none; z-index: 10000;
+    padding: 170px 16px 0; pointer-events: none; z-index: 10000;
   }
-  .scanner-overlay.factura { padding: 80px 12px 0; }
-  .scan-frame { width: 75%; height: 58%; border: 3px solid #f5c400; border-radius: 20px; position: relative; flex-shrink: 0; }
+  .scanner-overlay.factura { padding: 85px 12px 0; }
+  .scan-frame { width: 75%; height: 65%; border: 3px solid #f5c400; border-radius: 20px; position: relative; flex-shrink: 0; }
   .scan-frame::after { content: attr(data-label); position: absolute; bottom: -44px; left: 0; width: 100%; text-align: center; color: #fff; font-size: 15px; font-style: italic; }
   .scan-frame.factura { width: 100%; height: calc(100vh - 300px); border-color: #00c2ff; }
   .scan-frame.factura::after { bottom: -36px; }
