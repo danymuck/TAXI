@@ -771,12 +771,12 @@
     position: absolute;
     top: 9px;
     right: 11px;
-    font-size: 12px;
-    opacity: 0.6;
+    opacity: 0.55;
     pointer-events: none;
     z-index: 2;
-    line-height: 1;
+    display: flex;
   }
+  .card-arrow-indicator svg { width: 13px; height: 13px; }
   .card-ingresos .card-arrow-indicator { color: rgba(245,196,0,0.9); }
   .card-media    .card-arrow-indicator { color: rgba(0,229,255,0.9); }
 
@@ -914,13 +914,13 @@
 
     <div class="dash-row">
       <div class="dash-card card-ingresos" onclick="abrirMonthPicker()">
-        <span class="card-arrow-indicator">&#9662;</span>
+        <span class="card-arrow-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
         <div class="dash-label">Total del mes</div>
         <div class="dash-value" id="dashIngresos"><div class="dash-skeleton"></div></div>
         <div class="dash-sub" id="dashIngSub">Cargando... <span class="card-period-badge" id="periodBadge"></span></div>
       </div>
       <div class="dash-card card-media" onclick="abrirMetricPicker()">
-        <span class="card-arrow-indicator">&#9662;</span>
+        <span class="card-arrow-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
         <div class="dash-label" id="dashMediaLabel">Media diaria</div>
         <div class="dash-value" id="dashMedia"><div class="dash-skeleton"></div></div>
         <div class="dash-sub" id="dashMediaSub">&nbsp;<span class="card-metric-badge"></span></div>
