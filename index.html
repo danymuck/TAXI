@@ -830,7 +830,7 @@
 
 <!-- SCANNER -->
 <div id="scannerScreen">
-  <video id="camera" autoplay playsinline webkit-playsinline muted></video>
+  <video id="camera" autoplay playsinline muted></video>
   <img id="photo">
   <div class="scanner-overlay">
     <div class="scan-frame" id="scanFrame" data-label="Coloca el ticket dentro del marco"></div>
@@ -978,16 +978,20 @@
     if (stream) stream.getTracks().forEach(t => t.stop());
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
-      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } } });
-      // Set attributes BEFORE assigning srcObject - critical for Android Chrome
-      video.setAttribute("playsinline", "true");
-      video.setAttribute("webkit-playsinline", "true");
-      video.muted = true;
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "environment",
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        }
+      });
       video.srcObject = stream;
-      // Wait for browser to process the new srcObject before playing
-      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      video.setAttribute("playsinline", "true");
+      video.muted = true;
       await video.play();
-    } catch (err) { alert("Error de camara: " + err.name + " | " + err.message); }
+    } catch (err) {
+      alert("Error de camara: " + err.name + " | " + err.message);
+    }
   }
 
   async function capturePhoto() {
