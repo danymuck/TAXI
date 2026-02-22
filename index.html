@@ -780,6 +780,75 @@
   .card-ingresos .card-arrow-indicator { color: rgba(245,196,0,0.9); }
   .card-media    .card-arrow-indicator { color: rgba(0,229,255,0.9); }
 
+  /* ── PANEL BANCO ── */
+  #bancoPanel {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px);
+    z-index: 15000; display: none; flex-direction: column; align-items: center; justify-content: flex-end;
+  }
+  .banco-sheet {
+    background: #0a0e1a; border-radius: 25px 25px 0 0; padding: 20px 20px 40px;
+    width: 100%; max-width: 480px; max-height: 82vh; overflow-y: auto;
+    border-top: 1px solid rgba(110,80,255,0.3);
+    box-shadow: 0 -4px 30px rgba(110,80,255,0.1);
+  }
+  .banco-header { margin-bottom: 4px; }
+  .banco-header h3 { color: #fff; font-size: 16px; font-weight: 700; margin: 0 0 2px; font-family: 'Inter', system-ui, sans-serif; }
+  .banco-header .banco-subtitle { color: #555; font-size: 12px; font-family: 'Inter', system-ui, sans-serif; }
+  .banco-fecha-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0 14px; border-bottom: 1px solid #1a1f2e; margin-bottom: 10px;
+  }
+  .banco-fecha-label { color: #666; font-size: 11px; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; text-transform: uppercase; }
+  .banco-fecha-val { color: #8b6fff; font-size: 13px; font-weight: 700; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+
+  /* Categoria expandible */
+  .banco-cat {
+    border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;
+    margin-bottom: 8px; overflow: hidden; background: rgba(255,255,255,0.02);
+  }
+  .banco-cat-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px; cursor: pointer; gap: 10px;
+  }
+  .banco-cat-header:active { background: rgba(255,255,255,0.04); }
+  .banco-cat-name {
+    font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.7); flex: 1;
+  }
+  .banco-cat-total {
+    font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 700;
+    color: #8b6fff;
+  }
+  .banco-cat-arrow {
+    font-size: 11px; color: rgba(255,255,255,0.25); transition: transform 0.2s;
+    font-family: sans-serif; flex-shrink: 0;
+  }
+  .banco-cat.open .banco-cat-arrow { transform: rotate(180deg); }
+
+  .banco-cat-body { display: none; border-top: 1px solid rgba(255,255,255,0.05); }
+  .banco-cat.open .banco-cat-body { display: block; }
+  .banco-tx-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,0.04);
+    gap: 8px;
+  }
+  .banco-tx-row:last-child { border-bottom: none; }
+  .banco-tx-concepto {
+    font-family: 'Inter', system-ui, sans-serif; font-size: 12px;
+    color: rgba(255,255,255,0.5); flex: 1; line-height: 1.3;
+  }
+  .banco-tx-importe {
+    font-family: 'Inter', system-ui, sans-serif; font-size: 13px;
+    font-weight: 600; color: #e05; flex-shrink: 0;
+  }
+
+  .banco-total-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 4px 0; margin-top: 6px;
+    border-top: 1px solid rgba(110,80,255,0.2);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .banco-total-row span:first-child { color: rgba(255,255,255,0.5); font-size: 13px; }
   </style>
 </head>
 <body>
@@ -1023,6 +1092,29 @@
 
 <input type="file" id="inputImportar" style="display:none" accept="image/*" onchange="procesarArchivoImportado(this)">
 
+<!-- BANCO PANEL -->
+<div id="bancoPanel" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); z-index:15000; flex-direction:column; align-items:center; justify-content:flex-end;">
+  <div class="banco-sheet">
+    <div class="banco-header">
+      <h3>Gastos detectados</h3>
+      <div class="banco-subtitle">Revisa cada categoria antes de guardar</div>
+    </div>
+    <div class="banco-fecha-row">
+      <span class="banco-fecha-label">Periodo</span>
+      <span class="banco-fecha-val" id="bancoFecha">-</span>
+    </div>
+    <div id="bancoCategorias"></div>
+    <div class="banco-total-row">
+      <span>Total gastos</span>
+      <span id="bancoTotal">0,00 €</span>
+    </div>
+    <div class="actions" style="margin-top:16px;">
+      <button class="btn btn-back" onclick="cerrarBancoPanel()">VOLVER</button>
+      <button class="btn btn-accept" style="background:#8b6fff;" onclick="guardarGastosBanco()" id="btnGuardarBanco">GUARDAR TODO</button>
+    </div>
+  </div>
+</div>
+
 <!-- WHATSAPP PANEL -->
 <div id="whatsappPanel">
   <div class="whatsapp-sheet">
@@ -1264,12 +1356,116 @@
     const archivo = input.files[0]; input.value = '';
     const dataURL = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(archivo); });
     if (tipoImportActual === 'whatsapp') imagenWhatsappURL = dataURL;
-    const base64 = dataURL.split(',')[1];
-    mostrarImportLoading(tipoImportActual === 'whatsapp' ? 'Extrayendo viajes...' : 'Leyendo documento...');
+
+    // Comprimir imagen antes de enviar (max 1200px ancho)
+    const base64Comprimido = await comprimirImagen(dataURL, 1200, 0.82);
+    const base64 = base64Comprimido.split(',')[1];
+
+    mostrarImportLoading(tipoImportActual === 'whatsapp' ? 'Extrayendo viajes...' : tipoImportActual === 'banco' ? 'Analizando movimientos...' : 'Leyendo documento...');
     try {
       if (tipoImportActual === 'whatsapp') await procesarImportWhatsapp(base64, archivo.type);
+      else if (tipoImportActual === 'banco') await procesarImportBanco(base64);
       else await procesarImportGasto(base64, archivo.type);
     } catch (e) { ocultarImportLoading(); alert('Error procesando el archivo: ' + e.message); }
+  }
+
+  async function comprimirImagen(dataURL, maxAncho, calidad) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const escala = img.width > maxAncho ? maxAncho / img.width : 1;
+        const canvas = document.createElement('canvas');
+        canvas.width  = Math.round(img.width  * escala);
+        canvas.height = Math.round(img.height * escala);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', calidad));
+      };
+      img.src = dataURL;
+    });
+  }
+
+  // ── BANCO ──
+  let gastosBancoData = [];
+
+  async function procesarImportBanco(base64) {
+    const resp = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'analizarBanco', image: base64 })
+    });
+    const data = await resp.json();
+    ocultarImportLoading();
+    if (!data.ok || !data.categorias || data.categorias.length === 0) {
+      alert('No se detectaron gastos en la imagen.\n' + (data.error || ''));
+      return;
+    }
+    mostrarBancoPanel(data);
+  }
+
+  function mostrarBancoPanel(data) {
+    gastosBancoData = data.categorias;
+    document.getElementById('bancoFecha').textContent = data.periodo || '-';
+
+    const contenedor = document.getElementById('bancoCategorias');
+    contenedor.innerHTML = '';
+    let totalGlobal = 0;
+
+    data.categorias.forEach((cat, idx) => {
+      totalGlobal += cat.total;
+      const div = document.createElement('div');
+      div.className = 'banco-cat';
+      div.id = 'bancocat-' + idx;
+
+      const txRows = cat.transacciones.map(tx =>
+        '<div class="banco-tx-row">' +
+          '<span class="banco-tx-concepto">' + tx.concepto + '</span>' +
+          '<span class="banco-tx-importe">-' + Math.abs(tx.importe).toFixed(2).replace('.', ',') + ' €</span>' +
+        '</div>'
+      ).join('');
+
+      div.innerHTML =
+        '<div class="banco-cat-header" onclick="toggleBancoCat(' + idx + ')">' +
+          '<span class="banco-cat-name">' + cat.categoria + '</span>' +
+          '<span class="banco-cat-total">-' + cat.total.toFixed(2).replace('.', ',') + ' €</span>' +
+          '<span class="banco-cat-arrow">&#8964;</span>' +
+        '</div>' +
+        '<div class="banco-cat-body">' + txRows + '</div>';
+
+      contenedor.appendChild(div);
+    });
+
+    document.getElementById('bancoTotal').textContent =
+      '-' + totalGlobal.toFixed(2).replace('.', ',') + ' €';
+
+    document.getElementById('bancoPanel').style.display = 'flex';
+  }
+
+  function toggleBancoCat(idx) {
+    if (navigator.vibrate) navigator.vibrate(15);
+    document.getElementById('bancocat-' + idx).classList.toggle('open');
+  }
+
+  function cerrarBancoPanel() {
+    document.getElementById('bancoPanel').style.display = 'none';
+    gastosBancoData = [];
+  }
+
+  async function guardarGastosBanco() {
+    if (navigator.vibrate) navigator.vibrate(40);
+    const btn = document.getElementById('btnGuardarBanco');
+    btn.textContent = 'GUARDANDO...'; btn.disabled = true;
+    try {
+      const resp = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'guardarGastosBanco', categorias: gastosBancoData })
+      });
+      const data = await resp.json();
+      cerrarBancoPanel();
+      if (data.ok) mostrarExitoImport('Gastos guardados', data.guardados + ' categoria(s) registradas en GASTOS');
+      else { alert('Error al guardar: ' + (data.error || 'desconocido')); }
+    } catch (e) {
+      alert('Error de conexion: ' + e.message);
+      btn.textContent = 'GUARDAR TODO'; btn.disabled = false;
+    }
   }
 
   async function procesarImportWhatsapp(base64, mimeType) {
