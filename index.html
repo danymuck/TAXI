@@ -27,14 +27,12 @@
   .btn, .btn-popup-ok, .scan-btn, .capture-btn { outline: none !important; -webkit-appearance: none; }
 
   html {
-    overscroll-behavior: none;
   }
   body {
     background: var(--bg);
     font-family: 'Orbitron', sans-serif;
     overflow-x: hidden;
     min-height: 100vh;
-    overscroll-behavior: none;
   }
 
   /* Tron background */
@@ -139,6 +137,7 @@
     border-radius: 14px; padding: 10px 14px 8px;
     position: relative; overflow: hidden;
     display: flex; flex-direction: column; gap: 4px;
+    justify-content: center;
   }
   .dash-comparativo {
     position: absolute; bottom: 7px; left: 14px;
