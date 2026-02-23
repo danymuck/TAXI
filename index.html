@@ -1121,13 +1121,14 @@
         <div class="dash-label">Total del mes</div>
         <div class="dash-value" id="dashIngresos"><div class="dash-skeleton"></div></div>
         <div class="dash-sub" id="dashIngSub">Cargando... <span class="card-period-badge" id="periodBadge"></span></div>
-        <div id="dashComparativo" style="margin-top:5px;min-height:16px;"></div>
+        <div id="dashComparativo" style="margin-top:4px;min-height:14px;"></div>
       </div>
       <div class="dash-card card-media" onclick="abrirMetricPicker()">
         <span class="card-arrow-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
         <div class="dash-label" id="dashMediaLabel">Media diaria</div>
         <div class="dash-value" id="dashMedia"><div class="dash-skeleton"></div></div>
         <div class="dash-sub" id="dashMediaSub">&nbsp;<span class="card-metric-badge"></span></div>
+        <div style="min-height:14px;margin-top:4px;"></div>
       </div>
     </div>
 
@@ -2061,7 +2062,7 @@
         const color = sube ? '#00ff96' : '#ff3a5c';
         const flecha = sube ? '▲' : '▼';
         comp.innerHTML =
-          '<span style="font-family:\'Inter\',sans-serif;font-size:11px;color:' + color + ';letter-spacing:0.3px;">' +
+          '<span style="font-family:\'Orbitron\',sans-serif;font-size:8px;font-weight:700;letter-spacing:1px;color:' + color + ';opacity:0.85;">' +
           flecha + ' ' + Math.abs(pct) + '% vs ' + MESES_CORTOS[mesAnterior-1] +
           '</span>';
       }).catch(() => {});
