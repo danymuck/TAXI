@@ -1121,6 +1121,7 @@
         <div class="dash-label">Total del mes</div>
         <div class="dash-value" id="dashIngresos"><div class="dash-skeleton"></div></div>
         <div class="dash-sub" id="dashIngSub">Cargando... <span class="card-period-badge" id="periodBadge"></span></div>
+        <div id="dashComparativo" style="margin-top:5px;min-height:16px;"></div>
       </div>
       <div class="dash-card card-media" onclick="abrirMetricPicker()">
         <span class="card-arrow-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
@@ -2044,6 +2045,26 @@
       document.getElementById('dashIngSub').innerHTML =
         MESES_CORTOS[d.mes - 1] + ' ' + d.anio +
         ' <span class="card-period-badge"></span>';
+
+      // Comparativo con mes anterior
+      const mesAnterior = d.mes === 1 ? 12 : d.mes - 1;
+      const anioAnterior = d.mes === 1 ? d.anio - 1 : d.anio;
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'obtenerResumen', mes: mesAnterior, anio: anioAnterior })
+      }).then(r => r.json()).then(prev => {
+        const comp = document.getElementById('dashComparativo');
+        if (!comp || !prev.ok || prev.totalMes === 0) { if(comp) comp.innerHTML = ''; return; }
+        const diff = d.totalMes - prev.totalMes;
+        const pct  = Math.round((diff / prev.totalMes) * 100);
+        const sube = diff >= 0;
+        const color = sube ? '#00ff96' : '#ff3a5c';
+        const flecha = sube ? '▲' : '▼';
+        comp.innerHTML =
+          '<span style="font-family:\'Inter\',sans-serif;font-size:11px;color:' + color + ';letter-spacing:0.3px;">' +
+          flecha + ' ' + Math.abs(pct) + '% vs ' + MESES_CORTOS[mesAnterior-1] +
+          '</span>';
+      }).catch(() => {});
 
       // Guardar todas las metricas extra para el picker
       dashExtras = {
