@@ -849,6 +849,133 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
   .banco-total-row span:first-child { color: rgba(255,255,255,0.5); font-size: 13px; }
+
+  /* ── ICONO TAREAS EN TOP BAR ── */
+  .top-bar-tasks {
+    position: absolute; right: 56px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; padding: 8px;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.45; transition: opacity 0.2s;
+  }
+  .top-bar-tasks:active { opacity: 1; }
+  .top-bar-tasks svg { width: 22px; height: 22px; }
+  .tasks-badge {
+    position: absolute; top: 4px; right: 4px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #ff3a5c; box-shadow: 0 0 8px rgba(255,58,92,0.8);
+    display: none;
+  }
+  .tasks-badge.show { display: block; }
+
+  /* ── PANEL TAREAS ── */
+  #tareasPanel {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px); z-index: 15000;
+    display: none; flex-direction: column; align-items: center; justify-content: flex-end;
+  }
+  .tareas-sheet {
+    background: #0a0e1a; border-radius: 25px 25px 0 0;
+    padding: 20px 20px 40px; width: 100%; max-width: 480px;
+    max-height: 85vh; overflow-y: auto;
+    border-top: 1px solid rgba(0,229,255,0.2);
+    box-shadow: 0 -4px 30px rgba(0,229,255,0.08);
+  }
+  .tareas-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .tareas-header h3 {
+    font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 2px; color: #00e5ff; text-transform: uppercase;
+  }
+  .tareas-add-btn {
+    background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.3);
+    border-radius: 8px; color: #00e5ff; font-size: 20px; width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .tareas-add-btn:active { background: rgba(0,229,255,0.25); }
+
+  /* Lista de tareas */
+  .tarea-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 4px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .tarea-item:last-child { border-bottom: none; }
+  .tarea-check {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; cursor: pointer;
+    border: 2px solid rgba(0,229,255,0.4); background: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .tarea-item.done .tarea-check {
+    background: rgba(0,229,255,0.2); border-color: #00e5ff;
+  }
+  .tarea-check-inner {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #00e5ff; opacity: 0; transition: opacity 0.2s;
+  }
+  .tarea-item.done .tarea-check-inner { opacity: 1; }
+  .tarea-info { flex: 1; min-width: 0; }
+  .tarea-nombre {
+    font-family: 'Inter', system-ui, sans-serif; font-size: 14px;
+    color: rgba(255,255,255,0.85); margin-bottom: 2px;
+    transition: color 0.2s;
+  }
+  .tarea-item.done .tarea-nombre { color: rgba(255,255,255,0.3); text-decoration: line-through; }
+  .tarea-fecha {
+    font-family: 'Inter', system-ui, sans-serif; font-size: 11px;
+    color: rgba(255,255,255,0.3);
+  }
+  .tarea-fecha.urgente { color: #ff3a5c; }
+  .tarea-fecha.proxima { color: #f5c400; }
+  .tarea-alerta-btn {
+    background: none; border: none; cursor: pointer; padding: 4px;
+    opacity: 0.3; transition: opacity 0.2s; flex-shrink: 0;
+  }
+  .tarea-alerta-btn.activa { opacity: 1; }
+  .tarea-delete {
+    background: none; border: none; cursor: pointer; padding: 4px;
+    color: rgba(255,255,255,0.2); font-size: 16px; flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  .tarea-delete:active { color: #ff3a5c; }
+  .tareas-empty {
+    text-align: center; padding: 30px 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: rgba(255,255,255,0.2); font-size: 13px;
+  }
+
+  /* Form nueva tarea */
+  #tareaNuevoForm {
+    background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 14px; padding: 16px; margin-bottom: 16px; display: none;
+  }
+  .tarea-input {
+    width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 10px 12px; color: #fff;
+    font-family: 'Inter', system-ui, sans-serif; font-size: 14px;
+    margin-bottom: 10px; outline: none; box-sizing: border-box;
+  }
+  .tarea-input:focus { border-color: rgba(0,229,255,0.4); }
+  .tarea-input-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .tarea-input-row .tarea-input { margin-bottom: 0; flex: 1; }
+  .tarea-alerta-toggle {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Inter', system-ui, sans-serif; font-size: 12px;
+    color: rgba(255,255,255,0.4); margin-bottom: 12px; cursor: pointer;
+  }
+  .tarea-alerta-toggle input { accent-color: #00e5ff; width: 16px; height: 16px; }
+  .tarea-alerta-toggle.activa { color: #00e5ff; }
+  .tarea-form-btns { display: flex; gap: 8px; }
+  .tarea-form-btns button {
+    flex: 1; padding: 10px; border-radius: 8px; border: none;
+    font-family: 'Orbitron', sans-serif; font-size: 10px; letter-spacing: 1px;
+    cursor: pointer; font-weight: 700;
+  }
+  .tarea-btn-cancel { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); }
+  .tarea-btn-save { background: rgba(0,229,255,0.15); color: #00e5ff; border: 1px solid rgba(0,229,255,0.3) !important; }
   </style>
 </head>
 <body>
@@ -859,6 +986,13 @@
 
   <div class="top-bar">
     <h1>TAPPXI</h1>
+    <button class="top-bar-tasks" onclick="abrirTareas()" title="Tareas">
+      <div class="tasks-badge" id="tasksBadge"></div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11l3 3L22 4"/>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+    </button>
     <button class="top-bar-gear" onclick="abrirConfig(false)" title="Configuracion">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="12" cy="12" r="3" stroke="#00e5ff" stroke-width="1.6"/>
@@ -1092,6 +1226,32 @@
 
 <input type="file" id="inputImportar" style="display:none" accept="image/*" onchange="procesarArchivoImportado(this)">
 
+<!-- TAREAS PANEL -->
+<div id="tareasPanel" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); z-index:15000; flex-direction:column; align-items:center; justify-content:flex-end;">
+  <div class="tareas-sheet">
+    <div class="tareas-header">
+      <h3>Tareas</h3>
+      <button class="tareas-add-btn" onclick="toggleNuevaTarea()">+</button>
+    </div>
+    <div id="tareaNuevoForm">
+      <input class="tarea-input" id="tareaNombre" placeholder="Nombre de la tarea..." maxlength="60">
+      <div class="tarea-input-row">
+        <input class="tarea-input" id="tareaDias" type="number" placeholder="Avisar X dias antes" min="1" max="365">
+        <input class="tarea-input" id="tareaFecha" type="date">
+      </div>
+      <label class="tarea-alerta-toggle" id="alertaToggleLabel">
+        <input type="checkbox" id="tareaAlerta" onchange="document.getElementById('alertaToggleLabel').classList.toggle('activa',this.checked)">
+        Activar aviso
+      </label>
+      <div class="tarea-form-btns">
+        <button class="tarea-btn-cancel" onclick="toggleNuevaTarea()">CANCELAR</button>
+        <button class="tarea-btn-save" onclick="guardarTarea()">GUARDAR</button>
+      </div>
+    </div>
+    <div id="tareasLista"></div>
+  </div>
+</div>
+
 <!-- BANCO PANEL -->
 <div id="bancoPanel" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); z-index:15000; flex-direction:column; align-items:center; justify-content:flex-end;">
   <div class="banco-sheet">
@@ -1177,7 +1337,6 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnbZohq9RvBu5EAqKA5aq59EftWh7d04IBCJf9QKMPo5u7SRUdDoCgVkC3QOnK9y2_xw/exec";
-
   let stream = null;
   let tipoDocumento = 'ticket';
   let tipoImportActual = null;
@@ -1889,6 +2048,164 @@
   </div>
 </div>
 
-</body>
+<script>
+  // ── SISTEMA DE TAREAS ──
+  // Guardado en localStorage: array de objetos tarea
+  // { id, nombre, fecha, alerta, diasAntes, done }
 
+  function cargarTareas() {
+    try { return JSON.parse(localStorage.getItem('tappxi_tareas') || '[]'); }
+    catch(e) { return []; }
+  }
+
+  function guardarTareasStorage(tareas) {
+    localStorage.setItem('tappxi_tareas', JSON.stringify(tareas));
+  }
+
+  function tareasUrgentes() {
+    const hoy = new Date(); hoy.setHours(0,0,0,0);
+    return cargarTareas().filter(t => {
+      if (t.done || !t.fecha || !t.alerta) return false;
+      const fecha = new Date(t.fecha); fecha.setHours(0,0,0,0);
+      const dias = Math.ceil((fecha - hoy) / 86400000);
+      return dias <= (t.diasAntes || 7);
+    });
+  }
+
+  function actualizarBadge() {
+    const badge = document.getElementById('tasksBadge');
+    if (!badge) return;
+    const urgentes = tareasUrgentes().length;
+    badge.classList.toggle('show', urgentes > 0);
+  }
+
+  function abrirTareas() {
+    if (navigator.vibrate) navigator.vibrate(30);
+    renderTareas();
+    document.getElementById('tareasPanel').style.display = 'flex';
+  }
+
+  function cerrarTareas() {
+    document.getElementById('tareasPanel').style.display = 'none';
+    document.getElementById('tareaNuevoForm').style.display = 'none';
+    actualizarBadge();
+  }
+
+  function toggleNuevaTarea() {
+    const form = document.getElementById('tareaNuevoForm');
+    const visible = form.style.display === 'block';
+    form.style.display = visible ? 'none' : 'block';
+    if (!visible) {
+      document.getElementById('tareaNombre').value = '';
+      document.getElementById('tareaFecha').value = '';
+      document.getElementById('tareaDias').value = '';
+      document.getElementById('tareaAlerta').checked = false;
+      document.getElementById('alertaToggleLabel').classList.remove('activa');
+      document.getElementById('tareaNombre').focus();
+    }
+  }
+
+  function guardarTarea() {
+    const nombre = document.getElementById('tareaNombre').value.trim();
+    if (!nombre) { document.getElementById('tareaNombre').focus(); return; }
+    const tareas = cargarTareas();
+    tareas.unshift({
+      id: Date.now(),
+      nombre: nombre,
+      fecha: document.getElementById('tareaFecha').value || null,
+      alerta: document.getElementById('tareaAlerta').checked,
+      diasAntes: parseInt(document.getElementById('tareaDias').value) || 7,
+      done: false
+    });
+    guardarTareasStorage(tareas);
+    toggleNuevaTarea();
+    renderTareas();
+    if (navigator.vibrate) navigator.vibrate(30);
+  }
+
+  function toggleTareaDone(id) {
+    if (navigator.vibrate) navigator.vibrate(20);
+    const tareas = cargarTareas();
+    const t = tareas.find(x => x.id === id);
+    if (t) t.done = !t.done;
+    guardarTareasStorage(tareas);
+    renderTareas();
+  }
+
+  function eliminarTarea(id) {
+    if (navigator.vibrate) navigator.vibrate(30);
+    guardarTareasStorage(cargarTareas().filter(x => x.id !== id));
+    renderTareas();
+  }
+
+  function estadoFecha(fechaStr, diasAntes) {
+    if (!fechaStr) return { texto: '', clase: '' };
+    const hoy = new Date(); hoy.setHours(0,0,0,0);
+    const fecha = new Date(fechaStr); fecha.setHours(0,0,0,0);
+    const dias = Math.ceil((fecha - hoy) / 86400000);
+    const opciones = { day: 'numeric', month: 'short', year: 'numeric' };
+    const fechaFmt = fecha.toLocaleDateString('es-ES', opciones);
+    if (dias < 0) return { texto: 'Vencida · ' + fechaFmt, clase: 'urgente' };
+    if (dias === 0) return { texto: 'Hoy · ' + fechaFmt, clase: 'urgente' };
+    if (dias <= (diasAntes || 7)) return { texto: 'En ' + dias + ' día' + (dias===1?'':'s') + ' · ' + fechaFmt, clase: 'proxima' };
+    return { texto: fechaFmt, clase: '' };
+  }
+
+  function renderTareas() {
+    const lista = document.getElementById('tareasLista');
+    const tareas = cargarTareas();
+    if (tareas.length === 0) {
+      lista.innerHTML = '<div class="tareas-empty">Sin tareas pendientes</div>';
+      return;
+    }
+    // Ordenar: pendientes primero, luego por fecha, luego completadas
+    const ordenadas = [...tareas].sort((a, b) => {
+      if (a.done !== b.done) return a.done ? 1 : -1;
+      if (!a.fecha && !b.fecha) return 0;
+      if (!a.fecha) return 1;
+      if (!b.fecha) return -1;
+      return new Date(a.fecha) - new Date(b.fecha);
+    });
+
+    lista.innerHTML = ordenadas.map(t => {
+      const ef = estadoFecha(t.fecha, t.diasAntes);
+      const bellColor = t.alerta ? '#00e5ff' : 'rgba(255,255,255,0.2)';
+      return `<div class="tarea-item${t.done?' done':''}" id="ti-${t.id}">
+        <div class="tarea-check" onclick="toggleTareaDone(${t.id})">
+          <div class="tarea-check-inner"></div>
+        </div>
+        <div class="tarea-info">
+          <div class="tarea-nombre">${t.nombre}</div>
+          ${ef.texto ? `<div class="tarea-fecha ${ef.clase}">${ef.texto}</div>` : ''}
+        </div>
+        <button class="tarea-alerta-btn${t.alerta?' activa':''}" onclick="toggleAlerta(${t.id})" title="Aviso">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="${bellColor}" stroke="${bellColor}" stroke-width="1.5" stroke-linecap="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+        <button class="tarea-delete" onclick="eliminarTarea(${t.id})">×</button>
+      </div>`;
+    }).join('');
+  }
+
+  function toggleAlerta(id) {
+    if (navigator.vibrate) navigator.vibrate(15);
+    const tareas = cargarTareas();
+    const t = tareas.find(x => x.id === id);
+    if (t) t.alerta = !t.alerta;
+    guardarTareasStorage(tareas);
+    renderTareas();
+  }
+
+  // Cerrar al pulsar fuera
+  document.getElementById('tareasPanel').addEventListener('click', function(e) {
+    if (e.target === this) cerrarTareas();
+  });
+
+  // Badge al cargar
+  actualizarBadge();
+</script>
+
+</body>
 </html>
