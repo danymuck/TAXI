@@ -2105,44 +2105,40 @@
     document.getElementById('anioTotalGastos').textContent = '-';
     document.getElementById('anioTotalBeneficio').textContent = '-';
 
-    const fmt = v => parseFloat(v||0).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    const fmtDec = v => parseFloat(v||0).toFixed(2).replace('.', ',');
+    const fmt = v => Math.round(parseFloat(v||0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-    let totalIng = 0, totalGto = 0;
-    const filas = document.getElementById('anioFilas');
+    try {
+      const resp = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'resumenAnio', anio: anio })
+      });
+      const d = await resp.json();
+      if (!d.ok) { document.getElementById('anioLoading').textContent = 'Error cargando datos'; return; }
 
-    for (let m = 1; m <= 12; m++) {
-      try {
-        const resp = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'obtenerResumen', mes: m, anio: anio })
-        });
-        const d = await resp.json();
-        const ing = parseFloat(d.totalMes || 0);
-        const gto = parseFloat(d.totalGastos || 0);
-        const ben = ing - gto;
-        totalIng += ing;
-        totalGto += gto;
-
-        const esMesActual = (m === currentDashMes && anio === currentDashAnio);
+      const filas = document.getElementById('anioFilas');
+      d.meses.forEach(m => {
+        const esMesActual = (m.mes === currentDashMes && anio === currentDashAnio);
+        const tieneDatos = m.ingresos > 0;
         const fila = document.createElement('div');
         fila.style.cssText = 'display:grid;grid-template-columns:60px 1fr 1fr 1fr;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);cursor:pointer;' + (esMesActual ? 'background:rgba(0,229,255,0.04);' : '');
-        fila.onclick = () => { toggleVistaAnio(); seleccionarMes(m); };
+        fila.onclick = () => { toggleVistaAnio(); seleccionarMes(m.mes); };
         fila.innerHTML =
-          '<div style="font-family:\'Inter\',sans-serif;font-size:12px;color:rgba(255,255,255,' + (ing>0?'0.7':'0.25') + ');">' + MESES_CORTOS[m-1] + (esMesActual ? ' ◂' : '') + '</div>' +
-          '<div style="font-family:\'Inter\',sans-serif;font-size:12px;color:' + (ing>0?'rgba(0,229,255,0.8)':'rgba(255,255,255,0.2)') + ';text-align:right;">' + (ing>0 ? fmt(ing)+'€' : '—') + '</div>' +
-          '<div style="font-family:\'Inter\',sans-serif;font-size:12px;color:' + (gto>0?'rgba(255,58,92,0.8)':'rgba(255,255,255,0.2)') + ';text-align:right;">' + (gto>0 ? fmt(gto)+'€' : '—') + '</div>' +
-          '<div style="font-family:\'Inter\',sans-serif;font-size:12px;color:' + (ing>0?(ben>=0?'rgba(0,255,150,0.8)':'rgba(255,58,92,0.8)'):'rgba(255,255,255,0.2)') + ';text-align:right;">' + (ing>0 ? fmt(ben)+'€' : '—') + '</div>';
+          '<div style="font-family:\'Inter\',sans-serif;font-size:12px;color:rgba(255,255,255,' + (tieneDatos?'0.7':'0.25') + ');">' + MESES_CORTOS[m.mes-1] + (esMesActual ? ' ◂' : '') + '</div>' +
+          '<div style="font-family:\'Inter\',sans-serif;font-size:12px;color:' + (tieneDatos?'rgba(0,229,255,0.8)':'rgba(255,255,255,0.2)') + ';text-align:right;">' + (tieneDatos ? fmt(m.ingresos)+'€' : '—') + '</div>' +
+          '<div style="font-family:\'Inter\',sans-serif;font-size:12px;color:' + (m.gastos>0?'rgba(255,58,92,0.8)':'rgba(255,255,255,0.2)') + ';text-align:right;">' + (m.gastos>0 ? fmt(m.gastos)+'€' : '—') + '</div>' +
+          '<div style="font-family:\'Inter\',sans-serif;font-size:12px;color:' + (tieneDatos?(m.beneficio>=0?'rgba(0,255,150,0.8)':'rgba(255,58,92,0.8)'):'rgba(255,255,255,0.2)') + ';text-align:right;">' + (tieneDatos ? fmt(m.beneficio)+'€' : '—') + '</div>';
         filas.appendChild(fila);
-      } catch(e) { /* mes sin datos */ }
-    }
+      });
 
-    document.getElementById('anioLoading').style.display = 'none';
-    const ben = totalIng - totalGto;
-    document.getElementById('anioTotalIngresos').textContent = fmt(totalIng) + '€';
-    document.getElementById('anioTotalGastos').textContent = fmt(totalGto) + '€';
-    document.getElementById('anioTotalBeneficio').textContent = fmt(ben) + '€';
-    document.getElementById('anioTotalBeneficio').style.color = ben >= 0 ? '#00ff96' : '#ff3a5c';
+      document.getElementById('anioLoading').style.display = 'none';
+      document.getElementById('anioTotalIngresos').textContent = fmt(d.totalIngresos) + '€';
+      document.getElementById('anioTotalGastos').textContent = fmt(d.totalGastos) + '€';
+      document.getElementById('anioTotalBeneficio').textContent = fmt(d.totalBeneficio) + '€';
+      document.getElementById('anioTotalBeneficio').style.color = d.totalBeneficio >= 0 ? '#00ff96' : '#ff3a5c';
+
+    } catch(e) {
+      document.getElementById('anioLoading').textContent = 'Error: ' + e.message;
+    }
   }
 
   cargarDashboard();
