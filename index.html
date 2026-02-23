@@ -4,10 +4,11 @@
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000408">
   <meta name="apple-mobile-web-app-title" content="TaxiScan">
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Mi Taxi App</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -30,6 +31,7 @@
     font-family: 'Orbitron', sans-serif;
     overflow-x: hidden;
     min-height: 100vh;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   /* Tron background */
@@ -110,7 +112,7 @@
 
   /* Hero */
   .hero-section {
-    padding: 20px 20px 10px; text-align: center; position: relative; z-index: 2;
+    padding: 20px 20px 4px; text-align: center; position: relative; z-index: 2;
   }
   .hero-greeting {
     display: none;
