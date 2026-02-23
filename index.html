@@ -113,9 +113,7 @@
     padding: 20px 20px 10px; text-align: center; position: relative; z-index: 2;
   }
   .hero-greeting {
-    display: block; font-size: 11px; font-weight: 500; letter-spacing: 5px;
-    color: rgba(0,255,255,0.75); text-transform: uppercase; margin-bottom: 6px;
-    text-shadow: 0 0 12px rgba(0,255,255,0.5);
+    display: none;
   }
   .hero-date {
     display: block; font-size: 10px; font-weight: 400; letter-spacing: 3px;
@@ -505,7 +503,6 @@
     background: rgba(255,255,255,0.05);
     border-radius: 4px;
   }
-  /* En facturaPanel los campos activos son cyan */
   #facturaPanel .editable-active {
     outline-color: #00e5ff !important;
     background: rgba(0,229,255,0.06);
@@ -901,7 +898,6 @@
   }
   .tareas-add-btn:active { background: rgba(0,229,255,0.25); }
 
-  /* Lista de tareas */
   .tarea-item {
     display: flex; align-items: center; gap: 12px;
     padding: 12px 4px; border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -952,7 +948,6 @@
     color: rgba(255,255,255,0.2); font-size: 13px;
   }
 
-  /* Form nueva tarea */
   #tareaNuevoForm {
     background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.15);
     border-radius: 14px; padding: 16px; margin-bottom: 16px; display: none;
@@ -1008,7 +1003,6 @@
   </div>
 
   <div class="hero-section">
-    <div class="hero-greeting">HOLA, DANI</div>
     <div class="hero-date" id="heroDate"></div>
   </div>
 
@@ -1406,7 +1400,6 @@
     if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
     document.getElementById('scannerScreen').style.display = 'none';
     document.getElementById('homeScreen').style.display = 'block';
-    // Limpiar estados del scanner
     document.getElementById('resultPanel').classList.remove('show');
     document.getElementById('facturaPanel').classList.remove('show');
     document.getElementById('loadingOverlay').style.display = 'none';
@@ -1416,7 +1409,7 @@
     document.getElementById('photo').style.display = 'none';
   }
 
-  // ── FACTURA DIGITAL: abre selector de archivos nativo ──
+  // ── FACTURA DIGITAL ──
   function abrirFacturaDigital() {
     if (navigator.vibrate) navigator.vibrate(30);
     tipoImportActual = 'factura';
@@ -1571,7 +1564,6 @@
     const dataURL = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(archivo); });
     if (tipoImportActual === 'whatsapp') imagenWhatsappURL = dataURL;
 
-    // Comprimir imagen antes de enviar (max 1200px ancho)
     const base64Comprimido = await comprimirImagen(dataURL, 1200, 0.82);
     const base64 = base64Comprimido.split(',')[1];
 
@@ -1602,84 +1594,45 @@
   let gastosBancoData = [];
 
   async function procesarImportBanco(base64) {
-    const resp = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'analizarBanco', image: base64 })
-    });
+    const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'analizarBanco', image: base64 }) });
     const data = await resp.json();
     ocultarImportLoading();
-    if (!data.ok || !data.categorias || data.categorias.length === 0) {
-      alert('No se detectaron gastos en la imagen.\n' + (data.error || ''));
-      return;
-    }
+    if (!data.ok || !data.categorias || data.categorias.length === 0) { alert('No se detectaron gastos en la imagen.\n' + (data.error || '')); return; }
     mostrarBancoPanel(data);
   }
 
   function mostrarBancoPanel(data) {
     gastosBancoData = data.categorias;
     document.getElementById('bancoFecha').textContent = data.periodo || '-';
-
     const contenedor = document.getElementById('bancoCategorias');
     contenedor.innerHTML = '';
     let totalGlobal = 0;
-
     data.categorias.forEach((cat, idx) => {
       totalGlobal += cat.total;
       const div = document.createElement('div');
-      div.className = 'banco-cat';
-      div.id = 'bancocat-' + idx;
-
-      const txRows = cat.transacciones.map(tx =>
-        '<div class="banco-tx-row">' +
-          '<span class="banco-tx-concepto">' + tx.concepto + '</span>' +
-          '<span class="banco-tx-importe">-' + Math.abs(tx.importe).toFixed(2).replace('.', ',') + ' €</span>' +
-        '</div>'
-      ).join('');
-
-      div.innerHTML =
-        '<div class="banco-cat-header" onclick="toggleBancoCat(' + idx + ')">' +
-          '<span class="banco-cat-name">' + cat.categoria + '</span>' +
-          '<span class="banco-cat-total">-' + cat.total.toFixed(2).replace('.', ',') + ' €</span>' +
-          '<span class="banco-cat-arrow">&#8964;</span>' +
-        '</div>' +
-        '<div class="banco-cat-body">' + txRows + '</div>';
-
+      div.className = 'banco-cat'; div.id = 'bancocat-' + idx;
+      const txRows = cat.transacciones.map(tx => '<div class="banco-tx-row"><span class="banco-tx-concepto">' + tx.concepto + '</span><span class="banco-tx-importe">-' + Math.abs(tx.importe).toFixed(2).replace('.', ',') + ' €</span></div>').join('');
+      div.innerHTML = '<div class="banco-cat-header" onclick="toggleBancoCat(' + idx + ')"><span class="banco-cat-name">' + cat.categoria + '</span><span class="banco-cat-total">-' + cat.total.toFixed(2).replace('.', ',') + ' €</span><span class="banco-cat-arrow">&#8964;</span></div><div class="banco-cat-body">' + txRows + '</div>';
       contenedor.appendChild(div);
     });
-
-    document.getElementById('bancoTotal').textContent =
-      '-' + totalGlobal.toFixed(2).replace('.', ',') + ' €';
-
+    document.getElementById('bancoTotal').textContent = '-' + totalGlobal.toFixed(2).replace('.', ',') + ' €';
     document.getElementById('bancoPanel').style.display = 'flex';
   }
 
-  function toggleBancoCat(idx) {
-    if (navigator.vibrate) navigator.vibrate(15);
-    document.getElementById('bancocat-' + idx).classList.toggle('open');
-  }
-
-  function cerrarBancoPanel() {
-    document.getElementById('bancoPanel').style.display = 'none';
-    gastosBancoData = [];
-  }
+  function toggleBancoCat(idx) { if (navigator.vibrate) navigator.vibrate(15); document.getElementById('bancocat-' + idx).classList.toggle('open'); }
+  function cerrarBancoPanel() { document.getElementById('bancoPanel').style.display = 'none'; gastosBancoData = []; }
 
   async function guardarGastosBanco() {
     if (navigator.vibrate) navigator.vibrate(40);
     const btn = document.getElementById('btnGuardarBanco');
     btn.textContent = 'GUARDANDO...'; btn.disabled = true;
     try {
-      const resp = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'guardarGastosBanco', categorias: gastosBancoData })
-      });
+      const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'guardarGastosBanco', categorias: gastosBancoData }) });
       const data = await resp.json();
       cerrarBancoPanel();
       if (data.ok) mostrarExitoImport('Gastos guardados', data.guardados + ' categoria(s) registradas en GASTOS');
       else { alert('Error al guardar: ' + (data.error || 'desconocido')); }
-    } catch (e) {
-      alert('Error de conexion: ' + e.message);
-      btn.textContent = 'GUARDAR TODO'; btn.disabled = false;
-    }
+    } catch (e) { alert('Error de conexion: ' + e.message); btn.textContent = 'GUARDAR TODO'; btn.disabled = false; }
   }
 
   async function procesarImportWhatsapp(base64, mimeType) {
@@ -2049,9 +2002,8 @@
         fmt(d.totalMes) + '<span>EUR</span>';
       document.getElementById('dashIngSub').innerHTML =
         MESES_CORTOS[d.mes - 1] + ' ' + d.anio +
-        ' <span class="card-period-badge"></span>';
+        ' <span class="card-period-badge" id="periodBadge"></span>';
 
-      // Comparativo con mes anterior
       const mesAnterior = d.mes === 1 ? 12 : d.mes - 1;
       const anioAnterior = d.mes === 1 ? d.anio - 1 : d.anio;
       fetch(SCRIPT_URL, {
@@ -2068,7 +2020,6 @@
         comp.innerHTML = '<span style="color:' + color + ';">' + flecha + ' ' + Math.abs(pct) + '% vs ' + MESES_CORTOS[mesAnterior-1] + '</span>';
       }).catch(() => {});
 
-      // Guardar todas las metricas extra para el picker
       dashExtras = {
         mediaDiaria:    d.mediaDiaria,
         mediaHora:      d.mediaHora,
@@ -2191,9 +2142,6 @@
 
 <script>
   // ── SISTEMA DE TAREAS ──
-  // Guardado en localStorage: array de objetos tarea
-  // { id, nombre, fecha, alerta, diasAntes, done }
-
   function cargarTareas() {
     try { return JSON.parse(localStorage.getItem('tappxi_tareas') || '[]'); }
     catch(e) { return []; }
@@ -2299,7 +2247,6 @@
       lista.innerHTML = '<div class="tareas-empty">Sin tareas pendientes</div>';
       return;
     }
-    // Ordenar: pendientes primero, luego por fecha, luego completadas
     const ordenadas = [...tareas].sort((a, b) => {
       if (a.done !== b.done) return a.done ? 1 : -1;
       if (!a.fecha && !b.fecha) return 0;
@@ -2339,12 +2286,10 @@
     renderTareas();
   }
 
-  // Cerrar al pulsar fuera
   document.getElementById('tareasPanel').addEventListener('click', function(e) {
     if (e.target === this) cerrarTareas();
   });
 
-  // Badge al cargar
   actualizarBadge();
 </script>
 
