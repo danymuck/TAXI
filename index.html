@@ -1305,20 +1305,7 @@
     </div>
     <div class="banco-fecha-row">
       <span class="banco-fecha-label">Periodo</span>
-      <span class="banco-fecha-val" id="bancoFecha">-</span>
-    </div>
-    <div class="banco-fecha-row" style="border-bottom:1px solid #1a1f2e; padding-bottom:14px; margin-bottom:10px;">
-      <span class="banco-fecha-label">Imputar a</span>
-      <div style="display:flex; gap:6px; align-items:center;">
-        <select id="bancoMesSelect" style="background:#1a1f2e; border:1px solid rgba(110,80,255,0.3); border-radius:8px; color:#8b6fff; font-family:'Orbitron',sans-serif; font-size:10px; font-weight:700; letter-spacing:1px; padding:6px 10px; cursor:pointer; outline:none; -webkit-appearance:none; text-align:center;">
-          <option value="1">ENE</option><option value="2">FEB</option><option value="3">MAR</option>
-          <option value="4">ABR</option><option value="5">MAY</option><option value="6">JUN</option>
-          <option value="7">JUL</option><option value="8">AGO</option><option value="9">SEP</option>
-          <option value="10">OCT</option><option value="11">NOV</option><option value="12">DIC</option>
-        </select>
-        <select id="bancoAnioSelect" style="background:#1a1f2e; border:1px solid rgba(110,80,255,0.3); border-radius:8px; color:#8b6fff; font-family:'Orbitron',sans-serif; font-size:10px; font-weight:700; letter-spacing:1px; padding:6px 10px; cursor:pointer; outline:none; -webkit-appearance:none; text-align:center;">
-        </select>
-      </div>
+      <span class="banco-fecha-val" id="bancoFecha" onclick="abrirBancoMesPicker()" style="cursor:pointer; text-decoration:underline dotted; text-underline-offset:3px;">-</span>
     </div>
     <div id="bancoCategorias"></div>
     <div class="banco-total-row">
@@ -1613,6 +1600,23 @@
 
   // ── BANCO ──
   let gastosBancoData = [];
+  let bancoPicMes  = new Date().getMonth() + 1;
+  let bancoPicAnio = new Date().getFullYear();
+
+  function abrirBancoMesPicker() {
+    if (navigator.vibrate) navigator.vibrate(20);
+    // Reutilizar el month picker existente pero con callback propio
+    pickerAnio = bancoPicAnio;
+    document.getElementById('pickerYear').textContent = pickerAnio;
+    renderMonthGrid(function(mes) {
+      bancoPicMes  = mes;
+      bancoPicAnio = pickerAnio;
+      document.getElementById('bancoFecha').textContent =
+        MESES_CORTOS[mes - 1] + ' ' + pickerAnio;
+      document.getElementById('monthPicker').classList.remove('show');
+    });
+    document.getElementById('monthPicker').classList.add('show');
+  }
 
   async function procesarImportBanco(base64) {
     const resp = await fetch(SCRIPT_URL, {
@@ -1629,19 +1633,13 @@
   }
 
   function mostrarBancoPanel(data) {
-    document.getElementById('bancoFecha').textContent = data.periodo || '-';
+    // Preseleccionar mes del dashboard actual
+    bancoPicMes  = currentDashMes  || new Date().getMonth() + 1;
+    bancoPicAnio = currentDashAnio || new Date().getFullYear();
 
-    // Poblar selector de año y preseleccionar mes actual
-    const anioSelect = document.getElementById('bancoAnioSelect');
-    const anioActual = new Date().getFullYear();
-    anioSelect.innerHTML = '';
-    for (let a = anioActual; a >= anioActual - 2; a--) {
-      const opt = document.createElement('option');
-      opt.value = a; opt.textContent = a;
-      anioSelect.appendChild(opt);
-    }
-    document.getElementById('bancoMesSelect').value = currentDashMes || new Date().getMonth() + 1;
-    anioSelect.value = currentDashAnio || anioActual;
+    // Mostrar periodo detectado por Gemini, o el mes actual si no hay
+    document.getElementById('bancoFecha').textContent =
+      data.periodo || (MESES_CORTOS[bancoPicMes - 1] + ' ' + bancoPicAnio);
 
     gastosBancoData = (data.categorias || []).filter(c => c.total > 0);
 
@@ -1690,11 +1688,9 @@
     const btn = document.getElementById('btnGuardarBanco');
     btn.textContent = 'GUARDANDO...'; btn.disabled = true;
     try {
-      const mes  = parseInt(document.getElementById('bancoMesSelect').value);
-      const anio = parseInt(document.getElementById('bancoAnioSelect').value);
       const resp = await fetch(SCRIPT_URL, {
         method: 'POST',
-        body: JSON.stringify({ action: 'guardarGastosBanco', categorias: gastosBancoData, mes, anio })
+        body: JSON.stringify({ action: 'guardarGastosBanco', categorias: gastosBancoData, mes: bancoPicMes, anio: bancoPicAnio })
       });
       const data = await resp.json();
       cerrarBancoPanel();
@@ -2026,20 +2022,26 @@
     renderMonthGrid();
   }
 
-  function renderMonthGrid() {
+  function renderMonthGrid(callback) {
     const grid = document.getElementById('monthGrid');
     grid.innerHTML = '';
     const hoy = new Date();
     MESES_CORTOS.forEach((m, i) => {
       const mes = i + 1;
       const esFuturo = pickerAnio === hoy.getFullYear() && mes > hoy.getMonth() + 1;
-      const isActive = mes === currentDashMes && pickerAnio === currentDashAnio;
+      const isActive = callback
+        ? (mes === bancoPicMes && pickerAnio === bancoPicAnio)
+        : (mes === currentDashMes && pickerAnio === currentDashAnio);
       const btn = document.createElement('button');
       btn.className = 'month-btn' + (isActive ? ' active' : '');
       btn.textContent = m;
       btn.disabled = esFuturo;
       btn.style.opacity = esFuturo ? '0.2' : '1';
-      btn.onclick = function() { seleccionarMes(mes); };
+      btn.onclick = function() {
+        if (navigator.vibrate) navigator.vibrate(20);
+        if (callback) callback(mes);
+        else seleccionarMes(mes);
+      };
       grid.appendChild(btn);
     });
   }
