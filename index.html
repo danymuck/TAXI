@@ -4,10 +4,11 @@
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000408">
   <meta name="apple-mobile-web-app-title" content="TaxiScan">
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Mi Taxi App</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -25,6 +26,8 @@
   button, a, div, strong, span { -webkit-user-select: none; user-select: none; }
   .btn, .btn-popup-ok, .scan-btn, .capture-btn { outline: none !important; -webkit-appearance: none; }
 
+  html {
+  }
   body {
     background: var(--bg);
     font-family: 'Orbitron', sans-serif;
@@ -108,10 +111,23 @@
   .top-bar-gear:active { opacity: 1; transform: translateY(-50%) rotate(90deg); }
   .top-bar-gear svg { width: 22px; height: 22px; }
 
-  .hero-section { display: none; }
-  .hero-date { display: none; }
+  /* Hero */
+  .hero-section {
+    padding: 8px 20px 4px; text-align: center; position: relative; z-index: 2;
+  }
+  .hero-greeting {
+    display: none;
+  }
+  .hero-date {
+    display: block; font-size: 10px; font-weight: 400; letter-spacing: 3px;
+    color: rgba(255,255,255,0.3); text-transform: uppercase;
+  }
+
+  /* ══════════════════════════════════
+     DASHBOARD CARDS
+  ══════════════════════════════════ */
   .dashboard {
-    padding: 6px 14px 0px;
+    padding: 10px 14px 0px;
     display: flex; flex-direction: column; gap: 8px;
     position: relative; z-index: 2;
   }
@@ -146,6 +162,7 @@
   .dash-value {
     font-size: 22px; font-weight: 900; line-height: 1.1;
     position: relative; z-index: 1; letter-spacing: 1px;
+    margin-top: 6px;
   }
   .dash-value span { font-size: 12px; font-weight: 500; opacity: 0.6; margin-left: 2px; }
   .dash-sub { font-size: 8px; font-weight: 400; opacity: 0.4; letter-spacing: 1px; position: relative; z-index: 1; }
@@ -223,7 +240,7 @@
   }
 
   /* Buttons grid */
-  .buttons-grid { padding: 4px 14px 6px; display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 2; }
+  .buttons-grid { padding: 6px 14px 0px; display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 2; }
 
   .section-label {
     font-size: 8px; font-weight: 600; letter-spacing: 4px;
@@ -490,7 +507,6 @@
     background: rgba(255,255,255,0.05);
     border-radius: 4px;
   }
-  /* En facturaPanel los campos activos son cyan */
   #facturaPanel .editable-active {
     outline-color: #00e5ff !important;
     background: rgba(0,229,255,0.06);
@@ -886,7 +902,6 @@
   }
   .tareas-add-btn:active { background: rgba(0,229,255,0.25); }
 
-  /* Lista de tareas */
   .tarea-item {
     display: flex; align-items: center; gap: 12px;
     padding: 12px 4px; border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -937,7 +952,6 @@
     color: rgba(255,255,255,0.2); font-size: 13px;
   }
 
-  /* Form nueva tarea */
   #tareaNuevoForm {
     background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.15);
     border-radius: 14px; padding: 16px; margin-bottom: 16px; display: none;
@@ -975,10 +989,7 @@
   <div class="circuit-nodes" id="circuitNodes"></div>
 
   <div class="top-bar">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
-      <h1>TAPPXI</h1>
-      <div id="heroDate" style="font-size:7px;font-weight:400;letter-spacing:3px;color:rgba(255,255,255,0.18);text-transform:uppercase;font-family:'Orbitron',sans-serif;"></div>
-    </div>
+    <h1>TAPPXI</h1>
     <button class="top-bar-tasks" onclick="abrirTareas()" title="Tareas">
       <div class="tasks-badge" id="tasksBadge"></div>
       <svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -993,6 +1004,10 @@
         <circle cx="12" cy="12" r="6.5" stroke="#00e5ff" stroke-width="1.2" stroke-dasharray="2 3" opacity="0.4"/>
       </svg>
     </button>
+  </div>
+
+  <div class="hero-section">
+    <div class="hero-date" id="heroDate"></div>
   </div>
 
   <div class="buttons-grid">
@@ -1151,7 +1166,7 @@
     </div>
 
     <!-- BOTÓN AÑO -->
-    <div style="text-align:center; padding: 4px 0 10px;">
+    <div style="text-align:center; padding: 6px 0 0px;">
       <button id="btnVerAnio" onclick="toggleVistaAnio()"
         style="background:none; border:1px solid rgba(0,229,255,0.2); border-radius:20px;
                color:rgba(0,229,255,0.5); font-family:'Orbitron',sans-serif; font-size:9px;
@@ -1389,7 +1404,6 @@
     if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
     document.getElementById('scannerScreen').style.display = 'none';
     document.getElementById('homeScreen').style.display = 'block';
-    // Limpiar estados del scanner
     document.getElementById('resultPanel').classList.remove('show');
     document.getElementById('facturaPanel').classList.remove('show');
     document.getElementById('loadingOverlay').style.display = 'none';
@@ -1397,11 +1411,9 @@
     video.srcObject = null;
     video.style.display = 'block';
     document.getElementById('photo').style.display = 'none';
-    document.getElementById('photo').style.transform = '';
-    document.getElementById('photo').style.transition = '';
   }
 
-  // ── FACTURA DIGITAL: abre selector de archivos nativo ──
+  // ── FACTURA DIGITAL ──
   function abrirFacturaDigital() {
     if (navigator.vibrate) navigator.vibrate(30);
     tipoImportActual = 'factura';
@@ -1472,13 +1484,6 @@
           document.getElementById("kmField").innerText = res.datos.kilometros || "-";
           document.getElementById("tiempoField").innerText = res.datos.tiempo || "-";
           document.getElementById("resultPanel").classList.add("show");
-          // Subir la foto para que no quede tapada por el panel
-          setTimeout(function() {
-            var panelH = document.getElementById("resultPanel").offsetHeight;
-            var shift  = Math.round(panelH * 0.5);
-            document.getElementById("photo").style.transform = "translateY(-" + shift + "px)";
-            document.getElementById("photo").style.transition = "transform 0.5s cubic-bezier(0.16,1,0.3,1)";
-          }, 50);
         }
       } else {
         alert("No se pudieron extraer los datos.\n" + (res.message || ""));
@@ -1563,7 +1568,6 @@
     const dataURL = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(archivo); });
     if (tipoImportActual === 'whatsapp') imagenWhatsappURL = dataURL;
 
-    // Comprimir imagen antes de enviar (max 1200px ancho)
     const base64Comprimido = await comprimirImagen(dataURL, 1200, 0.82);
     const base64 = base64Comprimido.split(',')[1];
 
@@ -1594,84 +1598,45 @@
   let gastosBancoData = [];
 
   async function procesarImportBanco(base64) {
-    const resp = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'analizarBanco', image: base64 })
-    });
+    const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'analizarBanco', image: base64 }) });
     const data = await resp.json();
     ocultarImportLoading();
-    if (!data.ok || !data.categorias || data.categorias.length === 0) {
-      alert('No se detectaron gastos en la imagen.\n' + (data.error || ''));
-      return;
-    }
+    if (!data.ok || !data.categorias || data.categorias.length === 0) { alert('No se detectaron gastos en la imagen.\n' + (data.error || '')); return; }
     mostrarBancoPanel(data);
   }
 
   function mostrarBancoPanel(data) {
     gastosBancoData = data.categorias;
     document.getElementById('bancoFecha').textContent = data.periodo || '-';
-
     const contenedor = document.getElementById('bancoCategorias');
     contenedor.innerHTML = '';
     let totalGlobal = 0;
-
     data.categorias.forEach((cat, idx) => {
       totalGlobal += cat.total;
       const div = document.createElement('div');
-      div.className = 'banco-cat';
-      div.id = 'bancocat-' + idx;
-
-      const txRows = cat.transacciones.map(tx =>
-        '<div class="banco-tx-row">' +
-          '<span class="banco-tx-concepto">' + tx.concepto + '</span>' +
-          '<span class="banco-tx-importe">-' + Math.abs(tx.importe).toFixed(2).replace('.', ',') + ' €</span>' +
-        '</div>'
-      ).join('');
-
-      div.innerHTML =
-        '<div class="banco-cat-header" onclick="toggleBancoCat(' + idx + ')">' +
-          '<span class="banco-cat-name">' + cat.categoria + '</span>' +
-          '<span class="banco-cat-total">-' + cat.total.toFixed(2).replace('.', ',') + ' €</span>' +
-          '<span class="banco-cat-arrow">&#8964;</span>' +
-        '</div>' +
-        '<div class="banco-cat-body">' + txRows + '</div>';
-
+      div.className = 'banco-cat'; div.id = 'bancocat-' + idx;
+      const txRows = cat.transacciones.map(tx => '<div class="banco-tx-row"><span class="banco-tx-concepto">' + tx.concepto + '</span><span class="banco-tx-importe">-' + Math.abs(tx.importe).toFixed(2).replace('.', ',') + ' €</span></div>').join('');
+      div.innerHTML = '<div class="banco-cat-header" onclick="toggleBancoCat(' + idx + ')"><span class="banco-cat-name">' + cat.categoria + '</span><span class="banco-cat-total">-' + cat.total.toFixed(2).replace('.', ',') + ' €</span><span class="banco-cat-arrow">&#8964;</span></div><div class="banco-cat-body">' + txRows + '</div>';
       contenedor.appendChild(div);
     });
-
-    document.getElementById('bancoTotal').textContent =
-      '-' + totalGlobal.toFixed(2).replace('.', ',') + ' €';
-
+    document.getElementById('bancoTotal').textContent = '-' + totalGlobal.toFixed(2).replace('.', ',') + ' €';
     document.getElementById('bancoPanel').style.display = 'flex';
   }
 
-  function toggleBancoCat(idx) {
-    if (navigator.vibrate) navigator.vibrate(15);
-    document.getElementById('bancocat-' + idx).classList.toggle('open');
-  }
-
-  function cerrarBancoPanel() {
-    document.getElementById('bancoPanel').style.display = 'none';
-    gastosBancoData = [];
-  }
+  function toggleBancoCat(idx) { if (navigator.vibrate) navigator.vibrate(15); document.getElementById('bancocat-' + idx).classList.toggle('open'); }
+  function cerrarBancoPanel() { document.getElementById('bancoPanel').style.display = 'none'; gastosBancoData = []; }
 
   async function guardarGastosBanco() {
     if (navigator.vibrate) navigator.vibrate(40);
     const btn = document.getElementById('btnGuardarBanco');
     btn.textContent = 'GUARDANDO...'; btn.disabled = true;
     try {
-      const resp = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'guardarGastosBanco', categorias: gastosBancoData })
-      });
+      const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'guardarGastosBanco', categorias: gastosBancoData }) });
       const data = await resp.json();
       cerrarBancoPanel();
       if (data.ok) mostrarExitoImport('Gastos guardados', data.guardados + ' categoria(s) registradas en GASTOS');
       else { alert('Error al guardar: ' + (data.error || 'desconocido')); }
-    } catch (e) {
-      alert('Error de conexion: ' + e.message);
-      btn.textContent = 'GUARDAR TODO'; btn.disabled = false;
-    }
+    } catch (e) { alert('Error de conexion: ' + e.message); btn.textContent = 'GUARDAR TODO'; btn.disabled = false; }
   }
 
   async function procesarImportWhatsapp(base64, mimeType) {
@@ -2041,9 +2006,8 @@
         fmt(d.totalMes) + '<span>EUR</span>';
       document.getElementById('dashIngSub').innerHTML =
         MESES_CORTOS[d.mes - 1] + ' ' + d.anio +
-        ' <span class="card-period-badge"></span>';
+        ' <span class="card-period-badge" id="periodBadge"></span>';
 
-      // Comparativo con mes anterior
       const mesAnterior = d.mes === 1 ? 12 : d.mes - 1;
       const anioAnterior = d.mes === 1 ? d.anio - 1 : d.anio;
       fetch(SCRIPT_URL, {
@@ -2060,7 +2024,6 @@
         comp.innerHTML = '<span style="color:' + color + ';">' + flecha + ' ' + Math.abs(pct) + '% vs ' + MESES_CORTOS[mesAnterior-1] + '</span>';
       }).catch(() => {});
 
-      // Guardar todas las metricas extra para el picker
       dashExtras = {
         mediaDiaria:    d.mediaDiaria,
         mediaHora:      d.mediaHora,
@@ -2183,9 +2146,6 @@
 
 <script>
   // ── SISTEMA DE TAREAS ──
-  // Guardado en localStorage: array de objetos tarea
-  // { id, nombre, fecha, alerta, diasAntes, done }
-
   function cargarTareas() {
     try { return JSON.parse(localStorage.getItem('tappxi_tareas') || '[]'); }
     catch(e) { return []; }
@@ -2291,7 +2251,6 @@
       lista.innerHTML = '<div class="tareas-empty">Sin tareas pendientes</div>';
       return;
     }
-    // Ordenar: pendientes primero, luego por fecha, luego completadas
     const ordenadas = [...tareas].sort((a, b) => {
       if (a.done !== b.done) return a.done ? 1 : -1;
       if (!a.fecha && !b.fecha) return 0;
@@ -2331,12 +2290,10 @@
     renderTareas();
   }
 
-  // Cerrar al pulsar fuera
   document.getElementById('tareasPanel').addEventListener('click', function(e) {
     if (e.target === this) cerrarTareas();
   });
 
-  // Badge al cargar
   actualizarBadge();
 </script>
 
