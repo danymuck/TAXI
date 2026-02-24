@@ -1,4 +1,12 @@
 {
+  "name": "Taxi App",
+  "short_name": "TaxiApp",
+  "description": "Gestión de ingresos y gastos para taxistas",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000408",
+  "theme_color": "#000408",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icon-192.png",
