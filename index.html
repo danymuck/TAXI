@@ -839,6 +839,7 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
   .banco-total-row span:first-child { color: rgba(255,255,255,0.5); font-size: 13px; }
+  .banco-total-row span:last-child { color: #8b6fff; font-size: 16px; font-weight: 700; }
 
   /* ── ICONO TAREAS EN TOP BAR ── */
   .top-bar-tasks {
@@ -1617,30 +1618,7 @@
   function mostrarBancoPanel(data) {
     document.getElementById('bancoFecha').textContent = data.periodo || '-';
 
-    const CATEGORIAS_FIJAS = [
-      'Préstamo banco','Autónomos','Impuestos','Gestoría RT',
-      'Cuota Radio Taxi','Combustible','Comisiones','Taller','Seguros','Varios'
-    ];
-
-    // Indexar lo que devuelve Gemini por nombre (case-insensitive)
-    const geminiMap = {};
-    (data.categorias || []).forEach(cat => {
-      geminiMap[cat.categoria.toLowerCase()] = cat;
-    });
-
-    // Construir array final en orden fijo, rellenando con datos de Gemini
-    const ordenadas = CATEGORIAS_FIJAS.map(nombre => {
-      const cat = geminiMap[nombre.toLowerCase()];
-      return cat ? { ...cat, categoria: nombre } : { categoria: nombre, total: 0, transacciones: [] };
-    });
-
-    // Añadir al final cualquier categoría que Gemini haya devuelto fuera de la lista
-    (data.categorias || []).forEach(cat => {
-      const enLista = CATEGORIAS_FIJAS.some(n => n.toLowerCase() === cat.categoria.toLowerCase());
-      if (!enLista) ordenadas.push(cat);
-    });
-
-    gastosBancoData = ordenadas.filter(c => c.total > 0);
+    gastosBancoData = (data.categorias || []).filter(c => c.total > 0);
 
     const contenedor = document.getElementById('bancoCategorias');
     contenedor.innerHTML = '';
@@ -1648,17 +1626,15 @@
 
     gastosBancoData.forEach((cat, idx) => {
       totalGlobal += cat.total;
-      const div = document.createElement('div');
-      div.className = 'banco-cat';
-      div.id = 'bancocat-' + idx;
-
       const txRows = cat.transacciones.map(tx =>
         '<div class="banco-tx-row">' +
           '<span class="banco-tx-concepto">' + tx.concepto + '</span>' +
           '<span class="banco-tx-importe">-' + Math.abs(tx.importe).toFixed(2).replace('.', ',') + ' €</span>' +
         '</div>'
       ).join('');
-
+      const div = document.createElement('div');
+      div.className = 'banco-cat';
+      div.id = 'bancocat-' + idx;
       div.innerHTML =
         '<div class="banco-cat-header" onclick="toggleBancoCat(' + idx + ')">' +
           '<span class="banco-cat-name">' + cat.categoria + '</span>' +
@@ -1666,13 +1642,11 @@
           '<span class="banco-cat-arrow">&#8964;</span>' +
         '</div>' +
         '<div class="banco-cat-body">' + txRows + '</div>';
-
       contenedor.appendChild(div);
     });
 
     document.getElementById('bancoTotal').textContent =
       '-' + totalGlobal.toFixed(2).replace('.', ',') + ' €';
-
     document.getElementById('bancoPanel').style.display = 'flex';
   }
 
