@@ -1,6 +1,6 @@
 {
-  "name": "Taxi App",
-  "short_name": "TaxiApp",
+  "name": "TAPPXI",
+  "short_name": "TAPPXI",
   "description": "Gestión de ingresos y gastos para taxistas",
   "start_url": "./index.html",
   "display": "standalone",
