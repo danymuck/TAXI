@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000408">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="TaxiScan">
@@ -29,7 +30,7 @@
     background: var(--bg);
     font-family: 'Orbitron', sans-serif;
     overflow-x: hidden;
-    min-height: var(--app-height, 100dvh);
+    min-height: 100dvh;
   }
 
   /* Tron background */
@@ -1825,9 +1826,6 @@
     localStorage.setItem('wa_numero', num); cerrarConfig();
     if (_configDespuesAbrirPendiente) abrirNuevoPendiente();
   }
-
-  // Fijar altura real del viewport (evita scroll fantasma en Android tras recarga)
-  document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
 
   // Init: hero date + circuit nodes
   (function() {
