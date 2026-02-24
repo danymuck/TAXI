@@ -1211,7 +1211,7 @@
     </svg>
   </button>
 
-  <div class="scanner-overlay">
+  <div class="scanner-overlay" id="scannerOverlay">
     <div class="scan-frame" id="scanFrame" data-label="Coloca el ticket dentro del marco"></div>
   </div>
   <button class="capture-btn" id="captureBtn" onclick="capturePhoto()"></button>
@@ -1435,6 +1435,8 @@
     const video = document.getElementById("camera");
     const photo = document.getElementById("photo");
     photo.style.display = "none"; video.style.display = "block"; video.style.opacity = "1"; video.style.visibility = "visible";
+    document.getElementById("scannerOverlay").style.visibility = "visible";
+    document.getElementById("captureBtn").style.visibility = "visible";
     if (stream) stream.getTracks().forEach(t => t.stop());
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
@@ -1472,6 +1474,8 @@
           document.getElementById("kmField").innerText = res.datos.kilometros || "-";
           document.getElementById("tiempoField").innerText = res.datos.tiempo || "-";
           document.getElementById("resultPanel").classList.add("show");
+          document.getElementById("scannerOverlay").style.visibility = "hidden";
+          document.getElementById("captureBtn").style.visibility = "hidden";
           requestAnimationFrame(function() {
             var panelH = document.getElementById("resultPanel").offsetHeight;
             if (panelH > 0) {
