@@ -496,6 +496,13 @@
     outline-color: #00e5ff !important;
     background: rgba(0,229,255,0.06);
   }
+  /* Cuando viene de factura digital, azul */
+  #facturaPanel.digital .editable-active {
+    outline-color: #00aaff !important;
+    background: rgba(0,170,255,0.06);
+  }
+  #facturaPanel.digital ~ * #btnAceptarGasto,
+  #facturaPanel.digital #btnAceptarGasto { background: #00aaff !important; }
 
   .loading-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
@@ -508,6 +515,8 @@
     box-shadow: 0 0 10px rgba(245,196,0,0.1);
   }
   .spinner.factura { border-top-color: #00c2ff; box-shadow: 0 0 10px rgba(0,194,255,0.1); }
+  .spinner.digital { border-top-color: #00aaff; box-shadow: 0 0 10px rgba(0,170,255,0.1); }
+  .spinner.banco   { border-top-color: #8b6fff; box-shadow: 0 0 10px rgba(139,111,255,0.1); }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-text {
     color: rgba(255,255,255,0.8); margin-top: 20px; font-family: 'Orbitron', sans-serif;
@@ -1785,20 +1794,29 @@
     if (mimeType !== 'application/pdf') {
       photo.src = dataURL; photo.style.display = 'block';
       document.getElementById('facturaPanel').classList.add('show');
-      requestAnimationFrame(function() {
-        var panelH = document.getElementById('facturaPanel').offsetHeight;
-        if (panelH > 0) {
-          photo.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)';
-          photo.style.transform  = 'translateY(-' + Math.round(panelH * 0.5) + 'px)';
-        }
-      });
-    } else {
-      photo.style.display = 'none';
-      document.getElementById('facturaPanel').classList.add('show');
-    }
+    document.getElementById('facturaPanel').classList.add('digital');
+    document.getElementById('btnAceptarGasto').style.background = '#00aaff';
+    requestAnimationFrame(function() {
+      var panelH = document.getElementById('facturaPanel').offsetHeight;
+      if (panelH > 0) {
+        photo.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+        photo.style.transform  = 'translateY(-' + Math.round(panelH * 0.5) + 'px)';
+      }
+    });
+  } else {
+    photo.style.display = 'none';
+    document.getElementById('facturaPanel').classList.add('show');
+    document.getElementById('facturaPanel').classList.add('digital');
+    document.getElementById('btnAceptarGasto').style.background = '#00aaff';
+  }
   }
 
-  function mostrarImportLoading(texto) { document.getElementById('importLoadingText').textContent = texto || 'Procesando...'; document.getElementById('importLoadingOverlay').style.display = 'flex'; }
+  function mostrarImportLoading(texto) {
+    document.getElementById('importLoadingText').textContent = texto || 'Procesando...';
+    const spinner = document.querySelector('#importLoadingOverlay .spinner');
+    spinner.className = 'spinner ' + (tipoImportActual === 'banco' ? 'banco' : tipoImportActual === 'factura' ? 'digital' : 'factura');
+    document.getElementById('importLoadingOverlay').style.display = 'flex';
+  }
   function ocultarImportLoading() { document.getElementById('importLoadingOverlay').style.display = 'none'; }
   function mostrarExitoImport(titulo, subtitulo) { document.getElementById('popupTitle').innerText = titulo; document.getElementById('popupSubtitle').innerText = subtitulo; const popup = document.getElementById('successPopup'); popup.style.display = 'flex'; setTimeout(() => popup.classList.add('show'), 10); }
 
