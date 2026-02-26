@@ -1572,9 +1572,14 @@
     const dataURL = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(archivo); });
     if (tipoImportActual === 'whatsapp') imagenWhatsappURL = dataURL;
 
-    // Comprimir imagen antes de enviar (max 1200px ancho)
-    const base64Comprimido = await comprimirImagen(dataURL, 1200, 0.82);
-    const base64 = base64Comprimido.split(',')[1];
+    // Los PDFs no se pueden comprimir con canvas — se envían directamente
+    let base64;
+    if (archivo.type === 'application/pdf') {
+      base64 = dataURL.split(',')[1];
+    } else {
+      const base64Comprimido = await comprimirImagen(dataURL, 1200, 0.82);
+      base64 = base64Comprimido.split(',')[1];
+    }
 
     mostrarImportLoading(tipoImportActual === 'whatsapp' ? 'Extrayendo viajes...' : tipoImportActual === 'banco' ? 'Analizando movimientos...' : 'Leyendo documento...');
     try {
@@ -1768,24 +1773,29 @@
     document.getElementById('importeFactura').innerText = data.datos.importe || '0.00';
     document.getElementById('catFactura').innerText = data.datos.categoria || 'Varios';
 
-    // Mostrar la imagen del archivo como fondo igual que el scanner
+    // Mostrar la imagen del archivo como fondo (solo si es imagen, no PDF)
     document.getElementById('homeScreen').style.display = 'none';
     const ss = document.getElementById('scannerScreen'); ss.style.display = 'block';
     const camera = document.getElementById('camera');
     const photo  = document.getElementById('photo');
     camera.style.display = 'none';
-    photo.src = dataURL; photo.style.display = 'block';
     document.getElementById('scannerOverlay').style.visibility = 'hidden';
     document.getElementById('captureBtn').style.visibility = 'hidden';
 
-    document.getElementById('facturaPanel').classList.add('show');
-    requestAnimationFrame(function() {
-      var panelH = document.getElementById('facturaPanel').offsetHeight;
-      if (panelH > 0) {
-        photo.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)';
-        photo.style.transform  = 'translateY(-' + Math.round(panelH * 0.5) + 'px)';
-      }
-    });
+    if (mimeType !== 'application/pdf') {
+      photo.src = dataURL; photo.style.display = 'block';
+      document.getElementById('facturaPanel').classList.add('show');
+      requestAnimationFrame(function() {
+        var panelH = document.getElementById('facturaPanel').offsetHeight;
+        if (panelH > 0) {
+          photo.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+          photo.style.transform  = 'translateY(-' + Math.round(panelH * 0.5) + 'px)';
+        }
+      });
+    } else {
+      photo.style.display = 'none';
+      document.getElementById('facturaPanel').classList.add('show');
+    }
   }
 
   function mostrarImportLoading(texto) { document.getElementById('importLoadingText').textContent = texto || 'Procesando...'; document.getElementById('importLoadingOverlay').style.display = 'flex'; }
