@@ -1767,10 +1767,25 @@
     document.getElementById('fechaFactura').innerText = data.datos.fecha || '-';
     document.getElementById('importeFactura').innerText = data.datos.importe || '0.00';
     document.getElementById('catFactura').innerText = data.datos.categoria || 'Varios';
+
+    // Mostrar la imagen del archivo como fondo igual que el scanner
     document.getElementById('homeScreen').style.display = 'none';
     const ss = document.getElementById('scannerScreen'); ss.style.display = 'block';
-    document.getElementById('camera').style.display = 'none';
+    const camera = document.getElementById('camera');
+    const photo  = document.getElementById('photo');
+    camera.style.display = 'none';
+    photo.src = dataURL; photo.style.display = 'block';
+    document.getElementById('scannerOverlay').style.visibility = 'hidden';
+    document.getElementById('captureBtn').style.visibility = 'hidden';
+
     document.getElementById('facturaPanel').classList.add('show');
+    requestAnimationFrame(function() {
+      var panelH = document.getElementById('facturaPanel').offsetHeight;
+      if (panelH > 0) {
+        photo.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+        photo.style.transform  = 'translateY(-' + Math.round(panelH * 0.5) + 'px)';
+      }
+    });
   }
 
   function mostrarImportLoading(texto) { document.getElementById('importLoadingText').textContent = texto || 'Procesando...'; document.getElementById('importLoadingOverlay').style.display = 'flex'; }
