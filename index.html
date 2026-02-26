@@ -565,11 +565,12 @@
 
   #nuevoPendientePanel { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 15000; display: none; flex-direction: column; align-items: center; justify-content: flex-end; }
   .np-sheet { background: rgba(2,8,20,0.97); border-radius: 22px 22px 0 0; padding: 24px 20px 40px; width: 100%; max-width: 480px; border-top: 1px solid rgba(37,211,102,0.2); box-shadow: 0 -4px 30px rgba(37,211,102,0.08); }
-  .np-sheet h3 { color: #25d366; margin: 0 0 18px; font-size: 17px; font-weight: 700; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+  .np-sheet h3 { color: #25d366; margin: 0 0 4px; font-size: 16px; font-weight: 700; font-family: 'Inter', system-ui, sans-serif; }
+  .np-sheet .np-subtitle { color: rgba(37,211,102,0.35); font-size: 12px; font-family: 'Inter', system-ui, sans-serif; margin: 0 0 18px; }
   .np-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
-  .np-field label { color: #888; font-size: 9px; font-weight: 600; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; }
-  .np-field input { background: #0a0e1a; border: 1px solid rgba(0,229,255,0.15); border-radius: 10px; color: #00e5ff; font-size: 14px; padding: 12px 14px; width: 100%; font-family: 'Orbitron', sans-serif; -webkit-appearance: none; letter-spacing: 1px; }
-  .np-field input:focus { border-color: rgba(0,229,255,0.6); box-shadow: 0 0 10px rgba(0,229,255,0.15); outline: none; }
+  .np-field label { color: rgba(37,211,102,0.5); font-size: 11px; font-weight: 600; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+  .np-field input { background: #0a0e1a; border: 1px solid rgba(37,211,102,0.15); border-radius: 10px; color: #25d366; font-size: 13px; padding: 12px 14px; width: 100%; font-family: 'Orbitron', sans-serif; -webkit-appearance: none; letter-spacing: 1px; }
+  .np-field input:focus { border-color: rgba(37,211,102,0.6); box-shadow: 0 0 10px rgba(37,211,102,0.15); outline: none; }
 
   #configPanel { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 20000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
   .config-card { background: #1a1a2e; border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 340px; border: 1px solid rgba(255,255,255,0.08); }
@@ -1379,6 +1380,7 @@
 <div id="nuevoPendientePanel">
   <div class="np-sheet">
     <h3>Enviar viaje pendiente</h3>
+    <p class="np-subtitle">Rellena los datos del viaje</p>
     <div class="np-field"><label>Fecha</label><input type="date" id="npFecha"></div>
     <div class="np-field"><label>Importe (EUR)</label><input type="number" id="npImporte" step="0.01" min="0" placeholder="0.00"></div>
     <div class="np-field"><label>Cliente</label><input type="text" id="npCliente" placeholder="Nombre del cliente" autocomplete="off" oninput="this.value=this.value.toUpperCase()" style="text-transform:uppercase;"></div>
