@@ -550,7 +550,7 @@
   .import-btn-cancel   { background: transparent; color: #888; border: 1px solid #333; margin-bottom: 0; justify-content: center; }
 
   #whatsappPanel { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); z-index: 15000; display: none; flex-direction: column; align-items: center; justify-content: flex-end; }
-  .whatsapp-sheet { background: rgba(2,8,20,0.97); border-radius: 22px 22px 0 0; padding: 20px 20px 40px; width: 100%; max-width: 480px; max-height: 75vh; overflow-y: auto; border-top: 1px solid rgba(37,211,102,0.2); box-shadow: 0 -4px 30px rgba(37,211,102,0.08); }
+  .whatsapp-sheet { background: rgba(2,8,20,0.97); border-radius: 22px 22px 0 0; padding: 20px 20px 40px; width: 100%; max-width: 480px; max-height: 75vh; overflow-y: auto; box-shadow: 0 -4px 30px rgba(37,211,102,0.08); }
   .whatsapp-sheet h3 { color: #25d366; margin: 0 0 4px; font-size: 16px; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
   .whatsapp-sheet .wa-subtitle { color: rgba(37,211,102,0.45); font-size: 12px; margin: 0 0 16px; }
   .viaje-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #2a2a2a; gap: 8px; }
@@ -564,12 +564,13 @@
   #importLoadingOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 16000; }
 
   #nuevoPendientePanel { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 15000; display: none; flex-direction: column; align-items: center; justify-content: flex-end; }
-  .np-sheet { background: rgba(2,8,20,0.97); border-radius: 22px 22px 0 0; padding: 24px 20px 40px; width: 100%; max-width: 480px; border-top: 1px solid rgba(37,211,102,0.2); box-shadow: 0 -4px 30px rgba(37,211,102,0.08); }
-  .np-sheet h3 { color: #25d366; margin: 0 0 4px; font-size: 16px; font-weight: 700; font-family: 'Inter', system-ui, sans-serif; }
-  .np-sheet .np-subtitle { color: rgba(37,211,102,0.35); font-size: 12px; font-family: 'Inter', system-ui, sans-serif; margin: 0 0 18px; }
+  #nuevoPendientePanel .btn, #whatsappPanel .btn { font-size: 13px; letter-spacing: 1px; }
+  .np-sheet { background: rgba(2,8,20,0.97); border-radius: 22px 22px 0 0; padding: 24px 20px 40px; width: 100%; max-width: 480px; box-shadow: 0 -4px 30px rgba(37,211,102,0.08); }
+  .np-sheet h3 { color: #fff; margin: 0 0 4px; font-size: 16px; font-weight: 700; font-family: 'Inter', system-ui, sans-serif; }
+  .np-sheet .np-subtitle { color: #555; font-size: 12px; font-family: 'Inter', system-ui, sans-serif; margin: 0 0 18px; }
   .np-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
-  .np-field label { color: rgba(37,211,102,0.5); font-size: 11px; font-weight: 600; font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
-  .np-field input { background: #0a0e1a; border: 1px solid rgba(37,211,102,0.15); border-radius: 10px; color: #25d366; font-size: 13px; padding: 12px 14px; width: 100%; font-family: 'Orbitron', sans-serif; -webkit-appearance: none; letter-spacing: 1px; }
+  .np-field label { color: #fff; font-size: 13px; font-weight: 600; font-family: 'Inter', system-ui, sans-serif; }
+  .np-field input { background: #0a0e1a; border: 1px solid rgba(37,211,102,0.15); border-radius: 10px; color: #25d366; font-size: 14px; padding: 12px 14px; width: 100%; font-family: 'Inter', system-ui, sans-serif; -webkit-appearance: none; }
   .np-field input:focus { border-color: rgba(37,211,102,0.6); box-shadow: 0 0 10px rgba(37,211,102,0.15); outline: none; }
 
   #configPanel { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 20000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
