@@ -517,6 +517,7 @@
   .spinner.factura { border-top-color: #00c2ff; box-shadow: 0 0 10px rgba(0,194,255,0.1); }
   .spinner.digital { border-top-color: #00aaff; box-shadow: 0 0 10px rgba(0,170,255,0.1); }
   .spinner.banco   { border-top-color: #8b6fff; box-shadow: 0 0 10px rgba(139,111,255,0.1); }
+  .spinner.verde   { border-top-color: #25d366; box-shadow: 0 0 10px rgba(37,211,102,0.1); }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-text {
     color: rgba(255,255,255,0.8); margin-top: 20px; font-family: 'Orbitron', sans-serif;
@@ -595,8 +596,8 @@
     padding: 20px 20px 40px;
     width: 100%;
     max-width: 480px;
-    border-top: 1px solid rgba(0,229,255,0.2);
-    box-shadow: 0 -4px 30px rgba(0,229,255,0.08);
+    border-top: 1px solid rgba(110,80,255,0.2);
+    box-shadow: 0 -4px 30px rgba(110,80,255,0.08);
   }
 
   .month-picker-title {
@@ -604,7 +605,7 @@
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 3px;
-    color: rgba(0,229,255,0.6);
+    color: rgba(139,111,255,0.6);
     text-transform: uppercase;
     text-align: center;
     margin-bottom: 16px;
@@ -633,10 +634,10 @@
   }
   .month-btn:active { transform: scale(0.94); }
   .month-btn.active {
-    background: rgba(0,229,255,0.15);
-    border-color: rgba(0,229,255,0.5);
-    color: #00e5ff;
-    box-shadow: 0 0 10px rgba(0,229,255,0.15);
+    background: rgba(139,111,255,0.15);
+    border-color: rgba(139,111,255,0.5);
+    color: #8b6fff;
+    box-shadow: 0 0 10px rgba(139,111,255,0.15);
   }
 
   .year-row {
@@ -649,14 +650,14 @@
   .year-arrow {
     background: none;
     border: none;
-    color: rgba(0,229,255,0.5);
+    color: rgba(139,111,255,0.5);
     font-size: 22px;
     cursor: pointer;
     padding: 4px 10px;
     font-family: sans-serif;
     transition: color 0.15s;
   }
-  .year-arrow:active { color: #00e5ff; }
+  .year-arrow:active { color: #8b6fff; }
   .year-label {
     font-family: 'Orbitron', sans-serif;
     font-size: 14px;
@@ -1814,7 +1815,7 @@
   function mostrarImportLoading(texto) {
     document.getElementById('importLoadingText').textContent = texto || 'Procesando...';
     const spinner = document.querySelector('#importLoadingOverlay .spinner');
-    spinner.className = 'spinner ' + (tipoImportActual === 'banco' ? 'banco' : tipoImportActual === 'factura' ? 'digital' : 'factura');
+    spinner.className = 'spinner ' + (tipoImportActual === 'banco' ? 'banco' : tipoImportActual === 'factura' ? 'digital' : tipoImportActual === 'whatsapp' ? 'verde' : 'factura');
     document.getElementById('importLoadingOverlay').style.display = 'flex';
   }
   function ocultarImportLoading() { document.getElementById('importLoadingOverlay').style.display = 'none'; }
